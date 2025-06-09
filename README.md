@@ -1,4 +1,4 @@
-<img src="https://files.catbox.moe/1yu9ii.png">
+<img src="https://files.catbox.moe/rgzhuq.png">
 
 This is a fusion of <a href="https://kxs.rip" target="_blank" rel="noopener noreferrer">KxsClient</a> and     <a href="https://s.urpl.us" target="_blank" rel="noopener noreferrer">Surplus</a>, a feature-adding client and a cheat client. Both have been optimized by me for higher FPS and general performance. Press right shift to open/close menus.
 
