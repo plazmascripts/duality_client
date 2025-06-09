@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         Duality
-// @version      1.1
-// @description  A fusion of KxsClient and Surplus, adding many extra features and cheats.
+// @name         Duality Client
+// @version      1.22
+// @description  A fusion of KxsClient and Surplus, adding extra features and cheats.
 // @author       plazmascripts, mahdi, noam, Kisakay
 // @run-at       document-start
 // @grant        none
-// @namespace    https://github.com/Kisakay/KxsClient
+// @namespace    https://github.com/plazmascripts/duality_client/
 // @author       Kisakay
 // @license      AGPL-3.0
 // @run-at       document-end
@@ -19,48 +19,47 @@
 // @match        *://survivx.org
 // @match        *://kxs.rip/*
 // @grant        none
-// @downloadURL none
 // ==/UserScript==
 ;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
+ 
 /***/ 123:
 /***/ ((module) => {
-
+ 
 const numeric = /^[0-9]+$/
 const compareIdentifiers = (a, b) => {
   const anum = numeric.test(a)
   const bnum = numeric.test(b)
-
+ 
   if (anum && bnum) {
     a = +a
     b = +b
   }
-
+ 
   return a === b ? 0
     : (anum && !bnum) ? -1
     : (bnum && !anum) ? 1
     : a < b ? -1
     : 1
 }
-
+ 
 const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a)
-
+ 
 module.exports = {
   compareIdentifiers,
   rcompareIdentifiers,
 }
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 229:
 /***/ ((__unused_webpack_module, exports) => {
-
+ 
 "use strict";
 var __webpack_unused_export__;
-
+ 
 __webpack_unused_export__ = ({ value: true });
 exports.A = void 0;
 ;
@@ -289,13 +288,13 @@ class SimplifiedSteganoDB {
     }
 }
 exports.A = SimplifiedSteganoDB;
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 272:
 /***/ ((module) => {
-
+ 
 const debug = (
   typeof process === 'object' &&
   process.env &&
@@ -303,37 +302,37 @@ const debug = (
   /\bsemver\b/i.test(process.env.NODE_DEBUG)
 ) ? (...args) => console.error('SEMVER', ...args)
   : () => {}
-
+ 
 module.exports = debug
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 560:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
+ 
 const SemVer = __webpack_require__(908)
 const compare = (a, b, loose) =>
   new SemVer(a, loose).compare(new SemVer(b, loose))
-
+ 
 module.exports = compare
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 580:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
+ 
 const compare = __webpack_require__(560)
 const gt = (a, b, loose) => compare(a, b, loose) > 0
 module.exports = gt
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 587:
 /***/ ((module) => {
-
+ 
 // parse out just the options we care about
 const looseOption = Object.freeze({ loose: true })
 const emptyOpts = Object.freeze({ })
@@ -341,24 +340,24 @@ const parseOptions = options => {
   if (!options) {
     return emptyOpts
   }
-
+ 
   if (typeof options !== 'object') {
     return looseOption
   }
-
+ 
   return options
 }
 module.exports = parseOptions
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 686:
 /***/ ((__unused_webpack_module, exports) => {
-
+ 
 "use strict";
 var __webpack_unused_export__;
-
+ 
 __webpack_unused_export__ = ({ value: true });
 exports.w = void 0;
 ;
@@ -593,13 +592,13 @@ class SteganoDB {
     }
 }
 exports.w = SteganoDB;
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 718:
 /***/ ((module, exports, __webpack_require__) => {
-
+ 
 const {
   MAX_SAFE_COMPONENT_LENGTH,
   MAX_SAFE_BUILD_LENGTH,
@@ -607,7 +606,7 @@ const {
 } = __webpack_require__(874)
 const debug = __webpack_require__(272)
 exports = module.exports = {}
-
+ 
 // The actual regexps go on exports.re
 const re = exports.re = []
 const safeRe = exports.safeRe = []
@@ -615,9 +614,9 @@ const src = exports.src = []
 const safeSrc = exports.safeSrc = []
 const t = exports.t = {}
 let R = 0
-
+ 
 const LETTERDASHNUMBER = '[a-zA-Z0-9-]'
-
+ 
 // Replace some greedy regex tokens to prevent regex dos issues. These regex are
 // used internally via the safeRe object since all inputs in this library get
 // normalized first to trim and collapse all extra whitespace. The original
@@ -629,7 +628,7 @@ const safeRegexReplacements = [
   ['\\d', MAX_LENGTH],
   [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
 ]
-
+ 
 const makeSafeRegex = (value) => {
   for (const [token, max] of safeRegexReplacements) {
     value = value
@@ -638,7 +637,7 @@ const makeSafeRegex = (value) => {
   }
   return value
 }
-
+ 
 const createToken = (name, value, isGlobal) => {
   const safe = makeSafeRegex(value)
   const index = R++
@@ -649,113 +648,113 @@ const createToken = (name, value, isGlobal) => {
   re[index] = new RegExp(value, isGlobal ? 'g' : undefined)
   safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined)
 }
-
+ 
 // The following Regular Expressions can be used for tokenizing,
 // validating, and parsing SemVer version strings.
-
+ 
 // ## Numeric Identifier
 // A single `0`, or a non-zero digit followed by zero or more digits.
-
+ 
 createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*')
 createToken('NUMERICIDENTIFIERLOOSE', '\\d+')
-
+ 
 // ## Non-numeric Identifier
 // Zero or more digits, followed by a letter or hyphen, and then zero or
 // more letters, digits, or hyphens.
-
+ 
 createToken('NONNUMERICIDENTIFIER', `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`)
-
+ 
 // ## Main Version
 // Three dot-separated numeric identifiers.
-
+ 
 createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
                    `(${src[t.NUMERICIDENTIFIER]})\\.` +
                    `(${src[t.NUMERICIDENTIFIER]})`)
-
+ 
 createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
                         `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
                         `(${src[t.NUMERICIDENTIFIERLOOSE]})`)
-
+ 
 // ## Pre-release Version Identifier
 // A numeric identifier, or a non-numeric identifier.
-
+ 
 createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
 }|${src[t.NONNUMERICIDENTIFIER]})`)
-
+ 
 createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
 }|${src[t.NONNUMERICIDENTIFIER]})`)
-
+ 
 // ## Pre-release Version
 // Hyphen, followed by one or more dot-separated pre-release version
 // identifiers.
-
+ 
 createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
 }(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`)
-
+ 
 createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
 }(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)
-
+ 
 // ## Build Metadata Identifier
 // Any combination of digits, letters, or hyphens.
-
+ 
 createToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`)
-
+ 
 // ## Build Metadata
 // Plus sign, followed by one or more period-separated build metadata
 // identifiers.
-
+ 
 createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
 }(?:\\.${src[t.BUILDIDENTIFIER]})*))`)
-
+ 
 // ## Full Version String
 // A main version, followed optionally by a pre-release version and
 // build metadata.
-
+ 
 // Note that the only major, minor, patch, and pre-release sections of
 // the version string are capturing groups.  The build metadata is not a
 // capturing group, because it should not ever be used in version
 // comparison.
-
+ 
 createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
 }${src[t.PRERELEASE]}?${
   src[t.BUILD]}?`)
-
+ 
 createToken('FULL', `^${src[t.FULLPLAIN]}$`)
-
+ 
 // like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
 // also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
 // common in the npm registry.
 createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
 }${src[t.PRERELEASELOOSE]}?${
   src[t.BUILD]}?`)
-
+ 
 createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)
-
+ 
 createToken('GTLT', '((?:<|>)?=?)')
-
+ 
 // Something like "2.*" or "1.2.x".
 // Note that "x.x" is a valid xRange identifer, meaning "any version"
 // Only the first item is strictly required.
 createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`)
 createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`)
-
+ 
 createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:${src[t.PRERELEASE]})?${
                      src[t.BUILD]}?` +
                    `)?)?`)
-
+ 
 createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:${src[t.PRERELEASELOOSE]})?${
                           src[t.BUILD]}?` +
                         `)?)?`)
-
+ 
 createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
 createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
-
+ 
 // Coercion.
 // Extract anything that could conceivably be a part of a valid semver
 createToken('COERCEPLAIN', `${'(^|[^\\d])' +
@@ -769,37 +768,37 @@ createToken('COERCEFULL', src[t.COERCEPLAIN] +
               `(?:$|[^\\d])`)
 createToken('COERCERTL', src[t.COERCE], true)
 createToken('COERCERTLFULL', src[t.COERCEFULL], true)
-
+ 
 // Tilde ranges.
 // Meaning is "reasonably at or greater than"
 createToken('LONETILDE', '(?:~>?)')
-
+ 
 createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true)
 exports.tildeTrimReplace = '$1~'
-
+ 
 createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)
 createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)
-
+ 
 // Caret ranges.
 // Meaning is "at least and backwards compatible with"
 createToken('LONECARET', '(?:\\^)')
-
+ 
 createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true)
 exports.caretTrimReplace = '$1^'
-
+ 
 createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)
 createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)
-
+ 
 // A simple gt/lt/eq thing, or just "" to indicate "any version"
 createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`)
 createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`)
-
+ 
 // An expression to strip any whitespace between the gtlt and the thing
 // it modifies, so that `> 1.2.3` ==> `>1.2.3`
 createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
 }\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)
 exports.comparatorTrimReplace = '$1$2$3'
-
+ 
 // Something like `1.2.3 - 1.2.4`
 // Note that these all use the loose form, because they'll be
 // checked against either the strict or loose comparator form
@@ -808,26 +807,26 @@ createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
                    `\\s+-\\s+` +
                    `(${src[t.XRANGEPLAIN]})` +
                    `\\s*$`)
-
+ 
 createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
                         `\\s+-\\s+` +
                         `(${src[t.XRANGEPLAINLOOSE]})` +
                         `\\s*$`)
-
+ 
 // Star ranges basically just allow anything at all.
 createToken('STAR', '(<|>)?=?\\s*\\*')
 // >=0.0.0 is like a star
 createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$')
 createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 746:
 /***/ (() => {
-
+ 
 "use strict";
-
+ 
 // --- HOOK GLOBAL WEBSOCKET POUR INTERCEPTION gameId & PTC monitoring ---
 (function () {
     const OriginalWebSocket = window.WebSocket;
@@ -853,28 +852,28 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
     // Remplace le constructeur global
     window.WebSocket = HookedWebSocket;
 })();
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 874:
 /***/ ((module) => {
-
+ 
 // Note: this is the semver.org version of the spec that it implements
 // Not necessarily the package version of this code.
 const SEMVER_SPEC_VERSION = '2.0.0'
-
+ 
 const MAX_LENGTH = 256
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
 /* istanbul ignore next */ 9007199254740991
-
+ 
 // Max safe segment length for coercion.
 const MAX_SAFE_COMPONENT_LENGTH = 16
-
+ 
 // Max safe length for a build identifier. The max length minus 6 characters for
 // the shortest version with a build 0.0.0+BUILD.
 const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
-
+ 
 const RELEASE_TYPES = [
   'major',
   'premajor',
@@ -884,7 +883,7 @@ const RELEASE_TYPES = [
   'prepatch',
   'prerelease',
 ]
-
+ 
 module.exports = {
   MAX_LENGTH,
   MAX_SAFE_COMPONENT_LENGTH,
@@ -895,23 +894,23 @@ module.exports = {
   FLAG_INCLUDE_PRERELEASE: 0b001,
   FLAG_LOOSE: 0b010,
 }
-
-
+ 
+ 
 /***/ }),
-
+ 
 /***/ 908:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
+ 
 const debug = __webpack_require__(272)
 const { MAX_LENGTH, MAX_SAFE_INTEGER } = __webpack_require__(874)
 const { safeRe: re, safeSrc: src, t } = __webpack_require__(718)
-
+ 
 const parseOptions = __webpack_require__(587)
 const { compareIdentifiers } = __webpack_require__(123)
 class SemVer {
   constructor (version, options) {
     options = parseOptions(options)
-
+ 
     if (version instanceof SemVer) {
       if (version.loose === !!options.loose &&
         version.includePrerelease === !!options.includePrerelease) {
@@ -922,45 +921,45 @@ class SemVer {
     } else if (typeof version !== 'string') {
       throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`)
     }
-
+ 
     if (version.length > MAX_LENGTH) {
       throw new TypeError(
         `version is longer than ${MAX_LENGTH} characters`
       )
     }
-
+ 
     debug('SemVer', version, options)
     this.options = options
     this.loose = !!options.loose
     // this isn't actually relevant for versions, but keep it so that we
     // don't run into trouble passing this.options around.
     this.includePrerelease = !!options.includePrerelease
-
+ 
     const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
-
+ 
     if (!m) {
       throw new TypeError(`Invalid Version: ${version}`)
     }
-
+ 
     this.raw = version
-
+ 
     // these are actually numbers
     this.major = +m[1]
     this.minor = +m[2]
     this.patch = +m[3]
-
+ 
     if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
       throw new TypeError('Invalid major version')
     }
-
+ 
     if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
       throw new TypeError('Invalid minor version')
     }
-
+ 
     if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
       throw new TypeError('Invalid patch version')
     }
-
+ 
     // numberify any prerelease numeric ids
     if (!m[4]) {
       this.prerelease = []
@@ -975,11 +974,11 @@ class SemVer {
         return id
       })
     }
-
+ 
     this.build = m[5] ? m[5].split('.') : []
     this.format()
   }
-
+ 
   format () {
     this.version = `${this.major}.${this.minor}.${this.patch}`
     if (this.prerelease.length) {
@@ -987,11 +986,11 @@ class SemVer {
     }
     return this.version
   }
-
+ 
   toString () {
     return this.version
   }
-
+ 
   compare (other) {
     debug('SemVer.compare', this.version, this.options, other)
     if (!(other instanceof SemVer)) {
@@ -1000,31 +999,31 @@ class SemVer {
       }
       other = new SemVer(other, this.options)
     }
-
+ 
     if (other.version === this.version) {
       return 0
     }
-
+ 
     return this.compareMain(other) || this.comparePre(other)
   }
-
+ 
   compareMain (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
-
+ 
     return (
       compareIdentifiers(this.major, other.major) ||
       compareIdentifiers(this.minor, other.minor) ||
       compareIdentifiers(this.patch, other.patch)
     )
   }
-
+ 
   comparePre (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
-
+ 
     // NOT having a prerelease is > having one
     if (this.prerelease.length && !other.prerelease.length) {
       return -1
@@ -1033,7 +1032,7 @@ class SemVer {
     } else if (!this.prerelease.length && !other.prerelease.length) {
       return 0
     }
-
+ 
     let i = 0
     do {
       const a = this.prerelease[i]
@@ -1052,12 +1051,12 @@ class SemVer {
       }
     } while (++i)
   }
-
+ 
   compareBuild (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
-
+ 
     let i = 0
     do {
       const a = this.build[i]
@@ -1076,7 +1075,7 @@ class SemVer {
       }
     } while (++i)
   }
-
+ 
   // preminor will bump the version up to the next minor release, and immediately
   // down to pre-release. premajor and prepatch work the same way.
   inc (release, identifier, identifierBase) {
@@ -1093,7 +1092,7 @@ class SemVer {
         }
       }
     }
-
+ 
     switch (release) {
       case 'premajor':
         this.prerelease.length = 0
@@ -1130,7 +1129,7 @@ class SemVer {
         }
         this.prerelease.length = 0
         break
-
+ 
       case 'major':
         // If this is a pre-major version, bump up to the same major version.
         // Otherwise increment major.
@@ -1172,7 +1171,7 @@ class SemVer {
       // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
       case 'pre': {
         const base = Number(identifierBase) ? 1 : 0
-
+ 
         if (this.prerelease.length === 0) {
           this.prerelease = [base]
         } else {
@@ -1218,12 +1217,12 @@ class SemVer {
     return this
   }
 }
-
+ 
 module.exports = SemVer
-
-
+ 
+ 
 /***/ })
-
+ 
 /******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
@@ -1285,7 +1284,7 @@ var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
-
+ 
 // EXTERNAL MODULE: ./src/UTILS/websocket-hook.ts
 var websocket_hook = __webpack_require__(746);
 // EXTERNAL MODULE: ../../GitLab/SteganoDB2/lib/simplified_browser.js
@@ -1293,8 +1292,8 @@ var simplified_browser = __webpack_require__(229);
 ;// ./config.json
 const config_namespaceObject = /*#__PURE__*/JSON.parse('{"base_url":"https://kxs.rip","api_url":"https://network.kxs.rip","fileName":"KxsClient.user.js","match":["*://survev.io/*","*://66.179.254.36/*","*://zurviv.io/*","*://resurviv.biz/*","*://leia-uwu.github.io/survev/*","*://survev.leia-is.gay/*","*://survivx.org","*://kxs.rip/*"],"grant":["none"]}');
 ;// ./src/UTILS/vars.ts
-
-
+ 
+ 
 const background_song = config_namespaceObject.base_url + "/assets/Stranger_Things_Theme_Song_C418_REMIX.mp3";
 const kxs_logo = "https://files.catbox.moe/onhbvw.png";
 const full_logo = "https://files.catbox.moe/1yu9ii.png";
@@ -1307,7 +1306,7 @@ const survev_settings = new simplified_browser/* SimplifiedSteganoDB */.A({
 const kxs_settings = new simplified_browser/* SimplifiedSteganoDB */.A({
     database: "userSettings"
 });
-
+ 
 ;// ./src/MECHANIC/intercept.ts
 function intercept(link, targetUrl) {
     const open = XMLHttpRequest.prototype.open;
@@ -1325,8 +1324,8 @@ function intercept(link, targetUrl) {
         return originalFetch.apply(this, arguments);
     };
 }
-
-
+ 
+ 
 ;// ./src/HUD/MOD/HealthWarning.ts
 class HealthWarning {
     constructor(kxsClient) {
@@ -1560,8 +1559,8 @@ class HealthWarning {
         }, 100); // Vérifier toutes les 100ms
     }
 }
-
-
+ 
+ 
 ;// ./src/MECHANIC/KillLeaderTracking.ts
 class KillLeaderTracker {
     constructor(kxsClient) {
@@ -1726,8 +1725,8 @@ class KillLeaderTracker {
         this.lastKnownKills = myKills;
     }
 }
-
-
+ 
+ 
 ;// ./src/HUD/GridSystem.ts
 class GridSystem {
     constructor() {
@@ -1960,8 +1959,8 @@ class GridSystem {
         }
     }
 }
-
-
+ 
+ 
 ;// ./src/SERVER/DiscordTracking.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1972,7 +1971,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
+ 
 const stuff_emojis = {
     main_weapon: "🔫",
     secondary_weapon: "🔫",
@@ -2149,8 +2148,8 @@ class DiscordTracking {
         });
     }
 }
-
-
+ 
+ 
 ;// ./src/FUNC/StatsParser.ts
 class StatsParser {
     static cleanNumber(str) {
@@ -2227,8 +2226,8 @@ class StatsParser {
         return stats;
     }
 }
-
-
+ 
+ 
 // EXTERNAL MODULE: ./node_modules/semver/functions/gt.js
 var gt = __webpack_require__(580);
 var gt_default = /*#__PURE__*/__webpack_require__.n(gt);
@@ -2244,9 +2243,9 @@ var UpdateChecker_awaiter = (undefined && undefined.__awaiter) || function (this
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
-
-
+ 
+ 
+ 
 class UpdateChecker {
     constructor(kxsClient) {
         this.remoteScriptUrl = config_namespaceObject.api_url + "/getLatestVersion";
@@ -2321,100 +2320,16 @@ class UpdateChecker {
         });
     }
     displayUpdateNotification() {
-        const modal = document.createElement("div");
-        modal.style.position = "fixed";
-        modal.style.top = "50%";
-        modal.style.left = "50%";
-        modal.style.transform = "translate(-50%, -50%)";
-        modal.style.backgroundColor = "rgb(250, 250, 250)";
-        modal.style.borderRadius = "10px";
-        modal.style.padding = "20px";
-        modal.style.width = "500px";
-        modal.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)";
-        modal.style.border = "1px solid rgb(229, 229, 229)";
-        modal.style.zIndex = "10000";
-        const header = document.createElement("div");
-        header.style.display = "flex";
-        header.style.alignItems = "center";
-        header.style.marginBottom = "15px";
-        const title = document.createElement("h3");
-        title.textContent = "Update Available";
-        title.style.margin = "0";
-        title.style.fontSize = "18px";
-        title.style.fontWeight = "600";
-        header.appendChild(title);
-        const closeButton = document.createElement("button");
-        closeButton.innerHTML = "×";
-        closeButton.style.marginLeft = "auto";
-        closeButton.style.border = "none";
-        closeButton.style.background = "none";
-        closeButton.style.fontSize = "24px";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.padding = "0 5px";
-        closeButton.onclick = () => modal.remove();
-        header.appendChild(closeButton);
-        const content = document.createElement("div");
-        content.innerHTML = `<div style="margin-bottom: 20px;">
-			<p style="margin-bottom: 10px; font-weight: 500;">A new version of KxsClient is available!</p>
-			<p style="margin-bottom: 10px;">
-				Current version: <span style="font-weight: 500;">${this.getCurrentScriptVersion()}</span> |
-				New version: <span style="font-weight: 500; color: #4f46e5;">${this.hostedScriptVersion}</span>
-			</p>
-			<p style="margin-bottom: 15px;">To update, follow these steps:</p>
-			<ol style="margin-left: 20px; margin-bottom: 15px;">
-				<li style="margin-bottom: 8px;">Click "Copy Script" below</li>
-				<li style="margin-bottom: 8px;">Open your script manager (Tampermonkey, Violentmonkey, etc.)</li>
-				<li style="margin-bottom: 8px;">Overwrite the current script with the new one and paste the content</li>
-				<li style="margin-bottom: 8px;">Save the script (Ctrl+S or Cmd+S)</li>
-				<li>Reload the game page</li>
-			</ol>
-		</div>`;
-        content.style.color = "rgb(75, 85, 99)";
-        content.style.fontSize = "14px";
-        content.style.lineHeight = "1.5";
-        const updateButton = document.createElement("button");
-        updateButton.textContent = "Copy Script";
-        updateButton.style.backgroundColor = "rgb(79, 70, 229)";
-        updateButton.style.color = "white";
-        updateButton.style.padding = "10px 16px";
-        updateButton.style.borderRadius = "6px";
-        updateButton.style.border = "none";
-        updateButton.style.cursor = "pointer";
-        updateButton.style.width = "100%";
-        updateButton.style.fontWeight = "500";
-        updateButton.style.fontSize = "15px";
-        updateButton.style.transition = "background-color 0.2s ease";
-        updateButton.onmouseover = () => updateButton.style.backgroundColor = "rgb(67, 56, 202)";
-        updateButton.onmouseout = () => updateButton.style.backgroundColor = "rgb(79, 70, 229)";
-        updateButton.onclick = () => UpdateChecker_awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.copyScriptToClipboard();
-                updateButton.textContent = "Script copied!";
-                updateButton.style.backgroundColor = "rgb(16, 185, 129)";
-                setTimeout(() => {
-                    if (updateButton.isConnected) {
-                        updateButton.textContent = "Copy Script";
-                        updateButton.style.backgroundColor = "rgb(79, 70, 229)";
-                    }
-                }, 3000);
-            }
-            catch (error) {
-                this.kxsClient.nm.showNotification("Error: " + error.message, "error", 5000);
-            }
-        });
-        modal.appendChild(header);
-        modal.appendChild(content);
-        modal.appendChild(updateButton);
-        document.body.appendChild(modal);
+        
     }
     getCurrentScriptVersion() {
         return package_namespaceObject.rE;
     }
 }
-
-
+ 
+ 
 ;// ./src/SERVER/DiscordRichPresence.ts
-
+ 
 class DiscordWebSocket {
     constructor(kxsClient, token) {
         this.ws = null;
@@ -2508,8 +2423,8 @@ class DiscordWebSocket {
         }
     }
 }
-
-
+ 
+ 
 ;// ./src/HUD/MOD/NotificationManager.ts
 class NotificationManager {
     constructor() {
@@ -2532,18 +2447,18 @@ class NotificationManager {
           50% { transform: translateX(10px); opacity: 0.8; }
           100% { transform: translateX(0); opacity: 1; }
         }
-
+ 
         @keyframes slideOut {
           0% { transform: translateX(0); opacity: 1; }
           50% { transform: translateX(10px); opacity: 0.8; }
           100% { transform: translateX(-120%); opacity: 0; }
         }
-
+ 
         @keyframes slideLeft {
           from { transform-origin: right; transform: scaleX(1); }
           to { transform-origin: right; transform: scaleX(0); }
         }
-
+ 
         @keyframes bounce {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.1); }
@@ -2658,11 +2573,11 @@ class NotificationManager {
         }, duration);
     }
 }
-
-
+ 
+ 
 ;// ./src/HUD/ClientSecondaryMenu.ts
-
-
+ 
+ 
 const category = ["ALL", "HUD", "SERVER", "MECHANIC", "MISC"];
 class KxsClientSecondaryMenu {
     constructor(kxsClient) {
@@ -3730,7 +3645,7 @@ class KxsClientSecondaryMenu {
 				transition: background 0.2s, transform 0.1s;
 				z-index: 3;
 			}
-
+ 
 			.kxs-minimal-slider::-moz-range-thumb {
 				width: ${isMobile ? "14px" : "16px"};
 				height: ${isMobile ? "14px" : "16px"};
@@ -3742,24 +3657,24 @@ class KxsClientSecondaryMenu {
 				transition: background 0.2s, transform 0.1s;
 				z-index: 3;
 			}
-
+ 
 			/* Masquer la piste par défaut */
 			.kxs-minimal-slider::-webkit-slider-runnable-track {
 				background: transparent;
 				height: 100%;
 			}
-
+ 
 			.kxs-minimal-slider::-moz-range-track {
 				background: transparent;
 				height: 100%;
 			}
-
+ 
 			/* Effets au survol */
 			.kxs-minimal-slider:hover::-webkit-slider-thumb {
 				background: linear-gradient(135deg, #5a93fa, #4289f7);
 				transform: scale(1.05);
 			}
-
+ 
 			.kxs-minimal-slider:hover::-moz-range-thumb {
 				background: linear-gradient(135deg, #5a93fa, #4289f7);
 				transform: scale(1.05);
@@ -4138,8 +4053,8 @@ class KxsClientSecondaryMenu {
         return this.isClientMenuVisible;
     }
 }
-
-
+ 
+ 
 ;// ./src/SERVER/Ping.ts
 class PingTest {
     constructor() {
@@ -4369,10 +4284,10 @@ class PingTest {
         }
     }
 }
-
-
+ 
+ 
 ;// ./src/HUD/ClientHUD.ts
-
+ 
 class KxsClientHUD {
     constructor(kxsClient) {
         this.healthAnimations = [];
@@ -4892,7 +4807,7 @@ class KxsClientHUD {
 	box-sizing: border-box !important;
 	overflow-y: auto !important; /* Allow vertical scrolling if necessary */
 }
-
+ 
 /* Style pour les boutons de mode de jeu qui ont une image de fond */
 .btn-mode-cobalt,
 [style*="background: url("] {
@@ -4902,7 +4817,7 @@ class KxsClientHUD {
 	position: relative !important;
 	padding-right: 40px !important;
 }
-
+ 
 /* Ne pas appliquer ce style aux boutons standards comme Play Solo */
 #btn-start-mode-0 {
 	background-repeat: initial !important;
@@ -4910,7 +4825,7 @@ class KxsClientHUD {
 	background-size: initial !important;
 	padding-right: initial !important;
 }
-
+ 
 .ui-game-menu-desktop::-webkit-scrollbar {
 	width: 8px !important;
 }
@@ -4926,12 +4841,12 @@ class KxsClientHUD {
 .ui-game-menu-desktop::-webkit-scrollbar-thumb:hover {
 	background-color: #5a9eff !important;
 }
-
+ 
 .ui-game-menu-desktop {
 	scrollbar-width: thin !important;
 	scrollbar-color: #4287f5 rgba(25, 25, 35, 0.5) !important;
 }
-
+ 
 .kxs-header {
 	display: flex;
 	align-items: center;
@@ -4940,14 +4855,14 @@ class KxsClientHUD {
 	padding: 10px;
 	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
-
+ 
 .kxs-logo {
 	width: 30px;
 	height: 30px;
 	margin-right: 10px;
 	border-radius: 6px;
 }
-
+ 
 .kxs-title {
 	font-size: 20px;
 	font-weight: 700;
@@ -4957,12 +4872,12 @@ class KxsClientHUD {
 	font-family: 'Arial', sans-serif;
 	letter-spacing: 2px;
 }
-
+ 
 .kxs-title span {
 	color: #4287f5;
 }
-
-
+ 
+ 
 .btn-game-menu {
 	background: linear-gradient(135deg, rgba(66, 135, 245, 0.1) 0%, rgba(66, 135, 245, 0.2) 100%) !important;
 	border: 1px solid rgba(66, 135, 245, 0.3) !important;
@@ -4978,13 +4893,13 @@ class KxsClientHUD {
 	box-sizing: border-box !important;
 	line-height: 15px !important;
 }
-
+ 
 .btn-game-menu:hover {
 	background: linear-gradient(135deg, rgba(66, 135, 245, 0.2) 0%, rgba(66, 135, 245, 0.3) 100%) !important;
 	transform: translateY(-2px) !important;
 	box-shadow: 0 4px 12px rgba(66, 135, 245, 0.2) !important;
 }
-
+ 
 .slider-container {
 	background: rgba(66, 135, 245, 0.1) !important;
 	border-radius: 8px !important;
@@ -4993,14 +4908,14 @@ class KxsClientHUD {
 	width: 100% !important;
 	box-sizing: border-box !important;
 }
-
+ 
 .slider-text {
 	color: #ffffff !important;
 	font-size: 14px !important;
 	margin-bottom: 8px !important;
 	text-align: center !important;
 }
-
+ 
 .slider {
 	-webkit-appearance: none !important;
 	width: 100% !important;
@@ -5010,7 +4925,7 @@ class KxsClientHUD {
 	outline: none !important;
 	margin: 10px 0 !important;
 }
-
+ 
 .slider::-webkit-slider-thumb {
 	-webkit-appearance: none !important;
 	width: 16px !important;
@@ -5020,12 +4935,12 @@ class KxsClientHUD {
 	cursor: pointer !important;
 	transition: all 0.3s ease !important;
 }
-
+ 
 .slider::-webkit-slider-thumb:hover {
 	transform: scale(1.2) !important;
 	box-shadow: 0 0 10px rgba(66, 135, 245, 0.5) !important;
 }
-
+ 
 .btns-game-double-row {
 	display: flex !important;
 	justify-content: center !important;
@@ -5033,11 +4948,11 @@ class KxsClientHUD {
 	margin-bottom: 10px !important;
 	width: 100% !important;
 }
-
+ 
 .btn-game-container {
 	flex: 1 !important;
 }
-
+ 
 #btn-touch-styles,
 #btn-game-aim-line {
 	display: none !important;
@@ -5172,7 +5087,7 @@ class KxsClientHUD {
         if (this.kxsClient.isKillFeedBlint) {
             customStyles.innerHTML = `
         @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@600&display=swap');
-
+ 
         .killfeed-div {
             position: absolute !important;
             padding: 5px 10px !important;
@@ -5180,7 +5095,7 @@ class KxsClientHUD {
             border-radius: 5px !important;
             transition: opacity 0.5s ease-out !important;
         }
-
+ 
         .killfeed-text {
             font-family: 'Oxanium', sans-serif !important;
             font-weight: bold !important;
@@ -5200,7 +5115,7 @@ class KxsClientHUD {
             -webkit-text-fill-color: transparent;
             animation: glint 3s linear infinite;
         }
-
+ 
         @keyframes glint {
             0% {
                 background-position: 200% 0;
@@ -5209,7 +5124,7 @@ class KxsClientHUD {
                 background-position: -200% 0;
             }
         }
-
+ 
         .killfeed-div .killfeed-text:empty {
             display: none !important;
         }
@@ -5224,7 +5139,7 @@ class KxsClientHUD {
             border-radius: 5px;
             transition: opacity 0.5s ease-out;
         }
-
+ 
         .killfeed-text {
             font-family: inherit;
             font-weight: normal;
@@ -5233,7 +5148,7 @@ class KxsClientHUD {
             text-shadow: none;
             background: none;
         }
-
+ 
         .killfeed-div .killfeed-text:empty {
             display: none;
         }
@@ -5861,8 +5776,8 @@ class KxsClientHUD {
         });
     }
 }
-
-
+ 
+ 
 ;// ./src/FUNC/Logger.ts
 class Logger {
     getHeader(method) {
@@ -5886,8 +5801,8 @@ class Logger {
         this.展示(this.getHeader("ERROR"), message);
     }
 }
-
-
+ 
+ 
 // EXTERNAL MODULE: ../../GitLab/SteganoDB2/lib/browser.js
 var browser = __webpack_require__(686);
 ;// ./src/HUD/HistoryManager.ts
@@ -6230,10 +6145,10 @@ class GameHistoryMenu {
         this.hide();
     }
 }
-
-
+ 
+ 
 ;// ./src/NETWORK/KxsNetwork.ts
-
+ 
 class KxsNetwork {
     sendGlobalChatMessage(text) {
         if (!this.ws || this.ws.readyState !== WebSocket.OPEN)
@@ -6461,8 +6376,8 @@ class KxsNetwork {
         (_a = this.ws) === null || _a === void 0 ? void 0 : _a.send(JSON.stringify({ op: 4, d: {} }));
     }
 }
-
-
+ 
+ 
 ;// ./src/UTILS/KxsChat.ts
 class KxsChat {
     constructor(kxsClient) {
@@ -6555,7 +6470,7 @@ class KxsChat {
         if (this.kxsClient.secondaryMenu && this.kxsClient.secondaryMenu.menu) {
             observer.observe(this.kxsClient.secondaryMenu.menu, { attributes: true, attributeFilter: ['style', 'class'] });
         }
-        // Optionnel : timer pour fallback (si le menu est modifié autrement)
+        // Optionnel : timer pour fallback (si le menu est modifié autrement)
         setInterval(updateChatDraggable, 500);
         // Input
         const input = document.createElement('input');
@@ -6691,8 +6606,8 @@ class KxsChat {
         this.kxsClient.nm.showNotification(message, type, 600);
     }
 }
-
-
+ 
+ 
 ;// ./src/UTILS/KxsVoiceChat.ts
 var KxsVoiceChat_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -7226,8 +7141,8 @@ class KxsVoiceChat {
         this.kxsClient.nm.showNotification(message, notificationType, 2000);
     }
 }
-
-
+ 
+ 
 ;// ./src/KxsClient.ts
 var KxsClient_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -7238,24 +7153,24 @@ var KxsClient_awaiter = (undefined && undefined.__awaiter) || function (thisArg,
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 class KxsClient {
     constructor() {
         this.onlineMenuElement = null;
@@ -8651,7 +8566,7 @@ class KxsClient {
         }
     }
 }
-
+ 
 ;// ./src/HUD/MOD/LoadingScreen.ts
 /**
  * LoadingScreen.ts
@@ -8810,7 +8725,7 @@ class LoadingScreen {
         }, 500); // Wait for the transition to finish before removing the element
     }
 }
-
+ 
 ;// ./src/HUD/ServerSelector.ts
 class ServerSelector {
     constructor(servers, onServerSelect) {
@@ -9081,10 +8996,10 @@ class ServerSelector {
         this.selectedIndex = 0;
     }
 }
-
+ 
 ;// ./src/HUD/EasterEgg.ts
-
-
+ 
+ 
 class EasterEgg {
     constructor() {
         this.originalStyles = {};
@@ -9800,16 +9715,16 @@ class EasterEgg {
         this.initGlobalEventHandlers();
     }
 }
-
+ 
 ;// ./src/index.ts
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 if (window.location.href === "https://kxs.rip/") {
     /*
         - Injecting Easter Egg
@@ -9880,12 +9795,12 @@ else if (window.location.pathname === "/") {
         loadingScreen.hide();
     }, 1400);
 }
-
+ 
 })();
-
+ 
 /******/ })()
 ;
-
+ 
 (function() {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/surplus.user.js';
