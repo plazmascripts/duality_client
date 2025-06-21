@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Duality Client
-// @version      1.22
+// @version      2.2.7
 // @description  A fusion of KxsClient and Surplus, adding extra features and cheats.
 // @author       plazmascripts, mahdi, noam, Kisakay
 // @run-at       document-start
@@ -18,48 +18,54 @@
 // @match        *://survev.leia-is.gay/*
 // @match        *://survivx.org
 // @match        *://kxs.rip/*
+// @match        *suroi.io*
 // @grant        none
+// @downloadURL https://update.greasyfork.org/scripts/538515/Duality%20Client.user.js
+// @updateURL https://update.greasyfork.org/scripts/538515/Duality%20Client.meta.js
 // ==/UserScript==
+
 ;
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
- 
+
 /***/ 123:
 /***/ ((module) => {
- 
+
+
+
 const numeric = /^[0-9]+$/
 const compareIdentifiers = (a, b) => {
   const anum = numeric.test(a)
   const bnum = numeric.test(b)
- 
+
   if (anum && bnum) {
     a = +a
     b = +b
   }
- 
+
   return a === b ? 0
     : (anum && !bnum) ? -1
     : (bnum && !anum) ? 1
     : a < b ? -1
     : 1
 }
- 
+
 const rcompareIdentifiers = (a, b) => compareIdentifiers(b, a)
- 
+
 module.exports = {
   compareIdentifiers,
   rcompareIdentifiers,
 }
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 229:
 /***/ ((__unused_webpack_module, exports) => {
- 
-"use strict";
+
 var __webpack_unused_export__;
- 
+
 __webpack_unused_export__ = ({ value: true });
 exports.A = void 0;
 ;
@@ -288,13 +294,15 @@ class SimplifiedSteganoDB {
     }
 }
 exports.A = SimplifiedSteganoDB;
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 272:
 /***/ ((module) => {
- 
+
+
+
 const debug = (
   typeof process === 'object' &&
   process.env &&
@@ -302,37 +310,43 @@ const debug = (
   /\bsemver\b/i.test(process.env.NODE_DEBUG)
 ) ? (...args) => console.error('SEMVER', ...args)
   : () => {}
- 
+
 module.exports = debug
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 560:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
- 
+
+
+
 const SemVer = __webpack_require__(908)
 const compare = (a, b, loose) =>
   new SemVer(a, loose).compare(new SemVer(b, loose))
- 
+
 module.exports = compare
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 580:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
- 
+
+
+
 const compare = __webpack_require__(560)
 const gt = (a, b, loose) => compare(a, b, loose) > 0
 module.exports = gt
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 587:
 /***/ ((module) => {
- 
+
+
+
 // parse out just the options we care about
 const looseOption = Object.freeze({ loose: true })
 const emptyOpts = Object.freeze({ })
@@ -340,24 +354,23 @@ const parseOptions = options => {
   if (!options) {
     return emptyOpts
   }
- 
+
   if (typeof options !== 'object') {
     return looseOption
   }
- 
+
   return options
 }
 module.exports = parseOptions
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 686:
 /***/ ((__unused_webpack_module, exports) => {
- 
-"use strict";
+
 var __webpack_unused_export__;
- 
+
 __webpack_unused_export__ = ({ value: true });
 exports.w = void 0;
 ;
@@ -592,13 +605,15 @@ class SteganoDB {
     }
 }
 exports.w = SteganoDB;
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 718:
 /***/ ((module, exports, __webpack_require__) => {
- 
+
+
+
 const {
   MAX_SAFE_COMPONENT_LENGTH,
   MAX_SAFE_BUILD_LENGTH,
@@ -606,7 +621,7 @@ const {
 } = __webpack_require__(874)
 const debug = __webpack_require__(272)
 exports = module.exports = {}
- 
+
 // The actual regexps go on exports.re
 const re = exports.re = []
 const safeRe = exports.safeRe = []
@@ -614,9 +629,9 @@ const src = exports.src = []
 const safeSrc = exports.safeSrc = []
 const t = exports.t = {}
 let R = 0
- 
+
 const LETTERDASHNUMBER = '[a-zA-Z0-9-]'
- 
+
 // Replace some greedy regex tokens to prevent regex dos issues. These regex are
 // used internally via the safeRe object since all inputs in this library get
 // normalized first to trim and collapse all extra whitespace. The original
@@ -628,7 +643,7 @@ const safeRegexReplacements = [
   ['\\d', MAX_LENGTH],
   [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
 ]
- 
+
 const makeSafeRegex = (value) => {
   for (const [token, max] of safeRegexReplacements) {
     value = value
@@ -637,7 +652,7 @@ const makeSafeRegex = (value) => {
   }
   return value
 }
- 
+
 const createToken = (name, value, isGlobal) => {
   const safe = makeSafeRegex(value)
   const index = R++
@@ -648,113 +663,115 @@ const createToken = (name, value, isGlobal) => {
   re[index] = new RegExp(value, isGlobal ? 'g' : undefined)
   safeRe[index] = new RegExp(safe, isGlobal ? 'g' : undefined)
 }
- 
+
 // The following Regular Expressions can be used for tokenizing,
 // validating, and parsing SemVer version strings.
- 
+
 // ## Numeric Identifier
 // A single `0`, or a non-zero digit followed by zero or more digits.
- 
+
 createToken('NUMERICIDENTIFIER', '0|[1-9]\\d*')
 createToken('NUMERICIDENTIFIERLOOSE', '\\d+')
- 
+
 // ## Non-numeric Identifier
 // Zero or more digits, followed by a letter or hyphen, and then zero or
 // more letters, digits, or hyphens.
- 
+
 createToken('NONNUMERICIDENTIFIER', `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`)
- 
+
 // ## Main Version
 // Three dot-separated numeric identifiers.
- 
+
 createToken('MAINVERSION', `(${src[t.NUMERICIDENTIFIER]})\\.` +
                    `(${src[t.NUMERICIDENTIFIER]})\\.` +
                    `(${src[t.NUMERICIDENTIFIER]})`)
- 
+
 createToken('MAINVERSIONLOOSE', `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
                         `(${src[t.NUMERICIDENTIFIERLOOSE]})\\.` +
                         `(${src[t.NUMERICIDENTIFIERLOOSE]})`)
- 
+
 // ## Pre-release Version Identifier
 // A numeric identifier, or a non-numeric identifier.
- 
-createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NUMERICIDENTIFIER]
-}|${src[t.NONNUMERICIDENTIFIER]})`)
- 
-createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NUMERICIDENTIFIERLOOSE]
-}|${src[t.NONNUMERICIDENTIFIER]})`)
- 
+// Non-numberic identifiers include numberic identifiers but can be longer.
+// Therefore non-numberic identifiers must go first.
+
+createToken('PRERELEASEIDENTIFIER', `(?:${src[t.NONNUMERICIDENTIFIER]
+}|${src[t.NUMERICIDENTIFIER]})`)
+
+createToken('PRERELEASEIDENTIFIERLOOSE', `(?:${src[t.NONNUMERICIDENTIFIER]
+}|${src[t.NUMERICIDENTIFIERLOOSE]})`)
+
 // ## Pre-release Version
 // Hyphen, followed by one or more dot-separated pre-release version
 // identifiers.
- 
+
 createToken('PRERELEASE', `(?:-(${src[t.PRERELEASEIDENTIFIER]
 }(?:\\.${src[t.PRERELEASEIDENTIFIER]})*))`)
- 
+
 createToken('PRERELEASELOOSE', `(?:-?(${src[t.PRERELEASEIDENTIFIERLOOSE]
 }(?:\\.${src[t.PRERELEASEIDENTIFIERLOOSE]})*))`)
- 
+
 // ## Build Metadata Identifier
 // Any combination of digits, letters, or hyphens.
- 
+
 createToken('BUILDIDENTIFIER', `${LETTERDASHNUMBER}+`)
- 
+
 // ## Build Metadata
 // Plus sign, followed by one or more period-separated build metadata
 // identifiers.
- 
+
 createToken('BUILD', `(?:\\+(${src[t.BUILDIDENTIFIER]
 }(?:\\.${src[t.BUILDIDENTIFIER]})*))`)
- 
+
 // ## Full Version String
 // A main version, followed optionally by a pre-release version and
 // build metadata.
- 
+
 // Note that the only major, minor, patch, and pre-release sections of
 // the version string are capturing groups.  The build metadata is not a
 // capturing group, because it should not ever be used in version
 // comparison.
- 
+
 createToken('FULLPLAIN', `v?${src[t.MAINVERSION]
 }${src[t.PRERELEASE]}?${
   src[t.BUILD]}?`)
- 
+
 createToken('FULL', `^${src[t.FULLPLAIN]}$`)
- 
+
 // like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
 // also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
 // common in the npm registry.
 createToken('LOOSEPLAIN', `[v=\\s]*${src[t.MAINVERSIONLOOSE]
 }${src[t.PRERELEASELOOSE]}?${
   src[t.BUILD]}?`)
- 
+
 createToken('LOOSE', `^${src[t.LOOSEPLAIN]}$`)
- 
+
 createToken('GTLT', '((?:<|>)?=?)')
- 
+
 // Something like "2.*" or "1.2.x".
 // Note that "x.x" is a valid xRange identifer, meaning "any version"
 // Only the first item is strictly required.
 createToken('XRANGEIDENTIFIERLOOSE', `${src[t.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`)
 createToken('XRANGEIDENTIFIER', `${src[t.NUMERICIDENTIFIER]}|x|X|\\*`)
- 
+
 createToken('XRANGEPLAIN', `[v=\\s]*(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:\\.(${src[t.XRANGEIDENTIFIER]})` +
                    `(?:${src[t.PRERELEASE]})?${
                      src[t.BUILD]}?` +
                    `)?)?`)
- 
+
 createToken('XRANGEPLAINLOOSE', `[v=\\s]*(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:\\.(${src[t.XRANGEIDENTIFIERLOOSE]})` +
                         `(?:${src[t.PRERELEASELOOSE]})?${
                           src[t.BUILD]}?` +
                         `)?)?`)
- 
+
 createToken('XRANGE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAIN]}$`)
 createToken('XRANGELOOSE', `^${src[t.GTLT]}\\s*${src[t.XRANGEPLAINLOOSE]}$`)
- 
+
 // Coercion.
 // Extract anything that could conceivably be a part of a valid semver
 createToken('COERCEPLAIN', `${'(^|[^\\d])' +
@@ -768,37 +785,37 @@ createToken('COERCEFULL', src[t.COERCEPLAIN] +
               `(?:$|[^\\d])`)
 createToken('COERCERTL', src[t.COERCE], true)
 createToken('COERCERTLFULL', src[t.COERCEFULL], true)
- 
+
 // Tilde ranges.
 // Meaning is "reasonably at or greater than"
 createToken('LONETILDE', '(?:~>?)')
- 
+
 createToken('TILDETRIM', `(\\s*)${src[t.LONETILDE]}\\s+`, true)
 exports.tildeTrimReplace = '$1~'
- 
+
 createToken('TILDE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAIN]}$`)
 createToken('TILDELOOSE', `^${src[t.LONETILDE]}${src[t.XRANGEPLAINLOOSE]}$`)
- 
+
 // Caret ranges.
 // Meaning is "at least and backwards compatible with"
 createToken('LONECARET', '(?:\\^)')
- 
+
 createToken('CARETTRIM', `(\\s*)${src[t.LONECARET]}\\s+`, true)
 exports.caretTrimReplace = '$1^'
- 
+
 createToken('CARET', `^${src[t.LONECARET]}${src[t.XRANGEPLAIN]}$`)
 createToken('CARETLOOSE', `^${src[t.LONECARET]}${src[t.XRANGEPLAINLOOSE]}$`)
- 
+
 // A simple gt/lt/eq thing, or just "" to indicate "any version"
 createToken('COMPARATORLOOSE', `^${src[t.GTLT]}\\s*(${src[t.LOOSEPLAIN]})$|^$`)
 createToken('COMPARATOR', `^${src[t.GTLT]}\\s*(${src[t.FULLPLAIN]})$|^$`)
- 
+
 // An expression to strip any whitespace between the gtlt and the thing
 // it modifies, so that `> 1.2.3` ==> `>1.2.3`
 createToken('COMPARATORTRIM', `(\\s*)${src[t.GTLT]
 }\\s*(${src[t.LOOSEPLAIN]}|${src[t.XRANGEPLAIN]})`, true)
 exports.comparatorTrimReplace = '$1$2$3'
- 
+
 // Something like `1.2.3 - 1.2.4`
 // Note that these all use the loose form, because they'll be
 // checked against either the strict or loose comparator form
@@ -807,26 +824,25 @@ createToken('HYPHENRANGE', `^\\s*(${src[t.XRANGEPLAIN]})` +
                    `\\s+-\\s+` +
                    `(${src[t.XRANGEPLAIN]})` +
                    `\\s*$`)
- 
+
 createToken('HYPHENRANGELOOSE', `^\\s*(${src[t.XRANGEPLAINLOOSE]})` +
                         `\\s+-\\s+` +
                         `(${src[t.XRANGEPLAINLOOSE]})` +
                         `\\s*$`)
- 
+
 // Star ranges basically just allow anything at all.
 createToken('STAR', '(<|>)?=?\\s*\\*')
 // >=0.0.0 is like a star
 createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$')
 createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 746:
 /***/ (() => {
- 
-"use strict";
- 
+
+
 // --- HOOK GLOBAL WEBSOCKET POUR INTERCEPTION gameId & PTC monitoring ---
 (function () {
     const OriginalWebSocket = window.WebSocket;
@@ -837,6 +853,7 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
         if (typeof url === "string" && url.includes("gameId=")) {
             const gameId = url.split("gameId=")[1];
             globalThis.kxsClient.kxsNetwork.sendGameInfoToWebSocket(gameId);
+            globalThis.kxsClient.exchangeManager.sendGameInfo(gameId);
         }
         return ws;
     }
@@ -852,28 +869,30 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$')
     // Remplace le constructeur global
     window.WebSocket = HookedWebSocket;
 })();
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 874:
 /***/ ((module) => {
- 
+
+
+
 // Note: this is the semver.org version of the spec that it implements
 // Not necessarily the package version of this code.
 const SEMVER_SPEC_VERSION = '2.0.0'
- 
+
 const MAX_LENGTH = 256
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
 /* istanbul ignore next */ 9007199254740991
- 
+
 // Max safe segment length for coercion.
 const MAX_SAFE_COMPONENT_LENGTH = 16
- 
+
 // Max safe length for a build identifier. The max length minus 6 characters for
 // the shortest version with a build 0.0.0+BUILD.
 const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
- 
+
 const RELEASE_TYPES = [
   'major',
   'premajor',
@@ -883,7 +902,7 @@ const RELEASE_TYPES = [
   'prepatch',
   'prerelease',
 ]
- 
+
 module.exports = {
   MAX_LENGTH,
   MAX_SAFE_COMPONENT_LENGTH,
@@ -894,23 +913,25 @@ module.exports = {
   FLAG_INCLUDE_PRERELEASE: 0b001,
   FLAG_LOOSE: 0b010,
 }
- 
- 
+
+
 /***/ }),
- 
+
 /***/ 908:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
- 
+
+
+
 const debug = __webpack_require__(272)
 const { MAX_LENGTH, MAX_SAFE_INTEGER } = __webpack_require__(874)
-const { safeRe: re, safeSrc: src, t } = __webpack_require__(718)
- 
+const { safeRe: re, t } = __webpack_require__(718)
+
 const parseOptions = __webpack_require__(587)
 const { compareIdentifiers } = __webpack_require__(123)
 class SemVer {
   constructor (version, options) {
     options = parseOptions(options)
- 
+
     if (version instanceof SemVer) {
       if (version.loose === !!options.loose &&
         version.includePrerelease === !!options.includePrerelease) {
@@ -921,45 +942,45 @@ class SemVer {
     } else if (typeof version !== 'string') {
       throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`)
     }
- 
+
     if (version.length > MAX_LENGTH) {
       throw new TypeError(
         `version is longer than ${MAX_LENGTH} characters`
       )
     }
- 
+
     debug('SemVer', version, options)
     this.options = options
     this.loose = !!options.loose
     // this isn't actually relevant for versions, but keep it so that we
     // don't run into trouble passing this.options around.
     this.includePrerelease = !!options.includePrerelease
- 
+
     const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
- 
+
     if (!m) {
       throw new TypeError(`Invalid Version: ${version}`)
     }
- 
+
     this.raw = version
- 
+
     // these are actually numbers
     this.major = +m[1]
     this.minor = +m[2]
     this.patch = +m[3]
- 
+
     if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
       throw new TypeError('Invalid major version')
     }
- 
+
     if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
       throw new TypeError('Invalid minor version')
     }
- 
+
     if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
       throw new TypeError('Invalid patch version')
     }
- 
+
     // numberify any prerelease numeric ids
     if (!m[4]) {
       this.prerelease = []
@@ -974,11 +995,11 @@ class SemVer {
         return id
       })
     }
- 
+
     this.build = m[5] ? m[5].split('.') : []
     this.format()
   }
- 
+
   format () {
     this.version = `${this.major}.${this.minor}.${this.patch}`
     if (this.prerelease.length) {
@@ -986,11 +1007,11 @@ class SemVer {
     }
     return this.version
   }
- 
+
   toString () {
     return this.version
   }
- 
+
   compare (other) {
     debug('SemVer.compare', this.version, this.options, other)
     if (!(other instanceof SemVer)) {
@@ -999,31 +1020,31 @@ class SemVer {
       }
       other = new SemVer(other, this.options)
     }
- 
+
     if (other.version === this.version) {
       return 0
     }
- 
+
     return this.compareMain(other) || this.comparePre(other)
   }
- 
+
   compareMain (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
- 
+
     return (
       compareIdentifiers(this.major, other.major) ||
       compareIdentifiers(this.minor, other.minor) ||
       compareIdentifiers(this.patch, other.patch)
     )
   }
- 
+
   comparePre (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
- 
+
     // NOT having a prerelease is > having one
     if (this.prerelease.length && !other.prerelease.length) {
       return -1
@@ -1032,7 +1053,7 @@ class SemVer {
     } else if (!this.prerelease.length && !other.prerelease.length) {
       return 0
     }
- 
+
     let i = 0
     do {
       const a = this.prerelease[i]
@@ -1051,12 +1072,12 @@ class SemVer {
       }
     } while (++i)
   }
- 
+
   compareBuild (other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options)
     }
- 
+
     let i = 0
     do {
       const a = this.build[i]
@@ -1075,7 +1096,7 @@ class SemVer {
       }
     } while (++i)
   }
- 
+
   // preminor will bump the version up to the next minor release, and immediately
   // down to pre-release. premajor and prepatch work the same way.
   inc (release, identifier, identifierBase) {
@@ -1085,14 +1106,13 @@ class SemVer {
       }
       // Avoid an invalid semver results
       if (identifier) {
-        const r = new RegExp(`^${this.options.loose ? src[t.PRERELEASELOOSE] : src[t.PRERELEASE]}$`)
-        const match = `-${identifier}`.match(r)
+        const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE])
         if (!match || match[1] !== identifier) {
           throw new Error(`invalid identifier: ${identifier}`)
         }
       }
     }
- 
+
     switch (release) {
       case 'premajor':
         this.prerelease.length = 0
@@ -1129,7 +1149,7 @@ class SemVer {
         }
         this.prerelease.length = 0
         break
- 
+
       case 'major':
         // If this is a pre-major version, bump up to the same major version.
         // Otherwise increment major.
@@ -1171,7 +1191,7 @@ class SemVer {
       // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
       case 'pre': {
         const base = Number(identifierBase) ? 1 : 0
- 
+
         if (this.prerelease.length === 0) {
           this.prerelease = [base]
         } else {
@@ -1217,12 +1237,12 @@ class SemVer {
     return this
   }
 }
- 
+
 module.exports = SemVer
- 
- 
+
+
 /***/ })
- 
+
 /******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
@@ -1281,20 +1301,18 @@ module.exports = SemVer
 /******/
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
-(() => {
-"use strict";
- 
+
 // EXTERNAL MODULE: ./src/UTILS/websocket-hook.ts
 var websocket_hook = __webpack_require__(746);
 // EXTERNAL MODULE: ../../GitLab/SteganoDB2/lib/simplified_browser.js
 var simplified_browser = __webpack_require__(229);
 ;// ./config.json
-const config_namespaceObject = /*#__PURE__*/JSON.parse('{"base_url":"https://kxs.rip","api_url":"https://network.kxs.rip","fileName":"KxsClient.user.js","match":["*://survev.io/*","*://66.179.254.36/*","*://zurviv.io/*","*://resurviv.biz/*","*://leia-uwu.github.io/survev/*","*://survev.leia-is.gay/*","*://survivx.org","*://kxs.rip/*"],"grant":["none"]}');
+const config_namespaceObject = /*#__PURE__*/JSON.parse('{"base_url":"https://kxs.rip","api_url":"https://network.kxs.rip","fileName":"KxsClient.user.js","match":["survev.io","66.179.254.36","zurviv.io","resurviv.biz","leia-uwu.github.io/survev","survev.leia-is.gay","survivx.org","kxs.rip","localhost:3000","veldreth.com"],"grant":["none"]}');
 ;// ./src/UTILS/vars.ts
- 
- 
+
+
 const background_song = config_namespaceObject.base_url + "/assets/Stranger_Things_Theme_Song_C418_REMIX.mp3";
+const gbl_sound = config_namespaceObject.base_url + "/assets/blacklisted.m4a";
 const kxs_logo = "https://files.catbox.moe/onhbvw.png";
 const full_logo = "https://files.catbox.moe/1yu9ii.png";
 const background_image = config_namespaceObject.base_url + "/assets/background.jpg";
@@ -1306,7 +1324,21 @@ const survev_settings = new simplified_browser/* SimplifiedSteganoDB */.A({
 const kxs_settings = new simplified_browser/* SimplifiedSteganoDB */.A({
     database: "userSettings"
 });
- 
+
+;// ./src/UTILS/favicon.ts
+function setFavicon(url) {
+    // Remove existing favicons
+    const existingFavicons = document.querySelectorAll('link[rel*="icon"]');
+    existingFavicons.forEach(favicon => favicon.remove());
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = url;
+    // Modern browsers generally pick the best icon format,
+    // so explicitly setting type might not be necessary unless specific formats are used.
+    // link.type = 'image/png'; // Or 'image/x-icon' for .ico files
+    document.head.appendChild(link);
+}
+
 ;// ./src/MECHANIC/intercept.ts
 function intercept(link, targetUrl) {
     const open = XMLHttpRequest.prototype.open;
@@ -1324,16 +1356,585 @@ function intercept(link, targetUrl) {
         return originalFetch.apply(this, arguments);
     };
 }
- 
- 
+
+
+;// ./src/HUD/DesignSystem.ts
+/**
+ * KxsClient Modern Design System
+ * Implements a modern glassmorphism UI design with blur effects
+ * Also supports classic UI styling when glassmorphism is disabled
+ */
+class DesignSystem {
+    // Flag to check if glassmorphism is enabled - retrieved from KxsClient instance
+    static isGlassmorphismEnabled() {
+        var _a, _b;
+        return (_b = (_a = globalThis.kxsClient) === null || _a === void 0 ? void 0 : _a.isGlassmorphismEnabled) !== null && _b !== void 0 ? _b : true;
+    }
+    /**
+     * Injects required fonts and animations into the document
+     */
+    static injectFonts() {
+        // Inject fonts
+        const fontLinks = [
+            'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+            'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap'
+        ];
+        fontLinks.forEach(href => {
+            if (!document.querySelector(`link[href="${href}"]`)) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                document.head.appendChild(link);
+            }
+        });
+        // Inject animations if not already injected
+        if (!document.getElementById('kxs-design-system-animations')) {
+            const animationStyle = document.createElement('style');
+            animationStyle.id = 'kxs-design-system-animations';
+            animationStyle.textContent = `
+				@keyframes pulse {
+					0% { transform: scale(1); }
+					50% { transform: scale(1.05); }
+					100% { transform: scale(1); }
+				}
+			`;
+            document.head.appendChild(animationStyle);
+        }
+    }
+    /**
+     * Creates a style object for UI elements based on whether glassmorphism is enabled
+     * @param type Style effect type
+     * @param additionalStyles Additional CSS styles
+     * @returns CSS style object
+     */
+    static createStyle(type, additionalStyles = {}) {
+        if (this.isGlassmorphismEnabled()) {
+            // Use glassmorphism styles
+            const glass = this.glass[type];
+            return Object.assign({ backgroundColor: glass.background, backdropFilter: `blur(${glass.blur})`, WebkitBackdropFilter: `blur(${glass.blur})`, border: glass.border, boxShadow: glass.shadow, borderRadius: this.radius.lg }, additionalStyles);
+        }
+        else {
+            // Use classic styles
+            const classic = this.classic[type];
+            return Object.assign({ backgroundColor: classic.background, border: classic.border, boxShadow: classic.shadow, backdropFilter: 'none', WebkitBackdropFilter: 'none', borderRadius: this.radius.md }, additionalStyles);
+        }
+    }
+    /**
+     * Legacy method for backward compatibility
+     * @param type Glass effect type
+     * @param additionalStyles Additional CSS styles
+     * @returns CSS style object
+     */
+    static createGlassStyle(type, additionalStyles = {}) {
+        return this.createStyle(type, additionalStyles);
+    }
+    /**
+     * Applies appropriate styles to an HTML element based on whether glassmorphism is enabled
+     * @param element HTML element to style
+     * @param type Style effect type
+     * @param additionalStyles Additional CSS styles
+     */
+    static applyStyle(element, type, additionalStyles = {}) {
+        const styles = this.createStyle(type, additionalStyles);
+        Object.assign(element.style, styles);
+    }
+    /**
+     * Legacy method for backward compatibility
+     * @param element HTML element to style
+     * @param type Glass effect type
+     * @param additionalStyles Additional CSS styles
+     */
+    static applyGlassEffect(element, type, additionalStyles = {}) {
+        this.applyStyle(element, type, additionalStyles);
+    }
+    /**
+     * Creates a button with either glassmorphism or classic styling
+     * @param text Button text
+     * @param onClick Click handler
+     * @param variant Button variant
+     * @returns HTMLButtonElement
+     */
+    static createButton(text, onClick, variant = 'primary') {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.addEventListener('click', onClick);
+        // Base styles
+        const baseStyles = {
+            padding: `${this.spacing.sm} ${this.spacing.md}`,
+            borderRadius: this.isGlassmorphismEnabled() ? this.radius.md : this.radius.sm,
+            fontFamily: this.fonts.primary,
+            fontSize: this.fonts.sizes.base,
+            fontWeight: '500',
+            color: this.colors.light,
+            border: 'none',
+            cursor: 'pointer',
+            transition: `all ${this.animation.normal} ease`,
+            outline: 'none'
+        };
+        if (this.isGlassmorphismEnabled()) {
+            // Glassmorphism button style
+            Object.assign(button.style, Object.assign(Object.assign({}, baseStyles), { backgroundColor: this.colors[variant], backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }));
+        }
+        else {
+            // Classic button style
+            Object.assign(button.style, Object.assign(Object.assign({}, baseStyles), { backgroundColor: this.colors[variant].replace(/[^,]+(?=\))/, '1'), boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', border: '1px solid rgba(0, 0, 0, 0.1)' }));
+        }
+        // Hover effect based on style
+        button.addEventListener('mouseenter', () => {
+            if (this.isGlassmorphismEnabled()) {
+                button.style.transform = 'translateY(-2px)';
+                button.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+            }
+            else {
+                button.style.transform = 'translateY(-1px)';
+                button.style.filter = 'brightness(1.1)';
+                button.style.boxShadow = '0 3px 5px rgba(0, 0, 0, 0.15)';
+            }
+        });
+        button.addEventListener('mouseleave', () => {
+            if (this.isGlassmorphismEnabled()) {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+            }
+            else {
+                button.style.transform = 'translateY(0)';
+                button.style.filter = 'brightness(1)';
+                button.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+            }
+        });
+        // Active effect
+        button.addEventListener('mousedown', () => {
+            if (this.isGlassmorphismEnabled()) {
+                button.style.transform = 'translateY(1px)';
+                button.style.boxShadow = '0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06)';
+            }
+            else {
+                button.style.transform = 'translateY(1px)';
+                button.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.2)';
+                button.style.filter = 'brightness(0.95)';
+            }
+        });
+        return button;
+    }
+    /**
+     * Creates a card with either glassmorphism or classic styling
+     * @param content HTML content for the card
+     * @param type Style effect type
+     * @returns HTMLDivElement
+     */
+    static createCard(content, type = 'medium') {
+        const card = document.createElement('div');
+        card.innerHTML = content;
+        this.applyStyle(card, type, {
+            padding: this.spacing.lg,
+            margin: this.spacing.md,
+        });
+        return card;
+    }
+    /**
+     * Creates a modern slider element with fire theme
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param value Initial value
+     * @param onChange Change handler
+     * @param showValue Whether to show value display
+     * @returns HTMLDivElement containing the slider
+     */
+    static createSliderElement(min, max, value, onChange, showValue = true) {
+        // Container principal sans fond
+        const container = document.createElement('div');
+        Object.assign(container.style, {
+            width: '100%',
+            fontFamily: this.fonts.primary,
+            position: 'relative',
+            background: 'transparent',
+        });
+        // Input range invisible pour la fonctionnalité
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = min.toString();
+        slider.max = max.toString();
+        slider.value = value.toString();
+        slider.step = '1';
+        // Wrapper pour le slider visuel
+        const sliderWrapper = document.createElement('div');
+        Object.assign(sliderWrapper.style, {
+            position: 'relative',
+            height: '32px',
+            marginBottom: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            overflow: 'visible',
+            padding: '0 16px',
+            boxSizing: 'border-box',
+        });
+        // Track de base avec effet glassmorphism
+        const track = document.createElement('div');
+        Object.assign(track.style, {
+            position: 'absolute',
+            top: '50%',
+            left: '0',
+            right: '0',
+            height: '8px',
+            transform: 'translateY(-50%)',
+            borderRadius: this.radius.full,
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(51, 65, 85, 0.8) 100%)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
+            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1)',
+        });
+        // Barre de progression avec gradient moderne
+        const progressFill = document.createElement('div');
+        const progressWidth = ((value - min) / (max - min)) * 100;
+        Object.assign(progressFill.style, {
+            position: 'absolute',
+            top: '50%',
+            left: '0',
+            height: '8px',
+            width: `${progressWidth}%`,
+            transform: 'translateY(-50%)',
+            borderRadius: this.radius.full,
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(147, 51, 234, 0.9) 50%, rgba(236, 72, 153, 0.8) 100%)',
+            boxShadow: '0 0 16px rgba(59, 130, 246, 0.4), 0 0 8px rgba(147, 51, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
+            overflow: 'hidden',
+        });
+        // Effet de brillance animé sur la barre de progression
+        const shine = document.createElement('div');
+        Object.assign(shine.style, {
+            position: 'absolute',
+            top: '0',
+            left: '-100%',
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+            animation: 'sliderShine 2s ease-in-out infinite',
+        });
+        progressFill.appendChild(shine);
+        // Ajout de l'animation CSS pour l'effet de brillance
+        if (!document.querySelector('#slider-shine-animation')) {
+            const style = document.createElement('style');
+            style.id = 'slider-shine-animation';
+            style.textContent = `
+				@keyframes sliderShine {
+					0% { left: -100%; }
+					50% { left: 100%; }
+					100% { left: 100%; }
+				}
+			`;
+            document.head.appendChild(style);
+        }
+        // Assemblage du track
+        sliderWrapper.appendChild(track);
+        sliderWrapper.appendChild(progressFill);
+        // Input invisible pour la fonctionnalité
+        Object.assign(slider.style, {
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '32px',
+            opacity: '0',
+            margin: '0',
+            cursor: 'pointer',
+            zIndex: '3',
+        });
+        // Thumb personnalisé avec glassmorphism
+        const thumb = document.createElement('div');
+        const thumbPosition = ((value - min) / (max - min)) * 100;
+        Object.assign(thumb.style, {
+            position: 'absolute',
+            top: '50%',
+            left: `${thumbPosition}%`,
+            width: '18px',
+            height: '18px',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)',
+            backdropFilter: 'blur(10px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+            border: '1px solid rgba(59, 130, 246, 0.6)',
+            boxShadow: '0 3px 12px rgba(59, 130, 246, 0.25), 0 1px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+            cursor: 'grab',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            zIndex: '2',
+        });
+        // Point central du thumb
+        const thumbCenter = document.createElement('div');
+        Object.assign(thumbCenter.style, {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '6px',
+            height: '6px',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8))',
+            boxShadow: '0 0 6px rgba(59, 130, 246, 0.5)',
+        });
+        thumb.appendChild(thumbCenter);
+        // Affichage de la valeur avec style moderne
+        let valueDisplay = null;
+        if (showValue) {
+            valueDisplay = document.createElement('div');
+            valueDisplay.textContent = value.toString();
+            Object.assign(valueDisplay.style, {
+                position: 'absolute',
+                bottom: '-40px',
+                left: `${thumbPosition}%`,
+                transform: 'translateX(-50%)',
+                fontFamily: this.fonts.primary,
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#ffffff',
+                background: 'transparent',
+                padding: '4px 8px',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                zIndex: '4',
+            });
+            sliderWrapper.appendChild(valueDisplay);
+        }
+        // Labels min/max avec style amélioré
+        const labelsContainer = document.createElement('div');
+        Object.assign(labelsContainer.style, {
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '12px',
+            fontSize: '11px',
+            fontWeight: '500',
+            color: 'rgba(255, 255, 255, 0.8)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
+        });
+        const minLabel = document.createElement('div');
+        minLabel.textContent = min.toString();
+        const maxLabel = document.createElement('div');
+        maxLabel.textContent = max.toString();
+        labelsContainer.appendChild(minLabel);
+        labelsContainer.appendChild(maxLabel);
+        // Gestion des événements avec animations fluides
+        slider.addEventListener('input', () => {
+            const newValue = parseInt(slider.value);
+            const percentage = ((newValue - min) / (max - min)) * 100;
+            // Animation du thumb
+            thumb.style.left = `${percentage}%`;
+            // Animation de la barre de progression
+            progressFill.style.width = `${percentage}%`;
+            // Mise à jour de l'affichage de la valeur
+            if (valueDisplay) {
+                valueDisplay.textContent = newValue.toString();
+                valueDisplay.style.left = `${percentage}%`;
+            }
+            // Callback
+            onChange(newValue);
+        });
+        // Effets de survol et d'interaction
+        slider.addEventListener('mousedown', () => {
+            thumb.style.cursor = 'grabbing';
+            thumb.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            thumb.style.boxShadow = '0 5px 16px rgba(59, 130, 246, 0.35), 0 2px 10px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)';
+            progressFill.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5), 0 0 12px rgba(147, 51, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+        });
+        document.addEventListener('mouseup', () => {
+            thumb.style.cursor = 'grab';
+            thumb.style.transform = 'translate(-50%, -50%) scale(1)';
+            thumb.style.boxShadow = '0 3px 12px rgba(59, 130, 246, 0.25), 0 1px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)';
+            progressFill.style.boxShadow = '0 0 16px rgba(59, 130, 246, 0.4), 0 0 8px rgba(147, 51, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+        });
+        // Effet de survol
+        sliderWrapper.addEventListener('mouseenter', () => {
+            if (thumb.style.cursor !== 'grabbing') {
+                thumb.style.transform = 'translate(-50%, -50%) scale(1.05)';
+                thumb.style.boxShadow = '0 4px 14px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85)';
+            }
+        });
+        sliderWrapper.addEventListener('mouseleave', () => {
+            if (thumb.style.cursor !== 'grabbing') {
+                thumb.style.transform = 'translate(-50%, -50%) scale(1)';
+                thumb.style.boxShadow = '0 3px 12px rgba(59, 130, 246, 0.25), 0 1px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)';
+            }
+        });
+        // Assemblage final
+        sliderWrapper.appendChild(slider);
+        sliderWrapper.appendChild(thumb);
+        container.appendChild(sliderWrapper);
+        container.appendChild(labelsContainer);
+        return container;
+    }
+    /**
+     * Creates a modern notification with glassmorphism effect
+     * @param message Notification message
+     * @param type Notification type
+     * @param duration Duration in ms
+     * @returns HTMLDivElement
+     */
+    static createNotification(message, type, duration = 3000) {
+        const notification = document.createElement('div');
+        // Apply glassmorphism effect
+        this.applyGlassEffect(notification, 'medium', {
+            padding: `${this.spacing.md} ${this.spacing.lg}`,
+            margin: this.spacing.md,
+            borderLeft: `4px solid ${this.colors[type]}`,
+            color: this.colors.light,
+            fontFamily: this.fonts.primary,
+            fontSize: this.fonts.sizes.sm,
+            position: 'relative',
+            animation: `fadeInRight ${this.animation.normal} forwards`,
+            maxWidth: '300px',
+            boxSizing: 'border-box',
+        });
+        notification.textContent = message;
+        // Create and add animation styles if they don't exist
+        if (!document.getElementById('kxs-notification-animations')) {
+            const style = document.createElement('style');
+            style.id = 'kxs-notification-animations';
+            style.textContent = `
+        @keyframes fadeInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+      `;
+            document.head.appendChild(style);
+        }
+        // Auto-remove after duration
+        if (duration > 0) {
+            setTimeout(() => {
+                notification.style.animation = `fadeOut ${this.animation.normal} forwards`;
+                // Use event listener for animation end instead of setTimeout
+                notification.addEventListener('animationend', function onAnimationEnd() {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                    notification.removeEventListener('animationend', onAnimationEnd);
+                }, { once: true });
+            }, duration);
+        }
+        return notification;
+    }
+}
+// Color palette
+DesignSystem.colors = {
+    primary: 'rgba(59, 130, 246, 0.9)', // Blue
+    secondary: 'rgba(139, 92, 246, 0.9)', // Purple
+    accent: 'rgba(236, 72, 153, 0.9)', // Pink
+    dark: 'rgba(17, 24, 39, 0.8)', // Dark background
+    light: 'rgba(255, 255, 255, 0.9)', // Light text
+    success: 'rgba(16, 185, 129, 0.9)', // Green
+    warning: 'rgba(245, 158, 11, 0.9)', // Orange
+    danger: 'rgba(239, 68, 68, 0.9)', // Red
+    info: 'rgba(59, 130, 246, 0.9)', // Blue
+};
+// Glassmorphism effects
+DesignSystem.glass = {
+    light: {
+        background: 'rgba(255, 255, 255, 0.1)',
+        blur: '10px',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
+        shadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+    },
+    medium: {
+        background: 'rgba(255, 255, 255, 0.15)',
+        blur: '15px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        shadow: '0 8px 32px 0 rgba(31, 38, 135, 0.4)',
+    },
+    dark: {
+        background: 'rgba(17, 24, 39, 0.75)',
+        blur: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        shadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+    },
+};
+// Classic styles (non-glassmorphism)
+DesignSystem.classic = {
+    light: {
+        background: 'rgba(240, 240, 240, 0.9)',
+        border: '1px solid #ccc',
+        shadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+    },
+    medium: {
+        background: 'rgba(220, 220, 220, 0.95)',
+        border: '1px solid #bbb',
+        shadow: '0 3px 6px rgba(0, 0, 0, 0.25)',
+    },
+    dark: {
+        background: 'rgba(50, 50, 50, 0.9)',
+        border: '1px solid #555',
+        shadow: '0 3px 8px rgba(0, 0, 0, 0.3)',
+    },
+};
+// Font settings
+DesignSystem.fonts = {
+    primary: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    secondary: '"Cinzel", serif',
+    sizes: {
+        xs: '0.75rem',
+        sm: '0.875rem',
+        base: '1rem',
+        lg: '1.125rem',
+        xl: '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+    }
+};
+// Border radius
+DesignSystem.radius = {
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '1rem',
+    xl: '1.5rem',
+    full: '9999px',
+};
+// Spacing
+DesignSystem.spacing = {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+    '2xl': '3rem',
+};
+// Animation durations
+DesignSystem.animation = {
+    fast: '0.15s',
+    normal: '0.3s',
+    slow: '0.5s',
+    pulse: 'pulse',
+};
+// Z-index layers
+DesignSystem.layers = {
+    base: 1,
+    menu: 10,
+    modal: 20,
+    tooltip: 30,
+    notification: 40,
+};
+
 ;// ./src/HUD/MOD/HealthWarning.ts
+
 class HealthWarning {
     constructor(kxsClient) {
         this.isDraggable = false;
         this.isDragging = false;
         this.dragOffset = { x: 0, y: 0 };
         this.POSITION_KEY = 'lowHpWarning';
-        this.menuCheckInterval = null;
+        this.mouseMoveThrottle = false;
         this.warningElement = null;
         this.kxsClient = kxsClient;
         this.createWarningElement();
@@ -1344,27 +1945,46 @@ class HealthWarning {
     createWarningElement() {
         const warning = document.createElement("div");
         const uiTopLeft = document.getElementById("ui-top-left");
-        warning.style.cssText = `
-            position: fixed;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #ff0000;
-            border-radius: 5px;
-            padding: 10px 15px;
-            color: #ff0000;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            z-index: 9999;
-            display: none;
-            backdrop-filter: blur(5px);
-            pointer-events: none;
-            transition: border-color 0.3s ease;
-        `;
+        // Vérifier si le mode glassmorphism est activé
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
+        // Appliquer le style approprié en fonction du toggle glassmorphism
+        DesignSystem.applyStyle(warning, 'dark', {
+            position: 'fixed',
+            border: is_glassmorphism_enabled ?
+                '2px solid rgba(255, 0, 0, 0.8)' :
+                '2px solid rgba(255, 50, 50, 0.9)',
+            padding: DesignSystem.spacing.md + ' ' + DesignSystem.spacing.lg,
+            color: '#ff4444',
+            fontFamily: DesignSystem.fonts.primary,
+            fontSize: DesignSystem.fonts.sizes.base,
+            fontWeight: '600',
+            zIndex: DesignSystem.layers.notification.toString(),
+            display: 'none',
+            pointerEvents: 'none',
+            transition: `all ${DesignSystem.animation.normal} ease`,
+            boxShadow: is_glassmorphism_enabled ?
+                '0 8px 32px rgba(255, 0, 0, 0.3), 0 0 20px rgba(255, 0, 0, 0.2)' :
+                '0 4px 12px rgba(255, 0, 0, 0.25)',
+            textShadow: is_glassmorphism_enabled ?
+                '0 0 10px rgba(255, 0, 0, 0.5)' :
+                '0 0 5px rgba(255, 0, 0, 0.4)',
+            backdropFilter: is_glassmorphism_enabled ? 'blur(8px) saturate(180%)' : 'none',
+            borderRadius: is_glassmorphism_enabled ? '12px' : '8px'
+        });
+        // Appliquer le webkit backdrop filter manuellement
+        if (is_glassmorphism_enabled) {
+            warning.style['-webkit-backdrop-filter'] = 'blur(8px) saturate(180%)';
+        }
+        else {
+            warning.style['-webkit-backdrop-filter'] = 'none';
+        }
         const content = document.createElement("div");
-        content.style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        `;
+        Object.assign(content.style, {
+            display: 'flex',
+            alignItems: 'center',
+            gap: DesignSystem.spacing.sm,
+            filter: 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.4))'
+        });
         const icon = document.createElement("div");
         icon.innerHTML = `
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1468,10 +2088,22 @@ class HealthWarning {
     enableDragging() {
         if (!this.warningElement)
             return;
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
         this.isDraggable = true;
         this.warningElement.style.pointerEvents = 'auto';
         this.warningElement.style.cursor = 'move';
+        // Adaptation du style pour le mode placement, selon le toggle glassmorphism
         this.warningElement.style.borderColor = '#00ff00'; // Feedback visuel quand déplaçable
+        if (is_glassmorphism_enabled) {
+            this.warningElement.style.boxShadow = '0 8px 32px rgba(0, 255, 0, 0.2), 0 0 20px rgba(0, 255, 0, 0.15)';
+            this.warningElement.style.backdropFilter = 'blur(8px) saturate(180%)';
+            this.warningElement.style['-webkit-backdrop-filter'] = 'blur(8px) saturate(180%)';
+        }
+        else {
+            this.warningElement.style.boxShadow = '0 4px 12px rgba(0, 255, 0, 0.2)';
+            this.warningElement.style.backdropFilter = 'none';
+            this.warningElement.style['-webkit-backdrop-filter'] = 'none';
+        }
         // Force l'affichage de l'avertissement LOW HP, peu importe la santé actuelle
         this.warningElement.style.display = 'block';
         const span = this.warningElement.querySelector("span");
@@ -1482,11 +2114,23 @@ class HealthWarning {
     disableDragging() {
         if (!this.warningElement)
             return;
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
         this.isDraggable = false;
         this.isDragging = false;
         this.warningElement.style.pointerEvents = 'none';
         this.warningElement.style.cursor = 'default';
         this.warningElement.style.borderColor = '#ff0000'; // Retour à la couleur normale
+        // Restauration du style original en fonction du mode glassmorphism
+        if (is_glassmorphism_enabled) {
+            this.warningElement.style.boxShadow = '0 8px 32px rgba(255, 0, 0, 0.3), 0 0 20px rgba(255, 0, 0, 0.2)';
+            this.warningElement.style.backdropFilter = 'blur(8px) saturate(180%)';
+            this.warningElement.style['-webkit-backdrop-filter'] = 'blur(8px) saturate(180%)';
+        }
+        else {
+            this.warningElement.style.boxShadow = '0 4px 12px rgba(255, 0, 0, 0.25)';
+            this.warningElement.style.backdropFilter = 'none';
+            this.warningElement.style['-webkit-backdrop-filter'] = 'none';
+        }
         // Remet le texte original si l'avertissement est visible
         if (this.warningElement.style.display === 'block') {
             const span = this.warningElement.querySelector("span");
@@ -1522,14 +2166,21 @@ class HealthWarning {
         }
     }
     handleMouseMove(event) {
-        if (!this.isDragging || !this.warningElement)
+        if (!this.isDragging || !this.warningElement || this.mouseMoveThrottle)
             return;
-        // Calculate new position
-        const newX = event.clientX - this.dragOffset.x;
-        const newY = event.clientY - this.dragOffset.y;
-        // Update element position
-        this.warningElement.style.left = `${newX}px`;
-        this.warningElement.style.top = `${newY}px`;
+        // Optimized: throttle mousemove for better performance
+        this.mouseMoveThrottle = true;
+        requestAnimationFrame(() => {
+            // Calculate new position
+            const newX = event.clientX - this.dragOffset.x;
+            const newY = event.clientY - this.dragOffset.y;
+            // Update element position
+            if (this.warningElement) {
+                this.warningElement.style.left = `${newX}px`;
+                this.warningElement.style.top = `${newY}px`;
+            }
+            this.mouseMoveThrottle = false;
+        });
     }
     handleMouseUp() {
         if (this.isDragging && this.warningElement) {
@@ -1543,10 +2194,13 @@ class HealthWarning {
         }
     }
     startMenuCheckInterval() {
-        // Créer un intervalle qui vérifie régulièrement l'état du menu RSHIFT
-        this.menuCheckInterval = window.setInterval(() => {
+        // Écouter directement les événements RSHIFT pour une réaction immédiate
+        this.setupRShiftListener();
+    }
+    setupRShiftListener() {
+        // Fonction pour vérifier et mettre à jour l'état du mode placement
+        const checkMenuState = () => {
             var _a;
-            // Vérifier si le menu secondaire est ouvert
             const isMenuOpen = ((_a = this.kxsClient.secondaryMenu) === null || _a === void 0 ? void 0 : _a.isOpen) || false;
             // Si le menu est ouvert et que nous ne sommes pas en mode placement, activer le mode placement
             if (isMenuOpen && this.kxsClient.isHealthWarningEnabled && !this.isDraggable) {
@@ -1556,11 +2210,33 @@ class HealthWarning {
             else if (!isMenuOpen && this.isDraggable) {
                 this.disableDragging();
             }
-        }, 100); // Vérifier toutes les 100ms
+        };
+        // S'abonner aux notifications de changement d'état du menu
+        if (!this.kxsClient.secondaryMenu.onMenuToggle) {
+            this.kxsClient.secondaryMenu.onMenuToggle = [];
+        }
+        this.kxsClient.secondaryMenu.onMenuToggle.push(checkMenuState);
+        // Vérifier l'état initial
+        checkMenuState();
+    }
+    destroy() {
+        var _a;
+        // Supprimer le callback du menu secondaire
+        if ((_a = this.kxsClient.secondaryMenu) === null || _a === void 0 ? void 0 : _a.onMenuToggle) {
+            const index = this.kxsClient.secondaryMenu.onMenuToggle.findIndex(callback => callback.toString().includes('checkMenuState'));
+            if (index !== -1) {
+                this.kxsClient.secondaryMenu.onMenuToggle.splice(index, 1);
+            }
+        }
+        // Supprimer l'élément du DOM
+        if (this.warningElement) {
+            this.warningElement.remove();
+            this.warningElement = null;
+        }
     }
 }
- 
- 
+
+
 ;// ./src/MECHANIC/KillLeaderTracking.ts
 class KillLeaderTracker {
     constructor(kxsClient) {
@@ -1708,7 +2384,7 @@ class KillLeaderTracker {
                 // Ne rien faire si le kill leader n'a pas atteint le minimum requis
                 return;
             }
-            else if (this.isKillLeader()) {
+            else if (this.isKillLeader() && myKills > 0) {
                 this.showEncouragement(0);
                 this.wasKillLeader = true;
             }
@@ -1725,8 +2401,8 @@ class KillLeaderTracker {
         this.lastKnownKills = myKills;
     }
 }
- 
- 
+
+
 ;// ./src/HUD/GridSystem.ts
 class GridSystem {
     constructor() {
@@ -1800,82 +2476,6 @@ class GridSystem {
             delete this.counterElements[id];
         }
     }
-    areElementsAdjacent(element1, element2) {
-        const rect1 = element1.getBoundingClientRect();
-        const rect2 = element2.getBoundingClientRect();
-        const tolerance = 5;
-        const isLeftAdjacent = Math.abs((rect1.left + rect1.width) - rect2.left) < tolerance;
-        const isRightAdjacent = Math.abs((rect2.left + rect2.width) - rect1.left) < tolerance;
-        const isTopAdjacent = Math.abs((rect1.top + rect1.height) - rect2.top) < tolerance;
-        const isBottomAdjacent = Math.abs((rect2.top + rect2.height) - rect1.top) < tolerance;
-        const overlapVertically = (rect1.top < rect2.bottom && rect1.bottom > rect2.top) ||
-            (rect2.top < rect1.bottom && rect2.bottom > rect1.top);
-        const overlapHorizontally = (rect1.left < rect2.right && rect1.right > rect2.left) ||
-            (rect2.left < rect1.right && rect2.right > rect1.left);
-        let position = "";
-        if (isLeftAdjacent && overlapVertically)
-            position = "left";
-        else if (isRightAdjacent && overlapVertically)
-            position = "right";
-        else if (isTopAdjacent && overlapHorizontally)
-            position = "top";
-        else if (isBottomAdjacent && overlapHorizontally)
-            position = "bottom";
-        return {
-            isAdjacent: (isLeftAdjacent || isRightAdjacent) && overlapVertically ||
-                (isTopAdjacent || isBottomAdjacent) && overlapHorizontally,
-            position
-        };
-    }
-    updateCounterCorners() {
-        const counterIds = Object.keys(this.counterElements);
-        counterIds.forEach(id => {
-            const container = this.counterElements[id];
-            const counter = container.querySelector('div');
-            if (counter) {
-                counter.style.borderRadius = '5px';
-            }
-        });
-        for (let i = 0; i < counterIds.length; i++) {
-            for (let j = i + 1; j < counterIds.length; j++) {
-                const container1 = this.counterElements[counterIds[i]];
-                const container2 = this.counterElements[counterIds[j]];
-                const counter1 = container1.querySelector('div');
-                const counter2 = container2.querySelector('div');
-                if (counter1 && counter2) {
-                    const { isAdjacent, position } = this.areElementsAdjacent(container1, container2);
-                    if (isAdjacent) {
-                        switch (position) {
-                            case "left":
-                                counter1.style.borderTopRightRadius = '0';
-                                counter1.style.borderBottomRightRadius = '0';
-                                counter2.style.borderTopLeftRadius = '0';
-                                counter2.style.borderBottomLeftRadius = '0';
-                                break;
-                            case "right":
-                                counter1.style.borderTopLeftRadius = '0';
-                                counter1.style.borderBottomLeftRadius = '0';
-                                counter2.style.borderTopRightRadius = '0';
-                                counter2.style.borderBottomRightRadius = '0';
-                                break;
-                            case "top":
-                                counter1.style.borderBottomLeftRadius = '0';
-                                counter1.style.borderBottomRightRadius = '0';
-                                counter2.style.borderTopLeftRadius = '0';
-                                counter2.style.borderTopRightRadius = '0';
-                                break;
-                            case "bottom":
-                                counter1.style.borderTopLeftRadius = '0';
-                                counter1.style.borderTopRightRadius = '0';
-                                counter2.style.borderBottomLeftRadius = '0';
-                                counter2.style.borderBottomRightRadius = '0';
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-    }
     snapToGrid(element, x, y) {
         const rect = element.getBoundingClientRect();
         const elementWidth = rect.width;
@@ -1914,7 +2514,6 @@ class GridSystem {
                 snappedY = screenEdges.middle;
             }
         }
-        setTimeout(() => this.updateCounterCorners(), 10);
         return { x: snappedX, y: snappedY };
     }
     highlightNearestGridLine(x, y) {
@@ -1959,8 +2558,8 @@ class GridSystem {
         }
     }
 }
- 
- 
+
+
 ;// ./src/SERVER/DiscordTracking.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1971,7 +2570,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
- 
+
 const stuff_emojis = {
     main_weapon: "🔫",
     secondary_weapon: "🔫",
@@ -2139,7 +2738,7 @@ class DiscordTracking {
                 }
             }
             const message = {
-                username: "DualityClient",
+                username: "KxsClient",
                 avatar_url: kxs_logo,
                 content: result.isWin ? "🎉 New Victory!" : "Match Ended",
                 embeds: [embed],
@@ -2148,8 +2747,8 @@ class DiscordTracking {
         });
     }
 }
- 
- 
+
+
 ;// ./src/FUNC/StatsParser.ts
 class StatsParser {
     static cleanNumber(str) {
@@ -2226,13 +2825,11 @@ class StatsParser {
         return stats;
     }
 }
- 
- 
+
+
 // EXTERNAL MODULE: ./node_modules/semver/functions/gt.js
 var gt = __webpack_require__(580);
 var gt_default = /*#__PURE__*/__webpack_require__.n(gt);
-;// ./package.json
-const package_namespaceObject = {"rE":"2.1.24"};
 ;// ./src/FUNC/UpdateChecker.ts
 var UpdateChecker_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -2243,9 +2840,8 @@ var UpdateChecker_awaiter = (undefined && undefined.__awaiter) || function (this
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
- 
- 
- 
+
+
 class UpdateChecker {
     constructor(kxsClient) {
         this.remoteScriptUrl = config_namespaceObject.api_url + "/getLatestVersion";
@@ -2319,17 +2915,12 @@ class UpdateChecker {
             }
         });
     }
-    displayUpdateNotification() {
-        
-    }
-    getCurrentScriptVersion() {
-        return package_namespaceObject.rE;
-    }
+    displayUpdateNotification() {}
+
 }
- 
- 
+
+
 ;// ./src/SERVER/DiscordRichPresence.ts
- 
 class DiscordWebSocket {
     constructor(kxsClient, token) {
         this.ws = null;
@@ -2368,12 +2959,12 @@ class DiscordWebSocket {
                 },
                 presence: {
                     activities: [{
-                            name: "DualityClient",
+                            name: "KxsClient",
                             type: 0,
                             application_id: "1321193265533550602",
                             assets: {
                                 large_image: "mp:app-icons/1321193265533550602/bccd2479ec56ed7d4e69fa2fdfb47197.png?size=512",
-                                large_text: "DualityClient v" + package_namespaceObject.rE,
+                                large_text: "KxsClient v" + this.kxsClient.pkg.version,
                             }
                         }],
                     status: 'online',
@@ -2423,14 +3014,14 @@ class DiscordWebSocket {
         }
     }
 }
- 
- 
+
+
 ;// ./src/HUD/MOD/NotificationManager.ts
+
 class NotificationManager {
     constructor() {
         this.notifications = [];
         this.NOTIFICATION_HEIGHT = 65; // Height + margin
-        this.NOTIFICATION_MARGIN = 10;
         this.addGlobalStyles();
     }
     static getInstance() {
@@ -2447,18 +3038,18 @@ class NotificationManager {
           50% { transform: translateX(10px); opacity: 0.8; }
           100% { transform: translateX(0); opacity: 1; }
         }
- 
+
         @keyframes slideOut {
           0% { transform: translateX(0); opacity: 1; }
           50% { transform: translateX(10px); opacity: 0.8; }
           100% { transform: translateX(-120%); opacity: 0; }
         }
- 
+
         @keyframes slideLeft {
           from { transform-origin: right; transform: scaleX(1); }
           to { transform-origin: right; transform: scaleX(0); }
         }
- 
+
         @keyframes bounce {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.1); }
@@ -2502,25 +3093,28 @@ class NotificationManager {
         };
         return configs[type];
     }
+    // Helper method to check if glassmorphism is enabled
+    isGlassmorphismEnabled() {
+        var _a, _b;
+        return (_b = (_a = globalThis.kxsClient) === null || _a === void 0 ? void 0 : _a.isGlassmorphismEnabled) !== null && _b !== void 0 ? _b : true;
+    }
     showNotification(message, type, duration = 5000) {
         const notification = document.createElement("div");
-        // Base styles
-        Object.assign(notification.style, {
+        // Apply styles using DesignSystem with dark theme to match the rest of the interface
+        DesignSystem.applyStyle(notification, 'dark', {
             position: "fixed",
             top: "20px",
             left: "20px",
-            padding: "12px 20px",
-            backgroundColor: "#333333",
+            padding: DesignSystem.spacing.md + " " + DesignSystem.spacing.lg,
             color: "white",
-            zIndex: "9999",
+            zIndex: DesignSystem.layers.notification.toString(),
             minWidth: "200px",
-            borderRadius: "4px",
             display: "flex",
             alignItems: "center",
-            gap: "10px",
+            gap: DesignSystem.spacing.sm,
             transform: "translateX(-120%)",
             opacity: "0",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+            fontFamily: DesignSystem.fonts.primary
         });
         // Create icon
         const icon = document.createElement("div");
@@ -2539,17 +3133,37 @@ class NotificationManager {
         const messageDiv = document.createElement("div");
         messageDiv.textContent = message;
         messageDiv.style.flex = "1";
-        // Create progress bar
+        // Create progress bar with appropriate style based on glassmorphism setting
         const progressBar = document.createElement("div");
-        Object.assign(progressBar.style, {
-            height: "4px",
-            backgroundColor: "#e6f3ff",
-            width: "100%",
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            animation: `slideLeft ${duration}ms linear forwards`
-        });
+        if (this.isGlassmorphismEnabled()) {
+            // Glassmorphism progress bar style
+            Object.assign(progressBar.style, {
+                height: "4px",
+                background: "rgba(255, 255, 255, 0.3)",
+                backdropFilter: "blur(5px)",
+                webkitBackdropFilter: "blur(5px)",
+                borderRadius: `0 0 ${DesignSystem.radius.lg} ${DesignSystem.radius.lg}`,
+                width: "100%",
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                animation: `slideLeft ${duration}ms linear forwards`
+            });
+        }
+        else {
+            // Classic progress bar style
+            Object.assign(progressBar.style, {
+                height: "3px",
+                background: type === "success" ? "#4CAF50" : type === "error" ? "#F44336" : "#2196F3",
+                opacity: "0.7",
+                borderRadius: `0 0 ${DesignSystem.radius.md} ${DesignSystem.radius.md}`,
+                width: "100%",
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                animation: `slideLeft ${duration}ms linear forwards`
+            });
+        }
         // Assemble notification
         notification.appendChild(icon);
         notification.appendChild(messageDiv);
@@ -2563,42 +3177,50 @@ class NotificationManager {
             notification.style.transition = "all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
             notification.style.animation = "slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
         });
-        // Exit animation and cleanup
+        // Exit animation and cleanup (optimized)
         setTimeout(() => {
             notification.style.animation = "slideOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards";
-            setTimeout(() => {
+            // Use event listener for animation end instead of setTimeout
+            notification.addEventListener('animationend', () => {
                 this.removeNotification(notification);
                 notification.remove();
-            }, 500);
+            }, { once: true });
         }, duration);
     }
 }
- 
- 
+
+
 ;// ./src/HUD/ClientSecondaryMenu.ts
- 
- 
+var ClientSecondaryMenu_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
 const category = ["ALL", "HUD", "SERVER", "MECHANIC", "MISC"];
+const X0 = ["Kxs Network", "Developer Options"];
 class KxsClientSecondaryMenu {
     constructor(kxsClient) {
         this.searchTerm = '';
         // Fonction pour fermer un sous-menu
         this.closeSubMenu = () => { };
-        this.shiftListener = (event) => {
-            if (event.key === "Shift" && event.location == 2) {
-                this.clearMenu();
-                this.toggleMenuVisibility();
-                // Ensure options are displayed after loading
-                this.filterOptions();
-            }
-        };
+        // Callbacks pour notifier les changements d'état du menu
+        this.onMenuToggle = [];
         this.mouseMoveListener = (e) => {
             if (this.isDragging) {
-                const x = e.clientX - this.dragOffset.x;
-                const y = e.clientY - this.dragOffset.y;
-                this.menu.style.transform = 'none';
-                this.menu.style.left = `${x}px`;
-                this.menu.style.top = `${y}px`;
+                // Optimized: use requestAnimationFrame for smooth dragging
+                requestAnimationFrame(() => {
+                    const x = e.clientX - this.dragOffset.x;
+                    const y = e.clientY - this.dragOffset.y;
+                    this.menu.style.transform = 'none';
+                    this.menu.style.left = `${x}px`;
+                    this.menu.style.top = `${y}px`;
+                });
             }
         };
         this.mouseUpListener = () => {
@@ -2638,40 +3260,60 @@ class KxsClientSecondaryMenu {
         // Nous ne gérons pas mousedown et mouseup ici car ils sont gérés dans addDragListeners()
     }
     applyMenuStyles() {
-        // Styles par défaut (desktop/tablette)
-        const defaultStyles = {
-            backgroundColor: "rgba(17, 24, 39, 0.95)",
-            padding: "20px",
-            borderRadius: "12px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.8)",
-            zIndex: "10001",
-            width: "800px",
-            fontFamily: "'Segoe UI', Arial, sans-serif",
-            color: "#fff",
-            maxHeight: "80vh",
-            overflowY: "auto",
-            overflowX: "hidden", // Prevent horizontal scrolling
+        const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
+        // Injecter les polices et animations du DesignSystem
+        DesignSystem.injectFonts();
+        // Apply appropriate styling based on the glassmorphism toggle
+        DesignSystem.applyStyle(this.menu, 'dark', {
             position: "fixed",
-            top: "10%",
             left: "50%",
-            transform: "translateX(-50%)",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: isMobile ? "85%" : "55%",
+            maxWidth: "650px",
+            maxHeight: "70vh",
+            color: "#fff",
+            padding: isMobile ? "10px" : "18px",
+            zIndex: "10000",
             display: "none",
-            boxSizing: "border-box", // Include padding in width calculation
-        };
+            flexDirection: "column",
+            fontFamily: DesignSystem.fonts.primary,
+            cursor: "grab",
+            userSelect: "none",
+            overflow: "hidden",
+            boxSizing: "border-box",
+            transition: `all ${DesignSystem.animation.normal} ease`,
+            borderRadius: this.kxsClient.isGlassmorphismEnabled ? "14px" : "10px"
+        });
         // Styles réduits pour mobile
-        const mobileStyles = {
-            padding: "6px",
-            borderRadius: "7px",
-            width: "78vw",
-            maxWidth: "84vw",
-            fontSize: "10px",
-            maxHeight: "60vh",
-            top: "4%",
-            left: "50%",
-        };
-        Object.assign(this.menu.style, defaultStyles);
-        if (this.kxsClient.isMobile && this.kxsClient.isMobile()) {
-            Object.assign(this.menu.style, mobileStyles);
+        if (isMobile) {
+            Object.assign(this.menu.style, {
+                padding: "8px",
+                borderRadius: this.kxsClient.isGlassmorphismEnabled ? "12px" : "8px",
+                width: "75vw",
+                maxWidth: "80vw",
+                fontSize: "11px",
+                maxHeight: "65vh",
+                top: "5%"
+            });
+            // Add specific mobile styles based on glassmorphism toggle
+            if (this.kxsClient.isGlassmorphismEnabled) {
+                // Glassmorphism mobile optimisé pour les performances
+                Object.assign(this.menu.style, {
+                    backdropFilter: "blur(10px) saturate(140%)",
+                    WebkitBackdropFilter: "blur(10px) saturate(140%)",
+                    willChange: "transform, opacity",
+                    backgroundColor: "rgba(15, 23, 42, 0.9)",
+                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
+                });
+            }
+            else {
+                // Classic style mobile
+                Object.assign(this.menu.style, {
+                    backgroundColor: "rgba(40, 40, 40, 0.97)",
+                    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.4)"
+                });
+            }
         }
     }
     blockMousePropagation(element, preventDefault = true) {
@@ -2700,7 +3342,7 @@ class KxsClientSecondaryMenu {
             <div style="display: flex; align-items: center; gap: ${headerGap}px;">
                 <img src="${kxs_logo}"
                     alt="Logo" style="width: ${logoSize}px; height: ${logoSize}px;">
-                <span style="font-size: ${titleFontSize}px; font-weight: bold;">DUALITY CLIENT <span style="
+                <span style="font-size: ${titleFontSize}px; font-weight: bold;">DUALITY CLIENT<span style="
                  font-size: ${isMobile ? 10 : 14}px;
                  font-weight: 700;
                  color: #3B82F6;
@@ -2709,7 +3351,7 @@ class KxsClientSecondaryMenu {
                  top: ${isMobile ? -1 : -2}px;
                  margin-left: ${isMobile ? 2 : 3}px;
                  letter-spacing: 0.5px;
-               ">v${package_namespaceObject.rE}</span></span>
+               ">v${this.kxsClient.pkg.version}</span></span>
             </div>
             <div style="display: flex; gap: ${headerGap}px;">
               <button style="
@@ -2809,8 +3451,8 @@ class KxsClientSecondaryMenu {
                     // L'utilisateur a cliqué sur un autre champ de texte, ne pas reprendre le focus
                     return;
                 }
-                // Pour les autres cas, seulement si aucun autre élément n'a le focus
-                setTimeout(() => {
+                // Pour les autres cas, seulement si aucun autre élément n'a le focus (optimized)
+                requestAnimationFrame(() => {
                     const activeElement = document.activeElement;
                     if (this.isClientMenuVisible &&
                         activeElement &&
@@ -2819,7 +3461,7 @@ class KxsClientSecondaryMenu {
                         activeElement.tagName !== 'TEXTAREA') {
                         searchInput.focus();
                     }
-                }, 100);
+                });
             });
         }
         this.menu.appendChild(header);
@@ -3056,15 +3698,37 @@ class KxsClientSecondaryMenu {
         });
         this.addOption(HUD, {
             label: "Focus Mode",
-            value: (() => {
-                const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-                return `Press ${isMac ? 'Command+F (⌘+F)' : 'Ctrl+F'} to toggle Focus Mode.\nWhen enabled, the HUD will dim and notifications will appear.`;
-            })(),
+            value: true,
             category: "HUD",
-            type: "info",
-            icon: '<svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M30.146,28.561l-1.586,1.586c-0.292,0.292-0.676,0.438-1.061,0.438s-0.768-0.146-1.061-0.438 l-4.293-4.293l-2.232,2.232c-0.391,0.391-0.902,0.586-1.414,0.586s-1.024-0.195-1.414-0.586l-0.172-0.172 c-0.781-0.781-0.781-2.047,0-2.828l8.172-8.172c0.391-0.391,0.902-0.586,1.414-0.586s1.024,0.195,1.414,0.586l0.172,0.172 c0.781,0.781,0.781,2.047,0,2.828l-2.232,2.232l4.293,4.293C30.731,27.024,30.731,27.976,30.146,28.561z M22.341,18.244 l-4.097,4.097L3.479,13.656C2.567,13.12,2,12.128,2,11.07V3c0-0.551,0.449-1,1-1h8.07c1.058,0,2.049,0.567,2.586,1.479 L22.341,18.244z M19.354,19.354c0.195-0.195,0.195-0.512,0-0.707l-15.5-15.5c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707 l15.5,15.5C18.744,19.451,18.872,19.5,19,19.5S19.256,19.451,19.354,19.354z" fill="#000000"></path> </g></svg>',
-            onChange: () => {
-            }
+            type: "sub",
+            icon: '<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 569.16 569.16" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M513.217,216.366c-18.427,0-31.318-4.568-34.492-12.218c-3.17-7.647,2.702-19.982,15.704-32.999l33.109-33.109 l6.493-6.493l-6.493-6.49l-83.474-83.44l-6.49-6.49l-6.49,6.49l-33.079,33.082c-14.422,14.419-24.076,16.573-28.547,16.573 c-3.295,0-5.915-1.083-8.24-3.415c-3.151-3.161-8.434-11.5-8.391-31.864c0-0.386-0.021-0.768-0.067-1.147V9.18V0h-9.18H225.599 h-9.18v9.18v46.931c-0.024,8.229-1.3,35.166-16.741,35.166c-4.464,0-14.104-2.154-28.519-16.576l-33.103-33.085l-6.49-6.487 l-6.49,6.49l-83.44,83.44l-6.487,6.487l6.484,6.49l33.082,33.112c13.018,13.011,18.896,25.343,15.729,32.996 c-3.17,7.65-16.046,12.222-34.446,12.222H9.18H0v9.18V343.58v9.18h9.18h46.815c18.396,0,31.273,4.568,34.443,12.219 c3.173,7.656-2.705,20.004-15.722,33.025l-33.079,33.08l-6.49,6.49l6.49,6.492l83.44,83.475l6.493,6.496l6.494-6.496 l33.097-33.113c14.407-14.4,24.049-16.551,28.51-16.551c15.45,0,16.726,26.918,16.75,35.168v46.936v9.18h9.18h117.984h9.18v-9.18 v-45.662c0.046-0.377,0.067-0.752,0.067-1.135c-0.042-20.373,5.239-28.713,8.391-31.871c2.329-2.334,4.951-3.42,8.25-3.42 c4.471,0,14.125,2.148,28.544,16.539l33.069,33.104l6.49,6.498l6.493-6.496l83.474-83.471l6.493-6.492l-6.496-6.494 l-33.112-33.082c-12.999-13.023-18.871-25.373-15.698-33.023c3.174-7.648,16.065-12.215,34.489-12.215h46.761h9.18v-9.18V225.546 v-9.18h-9.18H513.217z M413.1,284.58c0,70.867-57.653,128.52-128.52,128.52c-70.867,0-128.52-57.652-128.52-128.52 c0-70.867,57.653-128.52,128.52-128.52C355.446,156.06,413.1,213.713,413.1,284.58z"></path> </g> </g> </g></svg>',
+            fields: [
+                {
+                    label: "Enable",
+                    value: this.kxsClient.isFocusModeEnabled,
+                    type: "toggle",
+                    category: "HUD",
+                    icon: '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13H5C2.23858 13 0 10.7614 0 8C0 5.23858 2.23858 3 5 3H11ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11C9.34315 11 8 9.65685 8 8C8 6.34315 9.34315 5 11 5Z" fill="#000000"></path> </g></svg>',
+                    onChange: (value) => {
+                        this.kxsClient.isFocusModeEnabled = !this.kxsClient.isFocusModeEnabled;
+                        if (!this.kxsClient.isFocusModeEnabled) {
+                            this.kxsClient.currentFocusModeState = false;
+                            this.kxsClient.hud.toggleFocusMode();
+                        }
+                        this.kxsClient.updateLocalStorage();
+                    },
+                },
+                {
+                    label: "Focus Mode",
+                    value: (() => {
+                        const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+                        return `Press ${isMac ? 'Command+F (⌘+F)' : 'Ctrl+F'} to toggle Focus Mode.\nWhen enabled, the HUD will dim and notifications will appear.`;
+                    })(),
+                    category: "HUD",
+                    type: "info",
+                    icon: '<svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M30.146,28.561l-1.586,1.586c-0.292,0.292-0.676,0.438-1.061,0.438s-0.768-0.146-1.061-0.438 l-4.293-4.293l-2.232,2.232c-0.391,0.391-0.902,0.586-1.414,0.586s-1.024-0.195-1.414-0.586l-0.172-0.172 c-0.781-0.781-0.781-2.047,0-2.828l8.172-8.172c0.391-0.391,0.902-0.586,1.414-0.586s1.024,0.195,1.414,0.586l0.172,0.172 c0.781,0.781,0.781,2.047,0,2.828l-2.232,2.232l4.293,4.293C30.731,27.024,30.731,27.976,30.146,28.561z M22.341,18.244 l-4.097,4.097L3.479,13.656C2.567,13.12,2,12.128,2,11.07V3c0-0.551,0.449-1,1-1h8.07c1.058,0,2.049,0.567,2.586,1.479 L22.341,18.244z M19.354,19.354c0.195-0.195,0.195-0.512,0-0.707l-15.5-15.5c-0.195-0.195-0.512-0.195-0.707,0s-0.195,0.512,0,0.707 l15.5,15.5C18.744,19.451,18.872,19.5,19,19.5S19.256,19.451,19.354,19.354z" fill="#000000"></path> </g></svg>',
+                }
+            ],
         });
         this.addOption(HUD, {
             label: "Health Bar Indicator",
@@ -3160,12 +3824,24 @@ class KxsClientSecondaryMenu {
         this.addOption(HUD, {
             label: `Winning Animation`,
             value: this.kxsClient.isWinningAnimationEnabled,
-            icon: '<svg fill="#000000" height="200px" width="200px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 448.881 448.881" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M189.82,138.531c-8.92,0-16.611,6.307-18.353,15.055l-11.019,55.306c-3.569,20.398-7.394,40.53-9.946,59.652h-0.513 c-2.543-19.122-5.35-37.474-9.176-57.615l-11.85-62.35c-1.112-5.832-6.206-10.048-12.139-10.048H95.819 c-5.854,0-10.909,4.114-12.099,9.853l-12.497,60.507c-4.332,21.159-8.414,41.805-11.213,60.413h-0.513 c-2.8-17.332-6.369-39.511-10.196-59.901l-10.024-54.643c-1.726-9.403-9.922-16.23-19.479-16.23c-6.05,0-11.774,2.77-15.529,7.52 c-3.755,4.751-5.133,10.965-3.733,16.851l32.747,137.944c1.322,5.568,6.299,9.503,12.022,9.503h22.878 c5.792,0,10.809-4.028,12.061-9.689l14.176-64.241c4.083-17.334,6.883-33.648,9.946-53.019h0.507 c2.037,19.627,4.845,35.685,8.157,53.019l12.574,63.96c1.136,5.794,6.222,9.97,12.125,9.97h22.325 c5.638,0,10.561-3.811,11.968-9.269l35.919-139.158c1.446-5.607,0.225-11.564-3.321-16.136 C201.072,141.207,195.612,138.531,189.82,138.531z"></path> <path d="M253.516,138.531c-10.763,0-19.495,8.734-19.495,19.503v132.821c0,10.763,8.732,19.495,19.495,19.495 c10.771,0,19.503-8.732,19.503-19.495V158.034C273.019,147.265,264.287,138.531,253.516,138.531z"></path> <path d="M431.034,138.531c-9.861,0-17.847,7.995-17.847,17.847v32.373c0,25.748,0.761,48.945,3.313,71.637h-0.763 c-7.652-19.379-17.847-40.786-28.041-58.891l-32.14-56.704c-2.193-3.865-6.299-6.26-10.747-6.26h-25.818 c-6.827,0-12.357,5.529-12.357,12.357v141.615c0,9.86,7.987,17.847,17.847,17.847c9.853,0,17.84-7.987,17.84-17.847v-33.905 c0-28.042-0.514-52.258-1.532-74.941l0.769-0.256c8.406,20.141,19.627,42.318,29.823,60.671l33.174,59.909 c2.177,3.927,6.321,6.369,10.809,6.369h21.159c6.828,0,12.357-5.53,12.357-12.357V156.378 C448.881,146.526,440.894,138.531,431.034,138.531z"></path> </g> </g></svg>',
+            icon: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5.5713 14.5L9.46583 18.4141M18.9996 3.60975C17.4044 3.59505 16.6658 4.33233 16.4236 5.07743C16.2103 5.73354 16.4052 7.07735 15.896 8.0727C15.4091 9.02443 14.1204 9.5617 12.6571 9.60697M20 7.6104L20.01 7.61049M19 15.96L19.01 15.9601M7.00001 3.94926L7.01001 3.94936M19 11.1094C17.5 11.1094 16.5 11.6094 15.5949 12.5447M10.2377 7.18796C11 6.10991 11.5 5.10991 11.0082 3.52734M3.53577 20.4645L7.0713 9.85791L14.1424 16.929L3.53577 20.4645Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>',
             category: "HUD",
             type: "toggle",
             onChange: () => {
                 this.kxsClient.isWinningAnimationEnabled = !this.kxsClient.isWinningAnimationEnabled;
                 this.kxsClient.updateLocalStorage();
+            },
+        });
+        this.addOption(HUD, {
+            label: `Glassmorphism`,
+            value: this.kxsClient.isGlassmorphismEnabled,
+            icon: '<svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M 6 5 L 6 7.375 L 6.8125 7.65625 C 7.546875 8.269531 8 9.15625 8 10.125 L 8 21 C 8 22.644531 9.355469 24 11 24 C 12.644531 24 14 22.644531 14 21 L 14 18.875 C 14 18.144531 14.660156 17.679688 15.34375 17.9375 C 15.738281 18.085938 16 18.453125 16 18.875 L 16 25 C 16 26.644531 17.355469 28 19 28 C 20.644531 28 22 26.644531 22 25 L 22 16.03125 C 22 14.757813 22.980469 13.796875 24.1875 13.75 L 24.21875 13.75 L 26 14.375 L 26 12 Z M 9.8125 8.71875 L 21.5 12.8125 C 20.59375 13.59375 20 14.730469 20 16.03125 L 20 25 C 20 25.566406 19.566406 26 19 26 C 18.433594 26 18 25.566406 18 25 L 18 18.875 C 18 17.628906 17.230469 16.5 16.0625 16.0625 C 14.132813 15.339844 12 16.8125 12 18.875 L 12 21 C 12 21.566406 11.566406 22 11 22 C 10.433594 22 10 21.566406 10 21 L 10 10.125 C 10 9.644531 9.9375 9.171875 9.8125 8.71875 Z"></path></g></svg>',
+            category: "HUD",
+            type: "toggle",
+            onChange: () => {
+                this.kxsClient.isGlassmorphismEnabled = !this.kxsClient.isGlassmorphismEnabled;
+                this.kxsClient.updateLocalStorage();
+                this.kxsClient.nm.showNotification("You need to reload the page to see the changes", "info", 1900);
             },
         });
         this.addOption(HUD, {
@@ -3243,7 +3919,7 @@ class KxsClientSecondaryMenu {
             },
         });
         this.addOption(MECHANIC, {
-            label: `Friends Detector (separe with ',')`,
+            label: `Friends Detector (separate with ',')`,
             icon: '<svg fill="#000000" viewBox="0 -6 44 44" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M42.001,32.000 L14.010,32.000 C12.908,32.000 12.010,31.104 12.010,30.001 L12.010,28.002 C12.010,27.636 12.211,27.300 12.532,27.124 L22.318,21.787 C19.040,18.242 19.004,13.227 19.004,12.995 L19.010,7.002 C19.010,6.946 19.015,6.891 19.024,6.837 C19.713,2.751 24.224,0.007 28.005,0.007 C28.006,0.007 28.008,0.007 28.009,0.007 C31.788,0.007 36.298,2.749 36.989,6.834 C36.998,6.889 37.003,6.945 37.003,7.000 L37.006,12.994 C37.006,13.225 36.970,18.240 33.693,21.785 L43.479,27.122 C43.800,27.298 44.000,27.634 44.000,28.000 L44.000,30.001 C44.000,31.104 43.103,32.000 42.001,32.000 ZM31.526,22.880 C31.233,22.720 31.039,22.425 31.008,22.093 C30.978,21.761 31.116,21.436 31.374,21.226 C34.971,18.310 35.007,13.048 35.007,12.995 L35.003,7.089 C34.441,4.089 30.883,2.005 28.005,2.005 C25.126,2.006 21.570,4.091 21.010,7.091 L21.004,12.997 C21.004,13.048 21.059,18.327 24.636,21.228 C24.895,21.438 25.033,21.763 25.002,22.095 C24.972,22.427 24.778,22.722 24.485,22.882 L14.010,28.596 L14.010,30.001 L41.999,30.001 L42.000,28.595 L31.526,22.880 ZM18.647,2.520 C17.764,2.177 16.848,1.997 15.995,1.997 C13.116,1.998 9.559,4.083 8.999,7.083 L8.993,12.989 C8.993,13.041 9.047,18.319 12.625,21.220 C12.884,21.430 13.022,21.755 12.992,22.087 C12.961,22.419 12.767,22.714 12.474,22.874 L1.999,28.588 L1.999,29.993 L8.998,29.993 C9.550,29.993 9.997,30.441 9.997,30.993 C9.997,31.545 9.550,31.993 8.998,31.993 L1.999,31.993 C0.897,31.993 -0.000,31.096 -0.000,29.993 L-0.000,27.994 C-0.000,27.629 0.200,27.292 0.521,27.117 L10.307,21.779 C7.030,18.234 6.993,13.219 6.993,12.988 L6.999,6.994 C6.999,6.939 7.004,6.883 7.013,6.829 C7.702,2.744 12.213,-0.000 15.995,-0.000 C15.999,-0.000 16.005,-0.000 16.010,-0.000 C17.101,-0.000 18.262,0.227 19.369,0.656 C19.885,0.856 20.140,1.435 19.941,1.949 C19.740,2.464 19.158,2.720 18.647,2.520 Z"></path> </g></svg>',
             category: "MECHANIC",
             value: this.kxsClient.all_friends,
@@ -3302,6 +3978,51 @@ class KxsClientSecondaryMenu {
                     fileInput.click();
                 }
             },
+        });
+        this.addOption(MISC, {
+            category: "MISC",
+            label: "Developer Options",
+            value: true,
+            icon: '<svg fill="#000000" viewBox="0 0 14 14" role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="m 9.095305,2.8613212 -8.0953049,1.257035 1.3073163,8.3969928 4.3242001,-0.70394 C 6.5812355,11.45944 7.7377073,8.4425562 7.9388329,7.8894612 l -2.2123815,0.351969 0.3016884,-0.905065 1.5587233,-0.251407 0.4022512,0.502814 c 0,0 0.1005628,-0.251407 0.1005628,-0.35197 L 5.927577,4.5708882 C 5.8270142,4.4200442 5.8270142,4.2189192 5.9778584,4.1183562 l 0.1005628,-0.100563 c 0.1508442,-0.100563 0.3519698,-0.100563 0.4525326,0.05028 l 1.910693,2.212382 c 0.4022512,-1.206754 0.754221,-2.262663 0.754221,-2.614633 0.050281,-0.100563 0.050281,-0.452532 -0.1005628,-0.804502 z M 3.0615374,7.8391792 4.4191351,7.5877722 4.0671653,8.4928372 3.1621002,8.6436812 3.0615374,7.8391792 Z m 2.916321,-2.564351 0.1508442,0.05028 c 0.2011256,0.05028 0.251407,0.251407 0.2011256,0.452533 L 4.8213863,9.8001542 3.9163211,11.006907 4.0168839,9.4984652 5.5253258,5.4759532 c 0.050281,-0.201125 0.251407,-0.251407 0.4525326,-0.201125 z m 5.4303906,-1.407879 c -0.201125,0.201125 -0.452532,0.854784 -0.955346,2.765477 l 0.05028,0 0.150844,0.804502 -0.402251,0.05028 c -0.05028,0.251407 -0.100563,0.502814 -0.201126,0.804503 0.854784,0.452532 0.402251,1.558723 0.35197,1.558723 -0.05028,0 -0.05028,0 -0.05028,-0.05028 0,-0.05028 0.05028,-0.201126 -0.100563,-0.251407 C 10.151214,9.4984652 9.9500887,9.4481842 9.7992445,9.3476212 9.6484004,9.9509982 9.4975562,10.654937 9.346712,11.409158 l 3.167728,-0.502814 -1.055909,-7.0896768 -0.05028,0.05028 z m -0.35197,-0.502814 c 0.201126,-0.100563 0.301689,-0.201126 0.452533,-0.201126 0.251407,0 0.402251,0.150844 0.452533,0.251407 0.100562,0.150844 0.452532,0.251407 0.603376,0.251407 0.100563,0 0.251407,-0.35197 0.35197,-0.653658 0.100563,-0.301688 0.100563,-0.653658 0.05028,-0.70394 -0.05028,-0.05028 -0.452532,-0.150844 -0.553095,-0.150844 -0.05028,0.05028 -0.150844,0.100563 -0.35197,0.100563 -0.201125,0 -0.402251,-0.150844 -0.553095,-0.301688 -0.251406,-0.251407 -0.553094,-0.35197 -0.854783,-0.452533 -0.301688,-0.100563 -0.653658,-0.100563 -0.9553462,-0.100563 -0.4525326,-0.05028 -0.9553466,-0.05028 -1.4078792,0.100563 -0.2011255,0.05028 -0.3519697,0.100563 -0.5530953,0.201126 -0.050281,0.05028 -0.2011256,0.100562 -0.251407,0.100562 -0.050281,0.05028 -0.050281,0.100563 0,0.100563 0.050281,0 0.251407,-0.05028 0.251407,-0.05028 0,0 -0.251407,0.100563 -0.251407,0.201125 0,0.05028 0.050281,0.05028 0.050281,0.05028 0,0 0.1508442,-0.05028 0.251407,-0.05028 0.2011256,0 0.5028139,-0.100562 0.7542209,-0.100562 0.3016884,0 0.6033768,0.100562 0.9050652,0.402251 0.4525325,0.553095 0.4022511,1.257035 0.4022511,1.407879 -0.1005627,1.055909 -2.4637884,7.4919278 -2.5643512,7.9444608 -0.1005628,0.452532 -0.1005628,0.703939 0.4525326,0.854783 0.5530953,0.150845 0.7542209,0 0.8547837,-0.201125 0.050281,-0.35197 1.5587234,-8.2964308 2.4637884,-9.0003698 z"></path></g></svg>',
+            type: "sub",
+            fields: [
+                {
+                    label: "Enable GameID Exchange",
+                    category: "MISC",
+                    icon: '<svg viewBox="-1 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>share</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set" sketch:type="MSLayerGroup" transform="translate(-312.000000, -726.000000)" fill="#000000"> <path d="M331,750 C329.343,750 328,748.657 328,747 C328,745.343 329.343,744 331,744 C332.657,744 334,745.343 334,747 C334,748.657 332.657,750 331,750 L331,750 Z M317,742 C315.343,742 314,740.657 314,739 C314,737.344 315.343,736 317,736 C318.657,736 320,737.344 320,739 C320,740.657 318.657,742 317,742 L317,742 Z M331,728 C332.657,728 334,729.343 334,731 C334,732.657 332.657,734 331,734 C329.343,734 328,732.657 328,731 C328,729.343 329.343,728 331,728 L331,728 Z M331,742 C329.23,742 327.685,742.925 326.796,744.312 L321.441,741.252 C321.787,740.572 322,739.814 322,739 C322,738.497 321.903,738.021 321.765,737.563 L327.336,734.38 C328.249,735.37 329.547,736 331,736 C333.762,736 336,733.762 336,731 C336,728.238 333.762,726 331,726 C328.238,726 326,728.238 326,731 C326,731.503 326.097,731.979 326.235,732.438 L320.664,735.62 C319.751,734.631 318.453,734 317,734 C314.238,734 312,736.238 312,739 C312,741.762 314.238,744 317,744 C318.14,744 319.179,743.604 320.02,742.962 L320,743 L326.055,746.46 C326.035,746.64 326,746.814 326,747 C326,749.762 328.238,752 331,752 C333.762,752 336,749.762 336,747 C336,744.238 333.762,742 331,742 L331,742 Z" id="share" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>',
+                    type: "toggle",
+                    value: this.kxsClient.kxsDeveloperOptions.enableGameIDExchange,
+                    onChange: () => {
+                        this.kxsClient.kxsDeveloperOptions.enableGameIDExchange = !this.kxsClient.kxsDeveloperOptions.enableGameIDExchange;
+                        this.kxsClient.updateLocalStorage();
+                    }
+                },
+                {
+                    label: "Renew Exchange Key",
+                    value: true,
+                    type: "click",
+                    icon: '<svg viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>reset</title> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Combined-Shape" fill="#000000" transform="translate(74.806872, 64.000000)"> <path d="M351.859794,42.6666667 L351.859794,85.3333333 L283.193855,85.3303853 C319.271288,116.988529 341.381875,163.321355 341.339886,213.803851 C341.27474,291.98295 288.098183,360.121539 212.277591,379.179704 C136.456999,398.237869 57.3818117,363.341907 20.3580507,294.485411 C-16.6657103,225.628916 -2.17003698,140.420413 55.5397943,87.68 C63.6931909,100.652227 75.1888658,111.189929 88.8197943,118.186667 C59.4998648,141.873553 42.4797783,177.560832 42.5264609,215.253333 C43.5757012,285.194843 100.577082,341.341203 170.526461,341.333333 C234.598174,342.388718 289.235113,295.138227 297.4321,231.584253 C303.556287,184.101393 282.297007,138.84385 245.195596,112.637083 L245.193128,192 L202.526461,192 L202.526461,42.6666667 L351.859794,42.6666667 Z M127.859794,-1.42108547e-14 C151.423944,-1.42108547e-14 170.526461,19.1025173 170.526461,42.6666667 C170.526461,66.230816 151.423944,85.3333333 127.859794,85.3333333 C104.295645,85.3333333 85.1931276,66.230816 85.1931276,42.6666667 C85.1931276,19.1025173 104.295645,-1.42108547e-14 127.859794,-1.42108547e-14 Z"> </path> </g> </g> </g></svg>',
+                    category: "MISC",
+                    onChange: () => ClientSecondaryMenu_awaiter(this, void 0, void 0, function* () {
+                        const new_password = this.kxsClient.generateRandomPassword();
+                        this.kxsClient.kxsDeveloperOptions.exchange.password = new_password;
+                        this.kxsClient.updateLocalStorage();
+                        this.kxsClient.nm.showNotification("New Exchange Key Generated (pasted to clipboard)", "success", 2100);
+                        yield navigator.clipboard.writeText(new_password);
+                    })
+                },
+                {
+                    label: "Copy Exchange Key",
+                    value: this.kxsClient.kxsDeveloperOptions.exchange.password,
+                    type: "click",
+                    category: "MISC",
+                    icon: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 17.5C9 18.8807 7.88071 20 6.5 20C5.11929 20 4 18.8807 4 17.5C4 16.1193 5.11929 15 6.5 15C7.88071 15 9 16.1193 9 17.5ZM9 17.5H15.125M19 20V17.75C19 17.6119 18.8881 17.5 18.75 17.5M15.125 17.5H18.75M15.125 17.5V20M18.75 17.5Lnan nanCnan nan nan nan nan nanLnan nanCnan nan nan nan nan nanL18.75 17.5ZM5 11H19C20.1046 11 21 10.1046 21 9V6C21 4.89543 20.1046 4 19 4H5C3.89543 4 3 4.89543 3 6V9C3 10.1046 3.89543 11 5 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <circle cx="7.5" cy="7.5" r="1.5" fill="#000000"></circle> <circle cx="12" cy="7.5" r="1.5" fill="#000000"></circle> <circle cx="16.5" cy="7.5" r="1.5" fill="#000000"></circle> </g></svg>',
+                    onChange: () => {
+                        this.kxsClient.nm.showNotification("Exchange Key Copied to Clipboard", "success", 2100);
+                        navigator.clipboard.writeText(this.kxsClient.kxsDeveloperOptions.exchange.password);
+                    }
+                }
+            ],
         });
     }
     createOptionCard(option, container) {
@@ -3377,6 +4098,9 @@ class KxsClientSecondaryMenu {
                 if (this.activeCategory === 'ALL' || section.category === this.activeCategory) {
                     section.options.forEach(option => {
                         // Create a unique key for each option
+                        if ((this.kxsClient.kxsNetwork["1"] === true) && X0.includes(option.label)) {
+                            return;
+                        }
                         const optionKey = `${option.label}-${option.category}`;
                         // Check if option matches search term
                         const matchesSearch = this.searchTerm === '' ||
@@ -3439,31 +4163,122 @@ class KxsClientSecondaryMenu {
         return section;
     }
     createToggleButton(option) {
+        // Créer le bouton principal
         const btn = document.createElement("button");
         const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
-        Object.assign(btn.style, {
-            width: "100%",
-            padding: isMobile ? "2px 0px" : "8px",
-            height: isMobile ? "24px" : "auto",
-            background: option.value ? "#059669" : "#DC2626",
-            border: "none",
-            borderRadius: isMobile ? "3px" : "6px",
-            color: "white",
-            cursor: "pointer",
-            transition: "background 0.2s",
-            fontSize: isMobile ? "9px" : "14px",
-            fontWeight: "bold",
-            minHeight: isMobile ? "20px" : "unset",
-            letterSpacing: isMobile ? "0.5px" : "1px"
+        // Créer l'indicateur (point vert/rouge)
+        const indicator = document.createElement("div");
+        // Appliquer le style de base au bouton avec glassmorphism moderne
+        btn.style.width = "100%";
+        btn.style.padding = isMobile ? "8px 14px" : "12px 18px";
+        btn.style.height = isMobile ? "32px" : "42px";
+        btn.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 100%)";
+        btn.style.backdropFilter = "blur(16px) saturate(180%)";
+        btn.style['-webkit-backdrop-filter'] = "blur(16px) saturate(180%)";
+        btn.style.border = "1px solid rgba(255, 255, 255, 0.18)";
+        btn.style.borderRadius = "12px";
+        btn.style.color = "#ffffff";
+        btn.style.cursor = "pointer";
+        btn.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+        btn.style.fontSize = isMobile ? "11px" : "14px";
+        btn.style.fontWeight = "500";
+        btn.style.letterSpacing = "0.3px";
+        btn.style.fontFamily = "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        btn.style.position = "relative";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "space-between";
+        btn.style.textAlign = "left";
+        btn.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+        btn.style.textShadow = "0 1px 2px rgba(0, 0, 0, 0.3)";
+        btn.style.overflow = "hidden";
+        // Appliquer le style à l'indicateur avec effet glassmorphism
+        indicator.style.width = isMobile ? "10px" : "12px";
+        indicator.style.height = isMobile ? "10px" : "12px";
+        indicator.style.borderRadius = "50%";
+        indicator.style.marginLeft = "12px";
+        indicator.style.flexShrink = "0";
+        indicator.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+        indicator.style.border = "2px solid rgba(255, 255, 255, 0.2)";
+        indicator.style.backdropFilter = "blur(8px)";
+        indicator.style['-webkit-backdrop-filter'] = "blur(8px)";
+        // Créer un conteneur pour le texte
+        const textSpan = document.createElement("span");
+        textSpan.style.flexGrow = "1";
+        // Fonction pour mettre à jour l'apparence du bouton
+        const updateButtonState = () => {
+            const isEnabled = option.value;
+            // Mettre à jour le texte
+            textSpan.textContent = isEnabled ? "ENABLED" : "DISABLED";
+            // Mettre à jour le style du bouton avec glassmorphism
+            btn.style.background = isEnabled ?
+                "linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(34, 197, 94, 0.12) 100%)" :
+                "linear-gradient(135deg, rgba(248, 113, 113, 0.15) 0%, rgba(239, 68, 68, 0.12) 100%)";
+            btn.style.border = isEnabled ?
+                "1px solid rgba(74, 222, 128, 0.3)" :
+                "1px solid rgba(248, 113, 113, 0.3)";
+            btn.style.boxShadow = isEnabled ?
+                "0 4px 16px rgba(74, 222, 128, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)" :
+                "0 4px 16px rgba(248, 113, 113, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+            // Mettre à jour l'indicateur avec effet glassmorphism
+            indicator.style.background = isEnabled ?
+                "radial-gradient(circle, #4ade80 0%, #22c55e 100%)" :
+                "radial-gradient(circle, #f87171 0%, #ef4444 100%)";
+            indicator.style.boxShadow = isEnabled ?
+                "0 0 12px rgba(74, 222, 128, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)" :
+                "0 0 12px rgba(248, 113, 113, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)";
+        };
+        // Ajouter les éléments au DOM
+        btn.appendChild(textSpan);
+        btn.appendChild(indicator);
+        // Définir l'état initial
+        updateButtonState();
+        // Gérer les événements de survol avec glassmorphism amélioré
+        btn.addEventListener("mouseenter", () => {
+            const isEnabled = option.value;
+            btn.style.transform = "translateY(-3px) scale(1.02)";
+            btn.style.backdropFilter = "blur(20px) saturate(200%)";
+            btn.style['-webkit-backdrop-filter'] = "blur(20px) saturate(200%)";
+            btn.style.boxShadow = isEnabled ?
+                "0 8px 24px rgba(74, 222, 128, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(74, 222, 128, 0.2)" :
+                "0 8px 24px rgba(248, 113, 113, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(248, 113, 113, 0.2)";
+            btn.style.border = isEnabled ?
+                "1px solid rgba(74, 222, 128, 0.4)" :
+                "1px solid rgba(248, 113, 113, 0.4)";
         });
-        btn.textContent = option.value ? "ENABLED" : "DISABLED";
-        btn.addEventListener("click", () => {
-            var _a;
+        btn.addEventListener("mouseleave", () => {
+            const isEnabled = option.value;
+            btn.style.transform = "translateY(0) scale(1)";
+            btn.style.backdropFilter = "blur(16px) saturate(180%)";
+            btn.style['-webkit-backdrop-filter'] = "blur(16px) saturate(180%)";
+            btn.style.boxShadow = isEnabled ?
+                "0 4px 16px rgba(74, 222, 128, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)" :
+                "0 4px 16px rgba(248, 113, 113, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+            btn.style.border = isEnabled ?
+                "1px solid rgba(74, 222, 128, 0.3)" :
+                "1px solid rgba(248, 113, 113, 0.3)";
+        });
+        // Gérer le clic
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Inverser la valeur
             const newValue = !option.value;
             option.value = newValue;
-            btn.textContent = newValue ? "ENABLED" : "DISABLED";
-            btn.style.background = newValue ? "#059669" : "#DC2626";
-            (_a = option.onChange) === null || _a === void 0 ? void 0 : _a.call(option, newValue);
+            // Mettre à jour l'apparence
+            updateButtonState();
+            // Ajouter une animation de pulsation (optimized)
+            btn.style.animation = `${DesignSystem.animation.pulse} 0.5s ease`;
+            // Use event listener for animation end instead of setTimeout
+            btn.addEventListener('animationend', function onAnimationEnd() {
+                btn.style.animation = '';
+                btn.removeEventListener('animationend', onAnimationEnd);
+            }, { once: true });
+            // Appeler le gestionnaire onChange
+            if (option.onChange) {
+                option.onChange(newValue);
+            }
+            return false;
         });
         this.blockMousePropagation(btn);
         return btn;
@@ -3471,22 +4286,90 @@ class KxsClientSecondaryMenu {
     createClickButton(option) {
         const btn = document.createElement("button");
         const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
-        Object.assign(btn.style, {
-            width: "100%",
-            padding: isMobile ? "2px 0px" : "8px",
-            height: isMobile ? "24px" : "auto",
-            background: "#3B82F6",
-            border: "none",
-            borderRadius: "6px",
-            color: "white",
-            cursor: "pointer",
-            transition: "background 0.2s",
-            fontSize: "14px",
-            fontWeight: "bold"
-        });
+        // Appliquer un style glassmorphism moderne
+        btn.style.width = "100%";
+        btn.style.padding = isMobile ? "6px 8px" : "10px 12px";
+        btn.style.height = isMobile ? "32px" : "auto";
+        btn.style.minHeight = isMobile ? "32px" : "40px";
+        btn.style.background = "linear-gradient(135deg, rgba(66, 135, 245, 0.15) 0%, rgba(59, 118, 217, 0.12) 100%)";
+        btn.style.backdropFilter = "blur(16px) saturate(180%)";
+        btn.style['-webkit-backdrop-filter'] = "blur(16px) saturate(180%)";
+        btn.style.border = "1px solid rgba(66, 135, 245, 0.25)";
+        btn.style.borderRadius = "12px";
+        btn.style.color = "#ffffff";
+        btn.style.cursor = "pointer";
+        btn.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+        btn.style.fontSize = isMobile ? "11px" : "13px";
+        btn.style.fontWeight = "500";
+        btn.style.letterSpacing = "0.2px";
+        btn.style.fontFamily = "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        btn.style.boxShadow = "0 4px 16px rgba(66, 135, 245, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+        btn.style.textShadow = "0 1px 2px rgba(0, 0, 0, 0.3)";
+        btn.style.position = "relative";
+        btn.style.overflow = "hidden";
+        btn.style.whiteSpace = "nowrap";
+        btn.style.textOverflow = "ellipsis";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+        btn.style.textAlign = "center";
         btn.textContent = option.label;
+        // Ajouter les effets hover modernes
+        btn.addEventListener("mouseenter", () => {
+            btn.style.transform = "translateY(-3px) scale(1.02)";
+            btn.style.backdropFilter = "blur(20px) saturate(200%)";
+            btn.style['-webkit-backdrop-filter'] = "blur(20px) saturate(200%)";
+            btn.style.boxShadow = "0 8px 24px rgba(66, 135, 245, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(66, 135, 245, 0.2)";
+            btn.style.border = "1px solid rgba(66, 135, 245, 0.35)";
+        });
+        btn.addEventListener("mouseleave", () => {
+            btn.style.transform = "translateY(0) scale(1)";
+            btn.style.backdropFilter = "blur(16px) saturate(180%)";
+            btn.style['-webkit-backdrop-filter'] = "blur(16px) saturate(180%)";
+            btn.style.boxShadow = "0 4px 16px rgba(66, 135, 245, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+            btn.style.border = "1px solid rgba(66, 135, 245, 0.25)";
+        });
+        // Ajouter l'effet actif
+        btn.addEventListener("mousedown", () => {
+            btn.style.transform = "translateY(-1px) scale(0.98)";
+            btn.style.boxShadow = "0 2px 8px rgba(66, 135, 245, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)";
+        });
         btn.addEventListener("click", () => {
             var _a;
+            // Add ripple effect for feedback
+            const ripple = document.createElement("span");
+            Object.assign(ripple.style, {
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "rgba(255, 255, 255, 0.3)",
+                borderRadius: "50%",
+                width: "0",
+                height: "0",
+                animation: "ripple 0.6s linear",
+                zIndex: "1"
+            });
+            // Add ripple animation if it doesn't exist
+            if (!document.getElementById("kxs-ripple-animation")) {
+                const style = document.createElement("style");
+                style.id = "kxs-ripple-animation";
+                style.textContent = `
+					@keyframes ripple {
+						to {
+							width: 200px;
+							height: 200px;
+							opacity: 0;
+						}
+					}
+				`;
+                document.head.appendChild(style);
+            }
+            btn.appendChild(ripple);
+            // Use event listener for animation end instead of setTimeout
+            ripple.addEventListener('animationend', () => {
+                ripple.remove();
+            }, { once: true });
             (_a = option.onChange) === null || _a === void 0 ? void 0 : _a.call(option, true);
         });
         this.blockMousePropagation(btn);
@@ -3500,6 +4383,17 @@ class KxsClientSecondaryMenu {
                 this.toggleMenuVisibility();
                 // Ensure options are displayed after loading
                 this.filterOptions();
+                if (survev_settings.get("playerName") === "debug") {
+                    let _ = `✨ KxsClient's Features\n\r`;
+                    this.allOptions.forEach(x => {
+                        var _a;
+                        _ += `* [${x.category}] ${x.label} (${x.placeholder || "No description"}) - ${x.type}\n` +
+                            `${((_a = x.fields) === null || _a === void 0 ? void 0 : _a.map(x => {
+                                return `- Name: ${x.label}\n- Category: ${x.category}\n- Type: ${x.type}\n\n`;
+                            }).join("")) || "Not SubMenu Found\n"}\n`;
+                    });
+                    navigator.clipboard.writeText(_);
+                }
             }
         });
         // Gestionnaire séparé pour la touche Échap avec capture en phase de capture
@@ -3517,31 +4411,71 @@ class KxsClientSecondaryMenu {
         }, true); // true = phase de capture
     }
     createInputElement(option) {
+        const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
+        // Create container for input with label effect
+        const container = document.createElement("div");
+        Object.assign(container.style, {
+            position: "relative",
+            width: "100%",
+            margin: "4px 0"
+        });
+        // Create the input element
         const input = document.createElement("input");
         input.type = "text";
         input.value = String(option.value);
         if (option.placeholder) {
             input.placeholder = option.placeholder;
         }
-        Object.assign(input.style, {
+        // Apply glassmorphism effect to input
+        DesignSystem.applyGlassEffect(input, 'dark', {
             width: "100%",
-            padding: "8px",
-            background: "rgba(55, 65, 81, 0.8)",
-            border: "none",
+            padding: isMobile ? "6px 8px" : "8px 10px",
+            background: "rgba(17, 24, 39, 0.7)",
             borderRadius: "6px",
-            color: "#FFAE00",
-            fontSize: "14px"
+            color: "#FFAE00", // Gold color
+            fontSize: isMobile ? "12px" : "14px",
+            fontFamily: DesignSystem.fonts.primary,
+            boxSizing: "border-box",
+            border: "1px solid rgba(255, 174, 0, 0.3)",
+            transition: `all ${DesignSystem.animation.normal} ease`,
+            outline: "none"
+        });
+        // Add focus effects
+        input.addEventListener("focus", () => {
+            input.style.boxShadow = "0 0 0 2px rgba(255, 174, 0, 0.2)";
+            input.style.border = "1px solid rgba(255, 174, 0, 0.5)";
+        });
+        input.addEventListener("blur", () => {
+            input.style.boxShadow = "none";
+            input.style.border = "1px solid rgba(255, 174, 0, 0.3)";
         });
         input.addEventListener("change", () => {
             var _a;
             option.value = input.value;
             (_a = option.onChange) === null || _a === void 0 ? void 0 : _a.call(option, input.value);
+            // Visual feedback on change (optimized)
+            input.style.animation = "glow 0.5s ease";
+            // Use event listener for animation end instead of setTimeout
+            input.addEventListener('animationend', function onAnimationEnd() {
+                input.style.animation = "";
+                input.removeEventListener('animationend', onAnimationEnd);
+            }, { once: true });
         });
-        // Empêcher la propagation des touches de texte vers la page web
-        // mais permettre l'interaction avec l'input
+        // Add glow animation if it doesn't exist
+        if (!document.getElementById("kxs-input-animations")) {
+            const style = document.createElement("style");
+            style.id = "kxs-input-animations";
+            style.textContent = `
+				@keyframes glow {
+					0% { box-shadow: 0 0 0 0 rgba(255, 174, 0, 0.4); }
+					50% { box-shadow: 0 0 10px 3px rgba(255, 174, 0, 0.4); }
+					100% { box-shadow: 0 0 0 0 rgba(255, 174, 0, 0.4); }
+				}
+			`;
+            document.head.appendChild(style);
+        }
+        // Prevent key propagation to the game
         input.addEventListener("keydown", (e) => {
-            // Ne pas arrêter la propagation des touches de navigation (flèches, tab, etc.)
-            // qui sont nécessaires pour naviguer dans le champ de texte
             e.stopPropagation();
         });
         input.addEventListener("keyup", (e) => {
@@ -3551,167 +4485,27 @@ class KxsClientSecondaryMenu {
             e.stopPropagation();
         });
         this.blockMousePropagation(input);
-        return input;
+        container.appendChild(input);
+        return container;
     }
     createSliderElement(option) {
-        const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
-        const container = document.createElement("div");
-        Object.assign(container.style, {
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            marginTop: isMobile ? "3px" : "5px",
-        });
-        // Conteneur pour le slider et la valeur
-        const sliderContainer = document.createElement("div");
-        Object.assign(sliderContainer.style, {
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            gap: isMobile ? "8px" : "12px",
-        });
-        // Wrapper du slider pour gérer la couleur de fond
-        const sliderWrapper = document.createElement("div");
-        Object.assign(sliderWrapper.style, {
-            position: "relative",
-            width: "100%",
-            height: isMobile ? "10px" : "12px",
-            background: "rgba(30, 35, 45, 0.5)",
-            borderRadius: "6px",
-            overflow: "hidden",
-            border: "1px solid rgba(59, 130, 246, 0.25)",
-        });
-        // Barre de progression bleue
-        const progressBar = document.createElement("div");
-        Object.assign(progressBar.style, {
-            position: "absolute",
-            left: "0",
-            top: "0",
-            height: "100%",
-            width: `${((Number(option.value) - (option.min || 0)) / ((option.max || 100) - (option.min || 0))) * 100}%`,
-            background: "#3B82F6", // Couleur bleue pleine
-            borderRadius: "6px 0 0 6px", // Arrondi uniquement à gauche
-            transition: "width 0.1s ease-out",
-        });
-        // Créer le slider
-        const slider = document.createElement("input");
-        slider.type = "range";
-        slider.min = String(option.min || 0);
-        slider.max = String(option.max || 100);
-        slider.step = String(option.step || 1);
-        slider.value = String(option.value);
-        slider.className = "kxs-minimal-slider";
-        Object.assign(slider.style, {
-            position: "absolute",
-            left: "0",
-            top: "0",
-            width: "100%",
-            height: "100%",
-            margin: "0",
-            appearance: "none",
-            background: "transparent", // Transparent pour voir la barre de progression
-            cursor: "pointer",
-            outline: "none",
-            border: "none",
-            zIndex: "2", // Au-dessus de la barre de progression
-        });
-        // Valeur actuelle avec style simple
-        const valueDisplay = document.createElement("div");
-        valueDisplay.textContent = String(option.value);
-        Object.assign(valueDisplay.style, {
-            minWidth: isMobile ? "28px" : "36px",
-            textAlign: "center",
-            color: "#ffffff",
-            fontSize: isMobile ? "11px" : "13px",
-            fontFamily: "'Segoe UI', Arial, sans-serif",
-            background: "rgba(59, 130, 246, 0.1)",
-            padding: isMobile ? "2px 4px" : "3px 6px",
-            borderRadius: "4px",
-            border: "1px solid rgba(59, 130, 246, 0.3)",
-            transition: "all 0.15s ease-out",
-        });
-        // Styles personnalisés pour le curseur du slider uniquement
-        const sliderStyles = `
-			/* Style du curseur */
-			.kxs-minimal-slider::-webkit-slider-thumb {
-				appearance: none;
-				width: ${isMobile ? "14px" : "16px"};
-				height: ${isMobile ? "14px" : "16px"};
-				border-radius: 50%;
-				background: linear-gradient(135deg, #4f8bf9, #3B82F6);
-				cursor: pointer;
-				border: none;
-				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-				transition: background 0.2s, transform 0.1s;
-				z-index: 3;
-			}
- 
-			.kxs-minimal-slider::-moz-range-thumb {
-				width: ${isMobile ? "14px" : "16px"};
-				height: ${isMobile ? "14px" : "16px"};
-				border-radius: 50%;
-				background: linear-gradient(135deg, #4f8bf9, #3B82F6);
-				cursor: pointer;
-				border: none;
-				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-				transition: background 0.2s, transform 0.1s;
-				z-index: 3;
-			}
- 
-			/* Masquer la piste par défaut */
-			.kxs-minimal-slider::-webkit-slider-runnable-track {
-				background: transparent;
-				height: 100%;
-			}
- 
-			.kxs-minimal-slider::-moz-range-track {
-				background: transparent;
-				height: 100%;
-			}
- 
-			/* Effets au survol */
-			.kxs-minimal-slider:hover::-webkit-slider-thumb {
-				background: linear-gradient(135deg, #5a93fa, #4289f7);
-				transform: scale(1.05);
-			}
- 
-			.kxs-minimal-slider:hover::-moz-range-thumb {
-				background: linear-gradient(135deg, #5a93fa, #4289f7);
-				transform: scale(1.05);
-			}
-		`;
-        // Ajouter les styles personnalisés
-        const style = document.createElement("style");
-        style.textContent = sliderStyles;
-        document.head.appendChild(style);
-        // Ajouter les gestionnaires d'événements
-        slider.addEventListener("input", () => {
+        // Create the slider using DesignSystem with proper event handling
+        const sliderElement = DesignSystem.createSliderElement(option.min || 0, option.max || 100, Number(option.value), (newValue) => {
             var _a;
-            // Mettre à jour la valeur affichée
-            valueDisplay.textContent = slider.value;
-            // Mettre à jour la largeur de la barre de progression
-            const percentage = ((Number(slider.value) - (option.min || 0)) / ((option.max || 100) - (option.min || 0))) * 100;
-            progressBar.style.width = `${percentage}%`;
-            // Mettre à jour la valeur de l'option
-            option.value = Number(slider.value);
-            (_a = option.onChange) === null || _a === void 0 ? void 0 : _a.call(option, Number(slider.value));
-            // Effet visuel sur la valeur
-            valueDisplay.style.background = "rgba(59, 130, 246, 0.25)";
-            setTimeout(() => {
-                valueDisplay.style.background = "rgba(59, 130, 246, 0.1)";
-            }, 150);
+            option.value = newValue;
+            (_a = option.onChange) === null || _a === void 0 ? void 0 : _a.call(option, newValue);
+        }, true);
+        // Prevent mouse events from propagating to the game
+        const sliderInput = sliderElement.querySelector("input");
+        if (sliderInput) {
+            this.blockMousePropagation(sliderInput, false);
+        }
+        // Apply consistent styling
+        Object.assign(sliderElement.style, {
+            width: "100%",
+            margin: "5px 0"
         });
-        // Empêcher les événements de se propager vers le jeu
-        slider.addEventListener("mousedown", (e) => e.stopPropagation());
-        slider.addEventListener("mouseup", (e) => e.stopPropagation());
-        this.blockMousePropagation(slider, false);
-        // Assembler tous les éléments
-        sliderWrapper.appendChild(progressBar);
-        sliderWrapper.appendChild(slider);
-        sliderContainer.appendChild(sliderWrapper);
-        sliderContainer.appendChild(valueDisplay);
-        container.appendChild(sliderContainer);
-        return container;
+        return sliderElement;
     }
     createInfoElement(option) {
         const info = document.createElement("div");
@@ -3733,23 +4527,56 @@ class KxsClientSecondaryMenu {
     createSubButton(option) {
         const btn = document.createElement("button");
         const isMobile = this.kxsClient.isMobile && this.kxsClient.isMobile();
-        // Styles pour le bouton de sous-menu (gris par défaut)
-        Object.assign(btn.style, {
+        // Apply modern glassmorphism effect
+        DesignSystem.applyGlassEffect(btn, 'dark', {
             width: "100%",
-            padding: isMobile ? "2px 0px" : "8px",
-            height: isMobile ? "24px" : "auto",
-            background: "#6B7280", // Couleur grise par défaut
-            border: "none",
-            borderRadius: isMobile ? "3px" : "6px",
-            color: "white",
+            padding: isMobile ? "6px 8px" : "12px 16px",
+            height: isMobile ? "32px" : "auto",
+            background: "linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.25) 100%)",
+            backdropFilter: "blur(12px) saturate(180%)",
+            WebkitBackdropFilter: "blur(12px) saturate(180%)",
+            border: "1px solid rgba(59, 130, 246, 0.3)",
+            borderRadius: isMobile ? "8px" : "12px",
+            color: "#ffffff",
             cursor: "pointer",
-            transition: "background 0.2s",
-            fontSize: isMobile ? "9px" : "14px",
-            fontWeight: "bold",
-            minHeight: isMobile ? "20px" : "unset",
-            letterSpacing: isMobile ? "0.5px" : "1px"
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            fontSize: isMobile ? "11px" : "14px",
+            fontWeight: "600",
+            letterSpacing: "0.5px",
+            fontFamily: DesignSystem.fonts.primary,
+            boxShadow: "0 4px 16px rgba(59, 130, 246, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+            textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
+            position: "relative",
+            overflow: "hidden"
         });
-        btn.textContent = "CONFIGURE";
+        // Add a subtle icon to indicate configuration
+        btn.innerHTML = `<span style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+			<svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				<path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+			CONFIGURE
+		</span>`;
+        // Add sophisticated hover effects
+        btn.addEventListener("mouseenter", () => {
+            btn.style.transform = "translateY(-2px) scale(1.02)";
+            btn.style.backdropFilter = "blur(16px) saturate(200%)";
+            btn.style.setProperty('-webkit-backdrop-filter', 'blur(16px) saturate(200%)');
+            btn.style.boxShadow = "0 8px 24px rgba(59, 130, 246, 0.35), 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)";
+            btn.style.border = "1px solid rgba(59, 130, 246, 0.5)";
+        });
+        btn.addEventListener("mouseleave", () => {
+            btn.style.transform = "translateY(0) scale(1)";
+            btn.style.backdropFilter = "blur(12px) saturate(180%)";
+            btn.style.backdropFilter = "blur(12px) saturate(180%)";
+            btn.style.boxShadow = "0 4px 16px rgba(59, 130, 246, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)";
+            btn.style.border = "1px solid rgba(59, 130, 246, 0.3)";
+        });
+        // Add active effect
+        btn.addEventListener("mousedown", () => {
+            btn.style.transform = "translateY(0) scale(0.98)";
+            btn.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)";
+        });
         // Variables pour le sous-menu
         let subMenuContainer = null;
         // Sauvegarde des éléments originaux à masquer/afficher
@@ -3974,13 +4801,19 @@ class KxsClientSecondaryMenu {
                 this.menu.style.cursor = "grabbing";
             }
         });
+        // Optimized: use throttled mousemove for better performance
+        let mouseMoveThrottle = false;
         document.addEventListener('mousemove', (e) => {
-            if (this.isDragging) {
-                const x = e.clientX - this.dragOffset.x;
-                const y = e.clientY - this.dragOffset.y;
-                this.menu.style.transform = 'none';
-                this.menu.style.left = `${x}px`;
-                this.menu.style.top = `${y}px`;
+            if (this.isDragging && !mouseMoveThrottle) {
+                mouseMoveThrottle = true;
+                requestAnimationFrame(() => {
+                    const x = e.clientX - this.dragOffset.x;
+                    const y = e.clientY - this.dragOffset.y;
+                    this.menu.style.transform = 'none';
+                    this.menu.style.left = `${x}px`;
+                    this.menu.style.top = `${y}px`;
+                    mouseMoveThrottle = false;
+                });
             }
         });
         document.addEventListener('mouseup', (e) => {
@@ -4009,10 +4842,18 @@ class KxsClientSecondaryMenu {
         if (this.isClientMenuVisible) {
             this.filterOptions();
         }
+        // Notifier immédiatement tous les callbacks enregistrés
+        this.onMenuToggle.forEach(callback => {
+            try {
+                callback();
+            }
+            catch (error) {
+                return;
+            }
+        });
     }
     destroy() {
         // Remove global event listeners
-        window.removeEventListener("keydown", this.shiftListener);
         document.removeEventListener('mousemove', this.mouseMoveListener);
         document.removeEventListener('mouseup', this.mouseUpListener);
         // Supprimer tous les écouteurs d'événements keydown du document
@@ -4053,8 +4894,8 @@ class KxsClientSecondaryMenu {
         return this.isClientMenuVisible;
     }
 }
- 
- 
+
+
 ;// ./src/SERVER/Ping.ts
 class PingTest {
     constructor() {
@@ -4284,10 +5125,11 @@ class PingTest {
         }
     }
 }
- 
- 
+
+
 ;// ./src/HUD/ClientHUD.ts
- 
+
+
 class KxsClientHUD {
     constructor(kxsClient) {
         this.healthAnimations = [];
@@ -4362,12 +5204,6 @@ class KxsClientHUD {
             this.loadCustomCrosshair();
         }
         this.setupCtrlFocusModeListener();
-        window.addEventListener('load', () => {
-            this.updateCounterCorners();
-        });
-        window.addEventListener('resize', () => {
-            this.updateCounterCorners();
-        });
     }
     setupCtrlFocusModeListener() {
         // Déterminer la plateforme une seule fois à l'initialisation
@@ -4380,9 +5216,9 @@ class KxsClientHUD {
                 modifierKeyPressed = true;
             }
             // Activer le mode focus seulement si F est pressé pendant que la touche modificatrice est déjà enfoncée
-            if (modifierKeyPressed && e.code === 'KeyF') {
+            if (modifierKeyPressed && e.code === 'KeyF' && this.kxsClient.isFocusModeEnabled) {
                 e.preventDefault(); // Empêcher le comportement par défaut (recherche)
-                this.kxsClient.isFocusModeEnabled = !this.kxsClient.isFocusModeEnabled;
+                this.kxsClient.currentFocusModeState = !this.kxsClient.currentFocusModeState;
                 this.kxsClient.hud.toggleFocusMode();
                 this.kxsClient.nm.showNotification("Focus mode toggled", "info", 1200);
             }
@@ -4560,7 +5396,7 @@ class KxsClientHUD {
         });
     }
     toggleFocusMode() {
-        if (this.kxsClient.isFocusModeEnabled) {
+        if (this.kxsClient.currentFocusModeState) {
             this.observeHudOpacity(0.05);
         }
         else {
@@ -4742,12 +5578,24 @@ class KxsClientHUD {
         });
     }
     escapeMenu() {
+        // Détermine si le mode glassmorphism est activé
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
+        // Style pour mobile avec prise en charge du toggle glassmorphism
         const customStylesMobile = `
     .ui-game-menu-desktop {
-        background: linear-gradient(135deg, rgba(25, 25, 35, 0.95) 0%, rgba(15, 15, 25, 0.98) 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 4px !important;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+        ${is_glassmorphism_enabled ? `
+        background: rgba(30, 35, 50, 0.15) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(60, 70, 90, 0.3) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(80, 90, 110, 0.2) !important;` : `
+        background: rgba(50, 50, 50, 0.95) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid #555 !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;`}
+        will-change: transform, opacity !important;
+        border-radius: ${is_glassmorphism_enabled ? '16px' : '8px'} !important;
         padding: 2px 2px !important;
         max-width: 45vw !important;
         width: 45vw !important;
@@ -4795,19 +5643,28 @@ class KxsClientHUD {
 `;
         const customStylesDesktop = `
 .ui-game-menu-desktop {
-	background: linear-gradient(135deg, rgba(25, 25, 35, 0.95) 0%, rgba(15, 15, 25, 0.98) 100%) !important;
-	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	${is_glassmorphism_enabled ? `
+	background: rgba(25, 30, 45, 0.12) !important;
+	backdrop-filter: blur(12px) !important;
+	-webkit-backdrop-filter: blur(12px) !important;
+	border: 1px solid rgba(55, 65, 85, 0.25) !important;
+	border-radius: 20px !important;
+	box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(75, 85, 105, 0.2), 0 0 0 1px rgba(45, 55, 75, 0.1) !important;` : `
+	background: rgba(45, 45, 45, 0.95) !important;
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+	border: 1px solid #555 !important;
 	border-radius: 12px !important;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;`}
+	will-change: transform, opacity !important;
 	padding: 20px !important;
-	backdrop-filter: blur(10px) !important;
 	max-width: 350px !important;
 	/* max-height: 80vh !important; */ /* Optional: Limit the maximum height */
 	margin: auto !important;
 	box-sizing: border-box !important;
 	overflow-y: auto !important; /* Allow vertical scrolling if necessary */
 }
- 
+
 /* Style pour les boutons de mode de jeu qui ont une image de fond */
 .btn-mode-cobalt,
 [style*="background: url("] {
@@ -4817,7 +5674,7 @@ class KxsClientHUD {
 	position: relative !important;
 	padding-right: 40px !important;
 }
- 
+
 /* Ne pas appliquer ce style aux boutons standards comme Play Solo */
 #btn-start-mode-0 {
 	background-repeat: initial !important;
@@ -4825,122 +5682,248 @@ class KxsClientHUD {
 	background-size: initial !important;
 	padding-right: initial !important;
 }
- 
+
 .ui-game-menu-desktop::-webkit-scrollbar {
 	width: 8px !important;
 }
 .ui-game-menu-desktop::-webkit-scrollbar-track {
-	background: rgba(25, 25, 35, 0.5) !important;
-	border-radius: 10px !important;
+	background: ${is_glassmorphism_enabled ? 'rgba(25, 25, 35, 0.5)' : 'rgba(40, 40, 40, 0.9)'} !important;
+	border-radius: ${is_glassmorphism_enabled ? '10px' : '6px'} !important;
 }
 .ui-game-menu-desktop::-webkit-scrollbar-thumb {
-	background-color: #4287f5 !important;
-	border-radius: 10px !important;
-	border: 2px solid rgba(25, 25, 35, 0.5) !important;
+	background-color: ${is_glassmorphism_enabled ? '#7f8c8d' : '#555'} !important;
+	border-radius: ${is_glassmorphism_enabled ? '10px' : '6px'} !important;
+	border: ${is_glassmorphism_enabled ? '2px solid rgba(25, 25, 35, 0.5)' : '1px solid #444'} !important;
 }
 .ui-game-menu-desktop::-webkit-scrollbar-thumb:hover {
-	background-color: #5a9eff !important;
+	background-color: ${is_glassmorphism_enabled ? '#95a5a6' : '#666'} !important;
 }
- 
+
 .ui-game-menu-desktop {
 	scrollbar-width: thin !important;
-	scrollbar-color: #4287f5 rgba(25, 25, 35, 0.5) !important;
+	scrollbar-color: ${is_glassmorphism_enabled ? '#7f8c8d rgba(25, 25, 35, 0.5)' : '#555 rgba(40, 40, 40, 0.9)'} !important;
 }
- 
+
 .kxs-header {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 	margin-bottom: 20px;
-	padding: 10px;
-	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+	padding: 15px;
+	border-bottom: 1px solid ${is_glassmorphism_enabled ? 'rgba(55, 65, 85, 0.2)' : '#444'};
+	background: ${is_glassmorphism_enabled ? 'rgba(20, 25, 40, 0.08)' : 'rgba(40, 40, 40, 0.95)'};
+	${is_glassmorphism_enabled ? 'backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);' : ''}
+	border-radius: ${is_glassmorphism_enabled ? '12px' : '8px'};
+	box-shadow: ${is_glassmorphism_enabled ? 'inset 0 1px 0 rgba(70, 80, 100, 0.15)' : '0 2px 6px rgba(0, 0, 0, 0.3)'};
 }
- 
+
 .kxs-logo {
 	width: 30px;
 	height: 30px;
 	margin-right: 10px;
 	border-radius: 6px;
 }
- 
+
 .kxs-title {
 	font-size: 20px;
 	font-weight: 700;
 	color: #ffffff;
 	text-transform: uppercase;
-	text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(70, 80, 120, 0.4);
 	font-family: 'Arial', sans-serif;
 	letter-spacing: 2px;
+	filter: drop-shadow(0 0 10px rgba(60, 70, 100, 0.3));
 }
- 
+
 .kxs-title span {
-	color: #4287f5;
+	color: #6b7db0;
 }
- 
- 
+
+
 .btn-game-menu {
-	background: linear-gradient(135deg, rgba(66, 135, 245, 0.1) 0%, rgba(66, 135, 245, 0.2) 100%) !important;
-	border: 1px solid rgba(66, 135, 245, 0.3) !important;
+	${is_glassmorphism_enabled ? `
+	background: linear-gradient(135deg, rgba(45, 55, 75, 0.15) 0%, rgba(35, 45, 65, 0.25) 100%) !important;
+	backdrop-filter: blur(16px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+	border: 1px solid rgba(255, 255, 255, 0.18) !important;
+	border-radius: 14px !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+	` : `
+	background: linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(45, 45, 45, 1) 100%) !important;
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+	border: 1px solid #555 !important;
 	border-radius: 8px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+	`}
 	color: #ffffff !important;
-	transition: all 0.3s ease !important;
-	margin: 5px 0 !important;
-	padding: 12px !important;
-	font-weight: 600 !important;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+	margin: 8px 0 !important;
+	padding: 14px 18px !important;
+	font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+	font-weight: 500 !important;
+	font-size: 14px !important;
+	letter-spacing: 0.3px !important;
 	width: 100% !important;
 	text-align: center !important;
 	display: block !important;
 	box-sizing: border-box !important;
-	line-height: 15px !important;
+	line-height: 1.4 !important;
+	position: relative !important;
+	overflow: hidden !important;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
- 
+
+.btn-game-menu::before {
+	content: '' !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: -100% !important;
+	width: 100% !important;
+	height: 100% !important;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent) !important;
+	transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+	z-index: 1 !important;
+}
+
+.btn-game-menu:hover::before {
+	left: 100% !important;
+}
+
 .btn-game-menu:hover {
-	background: linear-gradient(135deg, rgba(66, 135, 245, 0.2) 0%, rgba(66, 135, 245, 0.3) 100%) !important;
+	${is_glassmorphism_enabled ? `
+	background: linear-gradient(135deg, rgba(55, 65, 85, 0.25) 0%, rgba(45, 55, 75, 0.35) 100%) !important;
+	transform: translateY(-3px) scale(1.02) !important;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+	border-color: rgba(255, 255, 255, 0.25) !important;
+	backdrop-filter: blur(10px) saturate(150%) !important;
+	-webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+	` : `
+	background: linear-gradient(135deg, rgba(70, 70, 70, 0.9) 0%, rgba(50, 50, 50, 1) 100%) !important;
 	transform: translateY(-2px) !important;
-	box-shadow: 0 4px 12px rgba(66, 135, 245, 0.2) !important;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35) !important;
+	border-color: #666 !important;
+	`}
+	will-change: transform !important;
 }
- 
+
 .slider-container {
-	background: rgba(66, 135, 245, 0.1) !important;
+	${is_glassmorphism_enabled ? `
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+	backdrop-filter: blur(10px) saturate(150%) !important;
+	-webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+	border: 1px solid rgba(255, 255, 255, 0.15) !important;
+	border-radius: 16px !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+	` : `
+	background: linear-gradient(135deg, rgba(55, 55, 55, 0.95) 0%, rgba(45, 45, 45, 0.95) 100%) !important;
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+	border: 1px solid #555 !important;
 	border-radius: 8px !important;
-	padding: 10px 15px !important;
-	margin: 10px 0 !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+	`}
+	will-change: transform, opacity !important;
+	padding: 16px 20px !important;
+	margin: 12px 0 !important;
 	width: 100% !important;
 	box-sizing: border-box !important;
+	position: relative !important;
+	overflow: hidden !important;
 }
- 
+
+.slider-container::before {
+	content: '' !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: -100% !important;
+	width: 100% !important;
+	height: 100% !important;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent) !important;
+	animation: containerShine 6s ease-in-out infinite !important;
+	will-change: transform !important;
+	z-index: 0 !important;
+}
+
+@keyframes containerShine {
+	0% { left: -100%; }
+	50% { left: 100%; }
+	100% { left: 100%; }
+}
+
 .slider-text {
 	color: #ffffff !important;
-	font-size: 14px !important;
-	margin-bottom: 8px !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	margin-bottom: 12px !important;
 	text-align: center !important;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+	letter-spacing: 0.5px !important;
+	position: relative !important;
+	z-index: 1 !important;
 }
- 
+
 .slider {
 	-webkit-appearance: none !important;
 	width: 100% !important;
-	height: 6px !important;
-	border-radius: 3px !important;
-	background: rgba(66, 135, 245, 0.3) !important;
+	height: 8px !important;
+	border-radius: ${is_glassmorphism_enabled ? '12px' : '8px'} !important;
+	background: ${is_glassmorphism_enabled ?
+            'linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(51, 65, 85, 0.8) 100%)' :
+            'linear-gradient(135deg, rgba(40, 40, 40, 0.8) 0%, rgba(50, 50, 50, 1) 100%)'} !important;
 	outline: none !important;
-	margin: 10px 0 !important;
+	margin: 12px 0 !important;
+	${is_glassmorphism_enabled ? `
+	backdrop-filter: blur(8px) !important;
+	-webkit-backdrop-filter: blur(8px) !important;
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;` : `
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
+	border: 1px solid #444 !important;`}
+	box-shadow: ${is_glassmorphism_enabled ?
+            'inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1)' :
+            'inset 0 1px 3px rgba(0, 0, 0, 0.4)'} !important;
+	position: relative !important;
+	z-index: 1 !important;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
- 
+
+.slider:hover {
+	background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(51, 65, 85, 1) 100%) !important;
+	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(255, 255, 255, 0.15), 0 0 16px rgba(59, 130, 246, 0.2) !important;
+}
+
 .slider::-webkit-slider-thumb {
 	-webkit-appearance: none !important;
-	width: 16px !important;
-	height: 16px !important;
+	width: 24px !important;
+	height: 24px !important;
 	border-radius: 50% !important;
-	background: #4287f5 !important;
-	cursor: pointer !important;
-	transition: all 0.3s ease !important;
+	background: ${is_glassmorphism_enabled ?
+            'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%)' :
+            'linear-gradient(135deg, rgba(180, 180, 180, 0.95) 0%, rgba(140, 140, 140, 1) 100%)'} !important;
+	${is_glassmorphism_enabled ? `
+	backdrop-filter: blur(12px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(12px) saturate(180%) !important;` : ``}
+	border: 2px solid rgba(59, 130, 246, 0.6) !important;
+	cursor: grab !important;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+	box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+	position: relative !important;
 }
- 
+
 .slider::-webkit-slider-thumb:hover {
-	transform: scale(1.2) !important;
-	box-shadow: 0 0 10px rgba(66, 135, 245, 0.5) !important;
+	transform: scale(1.1) !important;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
+	box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4), 0 3px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+	border: 2px solid rgba(59, 130, 246, 0.8) !important;
 }
- 
+
+.slider::-webkit-slider-thumb:active {
+	cursor: grabbing !important;
+	transform: scale(1.05) !important;
+	box-shadow: 0 3px 12px rgba(59, 130, 246, 0.5), 0 1px 6px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
 .btns-game-double-row {
 	display: flex !important;
 	justify-content: center !important;
@@ -4948,11 +5931,11 @@ class KxsClientHUD {
 	margin-bottom: 10px !important;
 	width: 100% !important;
 }
- 
+
 .btn-game-container {
 	flex: 1 !important;
 }
- 
+
 #btn-touch-styles,
 #btn-game-aim-line {
 	display: none !important;
@@ -5029,9 +6012,19 @@ class KxsClientHUD {
                     if (!killfeedText.hasAttribute('data-glint')) {
                         killfeedText.setAttribute('data-glint', 'true');
                         element.style.opacity = '1';
-                        setTimeout(() => {
-                            element.style.opacity = '0';
-                        }, 5000);
+                        // Use CSS transition instead of setTimeout for better performance
+                        element.style.transition = 'opacity 0.3s ease';
+                        // Schedule fade out using requestAnimationFrame with delay
+                        const startTime = performance.now();
+                        const fadeOut = (currentTime) => {
+                            if (currentTime - startTime >= 5000) {
+                                element.style.opacity = '0';
+                            }
+                            else {
+                                requestAnimationFrame(fadeOut);
+                            }
+                        };
+                        requestAnimationFrame(fadeOut);
                     }
                 }
                 else {
@@ -5084,50 +6077,65 @@ class KxsClientHUD {
     }
     applyCustomStyles() {
         const customStyles = document.createElement('style');
+        // Get glassmorphism setting
+        const isGlassmorphismEnabled = this.kxsClient.isGlassmorphismEnabled;
         if (this.kxsClient.isKillFeedBlint) {
+            // Rainbow text effect with either glassmorphism or classic background
             customStyles.innerHTML = `
-        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@600&display=swap');
- 
-        .killfeed-div {
-            position: absolute !important;
-            padding: 5px 10px !important;
-            background: rgba(0, 0, 0, 0.7) !important;
-            border-radius: 5px !important;
-            transition: opacity 0.5s ease-out !important;
-        }
- 
-        .killfeed-text {
-            font-family: 'Oxanium', sans-serif !important;
-            font-weight: bold !important;
-            font-size: 16px !important;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
-            background: linear-gradient(90deg,
-                rgb(255, 0, 0),
-                rgb(255, 127, 0),
-                rgb(255, 255, 0),
-                rgb(0, 255, 0),
-                rgb(0, 0, 255),
-                rgb(75, 0, 130),
-                rgb(148, 0, 211),
-                rgb(255, 0, 0));
-            background-size: 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glint 3s linear infinite;
-        }
- 
-        @keyframes glint {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
-        }
- 
-        .killfeed-div .killfeed-text:empty {
-            display: none !important;
-        }
+           @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@600&display=swap');
+
+           .killfeed-div {
+               position: absolute !important;
+               padding: 5px 10px !important;
+               ${isGlassmorphismEnabled ? `
+               background: rgba(0, 0, 0, 0.5) !important;
+               backdrop-filter: blur(8px) !important;
+               -webkit-backdrop-filter: blur(8px) !important;
+               border: 1px solid rgba(255, 255, 255, 0.2) !important;
+               ` : `
+               background: rgba(50, 50, 50, 0.9) !important;
+               border: 1px solid #555 !important;
+               `}
+               border-radius: ${isGlassmorphismEnabled ? '8px' : '5px'} !important;
+               transition: all 0.3s ease !important;
+               box-shadow: ${isGlassmorphismEnabled ?
+                '0 4px 15px rgba(0, 0, 0, 0.2)' :
+                '0 2px 5px rgba(0, 0, 0, 0.3)'} !important;
+           }
+
+           .killfeed-text {
+               font-family: 'Oxanium', sans-serif !important;
+               font-weight: bold !important;
+               font-size: 16px !important;
+               text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+               background: linear-gradient(90deg,
+                   rgb(255, 0, 0),
+                   rgb(255, 127, 0),
+                   rgb(255, 255, 0),
+                   rgb(0, 255, 0),
+                   rgb(0, 0, 255),
+                   rgb(75, 0, 130),
+                   rgb(148, 0, 211),
+                   rgb(255, 0, 0));
+               background-size: 200%;
+               -webkit-background-clip: text;
+               -webkit-text-fill-color: transparent;
+               animation: glint 6s linear infinite;
+			will-change: background-position;
+           }
+
+           @keyframes glint {
+               0% {
+                   background-position: 200% 0;
+               }
+               100% {
+                   background-position: -200% 0;
+               }
+           }
+
+           .killfeed-div .killfeed-text:empty {
+               display: none !important;
+           }
       `;
         }
         else {
@@ -5135,11 +6143,22 @@ class KxsClientHUD {
         .killfeed-div {
             position: absolute;
             padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            transition: opacity 0.5s ease-out;
+            ${isGlassmorphismEnabled ? `
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            ` : `
+            background: rgba(50, 50, 50, 0.95);
+            border: 1px solid #555;
+            `}
+            border-radius: ${isGlassmorphismEnabled ? '8px' : '5px'};
+            transition: all 0.3s ease;
+            box-shadow: ${isGlassmorphismEnabled ?
+                '0 4px 12px rgba(0, 0, 0, 0.2)' :
+                '0 2px 5px rgba(0, 0, 0, 0.3)'};
         }
- 
+
         .killfeed-text {
             font-family: inherit;
             font-weight: normal;
@@ -5148,7 +6167,7 @@ class KxsClientHUD {
             text-shadow: none;
             background: none;
         }
- 
+
         .killfeed-div .killfeed-text:empty {
             display: none;
         }
@@ -5156,64 +6175,15 @@ class KxsClientHUD {
         }
         document.head.appendChild(customStyles);
     }
-    handleResize() {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        for (const name of ['fps', 'kills', 'ping']) {
-            const counterContainer = document.getElementById(`${name}CounterContainer`);
-            if (!counterContainer)
-                continue;
-            const counter = this.kxsClient.counters[name];
-            if (!counter)
-                continue;
-            const rect = counterContainer.getBoundingClientRect();
-            const savedPosition = this.getSavedPosition(name);
-            let newPosition = this.calculateSafePosition(savedPosition, rect.width, rect.height, viewportWidth, viewportHeight);
-            this.applyPosition(counterContainer, newPosition);
-            this.savePosition(name, newPosition);
-        }
-    }
-    calculateSafePosition(currentPosition, elementWidth, elementHeight, viewportWidth, viewportHeight) {
-        let { left, top } = currentPosition;
-        if (left + elementWidth > viewportWidth) {
-            left = viewportWidth - elementWidth;
-        }
-        if (left < 0) {
-            left = 0;
-        }
-        if (top + elementHeight > viewportHeight) {
-            top = viewportHeight - elementHeight;
-        }
-        if (top < 0) {
-            top = 0;
-        }
-        return { left, top };
-    }
-    getSavedPosition(name) {
-        const savedPosition = localStorage.getItem(`${name}CounterPosition`);
-        if (savedPosition) {
-            try {
-                return JSON.parse(savedPosition);
-            }
-            catch (_a) {
-                return this.kxsClient.defaultPositions[name];
-            }
-        }
-        return this.kxsClient.defaultPositions[name];
-    }
-    applyPosition(element, position) {
-        element.style.left = `${position.left}px`;
-        element.style.top = `${position.top}px`;
-    }
-    savePosition(name, position) {
-        localStorage.setItem(`${name}CounterPosition`, JSON.stringify(position));
-    }
     startUpdateLoop() {
         var _a;
         const now = performance.now();
         const delta = now - this.kxsClient.lastFrameTime;
         this.frameCount++;
         if (delta >= 1000) {
+            const previousFps = this.fps;
+            const previousKills = this.kills;
+            const previousPing = this.pingManager ? this.pingManager.getPingResult().ping : 0;
             this.fps = Math.round((this.frameCount * 1000) / delta);
             this.frameCount = 0;
             this.kxsClient.lastFrameTime = now;
@@ -5230,16 +6200,56 @@ class KxsClientHUD {
             }
             // Met à jour les valeurs des compteurs visibles
             if (this.kxsClient.isFpsVisible && this.kxsClient.counters.fps) {
-                this.kxsClient.counters.fps.textContent = `FPS: ${this.fps}`;
+                const valueElement = this.kxsClient.counters.fps.querySelector('span:last-child');
+                if (valueElement) {
+                    valueElement.textContent = `${this.fps}`;
+                    // Add a visual pulse effect when value changes (fixed logic)
+                    if (this.fps !== previousFps) {
+                        valueElement.style.animation = 'none';
+                        requestAnimationFrame(() => {
+                            valueElement.style.animation = `${DesignSystem.animation.pulse} 0.5s ease`;
+                        });
+                    }
+                }
             }
             if (this.kxsClient.isKillsVisible && this.kxsClient.counters.kills) {
-                this.kxsClient.counters.kills.textContent = `Kills: ${this.kills}`;
+                const valueElement = this.kxsClient.counters.kills.querySelector('span:last-child');
+                if (valueElement) {
+                    valueElement.textContent = `${this.kills}`;
+                    // Add a visual pulse effect when value changes (fixed logic)
+                    if (this.kills !== previousKills) {
+                        valueElement.style.animation = 'none';
+                        requestAnimationFrame(() => {
+                            valueElement.style.animation = `${DesignSystem.animation.pulse} 0.5s ease`;
+                        });
+                    }
+                }
             }
             if (this.kxsClient.isPingVisible &&
                 this.kxsClient.counters.ping &&
                 this.pingManager) {
                 const result = this.pingManager.getPingResult();
-                this.kxsClient.counters.ping.textContent = `PING: ${result.ping} ms`;
+                const valueElement = this.kxsClient.counters.ping.querySelector('span:last-child');
+                if (valueElement) {
+                    valueElement.textContent = `${result.ping} ms`;
+                    // Add a visual pulse effect when value changes (fixed logic)
+                    if (result.ping !== previousPing) {
+                        valueElement.style.animation = 'none';
+                        requestAnimationFrame(() => {
+                            valueElement.style.animation = `${DesignSystem.animation.pulse} 0.5s ease`;
+                        });
+                    }
+                    // Change color based on ping value
+                    if (result.ping < 50) {
+                        valueElement.style.color = DesignSystem.colors.success;
+                    }
+                    else if (result.ping < 100) {
+                        valueElement.style.color = DesignSystem.colors.warning;
+                    }
+                    else {
+                        valueElement.style.color = DesignSystem.colors.danger;
+                    }
+                }
             }
         }
         if (this.kxsClient.animationFrameCallback) {
@@ -5251,45 +6261,129 @@ class KxsClientHUD {
         (_a = this.kxsClient.kill_leader) === null || _a === void 0 ? void 0 : _a.update(this.kills);
     }
     initCounter(name, label, initialText) {
+        // Ensure design system fonts are loaded
+        DesignSystem.injectFonts();
         // Vérifier si le compteur existe déjà et le supprimer si c'est le cas
         this.removeCounter(name);
         const counter = document.createElement("div");
         counter.id = `${name}Counter`;
         const counterContainer = document.createElement("div");
         counterContainer.id = `${name}CounterContainer`;
+        counterContainer.dataset.counterName = name;
         Object.assign(counterContainer.style, {
             position: "absolute",
             left: `${this.kxsClient.defaultPositions[name].left}px`,
             top: `${this.kxsClient.defaultPositions[name].top}px`,
             zIndex: "10000",
+            transition: `all ${DesignSystem.animation.normal} ease`,
         });
-        Object.assign(counter.style, {
-            color: "white",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            borderRadius: "5px",
-            fontFamily: "Arial, sans-serif",
-            padding: "5px 10px",
-            pointerEvents: "none",
-            cursor: "default",
-            width: `${this.kxsClient.defaultSizes[name].width}px`,
-            height: `${this.kxsClient.defaultSizes[name].height}px`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            resize: "both",
-            overflow: "hidden",
-        });
-        counter.textContent = `${label}: ${initialText}`;
+        // Check if glassmorphism is enabled
+        const isGlassmorphismEnabled = this.kxsClient.isGlassmorphismEnabled;
+        // Apply appropriate styling based on the glassmorphism toggle
+        if (isGlassmorphismEnabled) {
+            // Glassmorphism style
+            counter.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
+            counter.style.backdropFilter = "blur(8px)";
+            // Apply webkit prefix for Safari compatibility
+            counter.style['-webkit-backdrop-filter'] = "blur(8px)";
+            counter.style.border = "1px solid rgba(255, 255, 255, 0.2)";
+            counter.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+            counter.style.borderRadius = "8px";
+        }
+        else {
+            // Classic style - solid gray background without blur
+            counter.style.backgroundColor = "rgba(75, 75, 75, 0.95)";
+            counter.style.backdropFilter = "none";
+            counter.style['-webkit-backdrop-filter'] = "none";
+            counter.style.border = "1px solid #555";
+            counter.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+            counter.style.borderRadius = "6px";
+        }
+        counter.style.color = "#ffffff";
+        counter.style.fontFamily = DesignSystem.fonts.secondary;
+        counter.style.fontWeight = "500";
+        counter.style.padding = "8px 12px";
+        counter.style.pointerEvents = "none";
+        counter.style.cursor = "default";
+        counter.style.display = "flex";
+        counter.style.alignItems = "center";
+        counter.style.justifyContent = "center";
+        counter.style.textAlign = "center";
+        counter.style.resize = "both";
+        counter.style.overflow = "hidden";
+        counter.style.textShadow = "0 1px 2px rgba(0, 0, 0, 0.5)";
+        counter.style.transition = `all ${DesignSystem.animation.normal} ease`;
+        // Set initial size based on default positions or the last saved size
+        const savedSize = JSON.parse(localStorage.getItem(`${name}CounterSize`) || '{}');
+        // Check if savedSize contains width/height with or without 'px' suffix
+        if (savedSize.width) {
+            // Check if width is a string or number
+            const width_is_string = typeof savedSize.width === 'string';
+            counter.style.width = width_is_string && savedSize.width.includes('px') ?
+                savedSize.width : `${savedSize.width}px`;
+        }
+        else {
+            counter.style.width = `${this.kxsClient.defaultSizes[name].width}px`;
+        }
+        if (savedSize.height) {
+            // Check if height is a string or number
+            const height_is_string = typeof savedSize.height === 'string';
+            counter.style.height = height_is_string && savedSize.height.includes('px') ?
+                savedSize.height : `${savedSize.height}px`;
+        }
+        else {
+            counter.style.height = `${this.kxsClient.defaultSizes[name].height}px`;
+        }
+        // Create a label element with clean styling
+        const labelElement = document.createElement("span");
+        labelElement.style.fontWeight = "600";
+        labelElement.style.marginRight = "6px";
+        labelElement.style.color = "#ffffff";
+        labelElement.textContent = `${label}:`;
+        // Create a value element with clean styling
+        const valueElement = document.createElement("span");
+        valueElement.style.fontWeight = "500";
+        valueElement.textContent = initialText;
+        // Clear counter and append new elements
+        counter.innerHTML = "";
+        counter.appendChild(labelElement);
+        counter.appendChild(valueElement);
         counterContainer.appendChild(counter);
         const uiTopLeft = document.getElementById("ui-top-left");
         if (uiTopLeft) {
             uiTopLeft.appendChild(counterContainer);
         }
+        // Add subtle hover effect based on glassmorphism toggle
+        counterContainer.addEventListener("mouseenter", () => {
+            counter.style.transform = "scale(1.05)";
+            if (this.kxsClient.isGlassmorphismEnabled) {
+                counter.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.3)";
+            }
+            else {
+                counter.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.25)";
+            }
+        });
+        counterContainer.addEventListener("mouseleave", () => {
+            counter.style.transform = "scale(1)";
+            if (this.kxsClient.isGlassmorphismEnabled) {
+                counter.style.boxShadow = DesignSystem.glass.dark.shadow;
+            }
+            else {
+                counter.style.boxShadow = DesignSystem.classic.dark.shadow;
+            }
+        });
         const adjustFontSize = () => {
             const { width, height } = counter.getBoundingClientRect();
             const size = Math.min(width, height) * 0.4;
-            counter.style.fontSize = `${size}px`;
+            labelElement.style.fontSize = `${size}px`;
+            valueElement.style.fontSize = `${size}px`;
+            // Store the numeric values without 'px' suffix to avoid duplication
+            const width_value = parseInt(counter.style.width) || counter.offsetWidth;
+            const height_value = parseInt(counter.style.height) || counter.offsetHeight;
+            localStorage.setItem(`${name}CounterSize`, JSON.stringify({
+                width: width_value,
+                height: height_value
+            }));
         };
         new ResizeObserver(adjustFontSize).observe(counter);
         counter.addEventListener("mousedown", (event) => {
@@ -5307,7 +6401,6 @@ class KxsClientHUD {
             counterContainer.style.left = `${x}px`;
             counterContainer.style.top = `${y}px`;
         }
-        this.updateCounterCorners();
     }
     /**
      * Supprime un compteur du DOM et de la référence dans kxsClient.counters
@@ -5325,7 +6418,6 @@ class KxsClientHUD {
             delete this.kxsClient.counters[name];
         }
         this.kxsClient.gridSystem.registerCounter(name, null);
-        this.kxsClient.gridSystem.updateCounterCorners();
     }
     /**
      * Gère l'affichage ou le masquage d'un compteur en fonction de son état
@@ -5355,19 +6447,62 @@ class KxsClientHUD {
         Object.assign(container.style, {
             left: `${this.kxsClient.defaultPositions[name].left}px`,
             top: `${this.kxsClient.defaultPositions[name].top}px`,
+            transition: `all ${DesignSystem.animation.normal} ease`,
         });
-        Object.assign(counter.style, {
-            width: `${this.kxsClient.defaultSizes[name].width}px`,
-            height: `${this.kxsClient.defaultSizes[name].height}px`,
-            fontSize: "18px",
-            borderRadius: "5px",
-        });
-        counter.textContent = `${label}: ${initialText}`;
+        // Apply simple white glassmorphism effect to counter
+        counter.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
+        counter.style.backdropFilter = "blur(8px)";
+        // Apply webkit prefix for Safari compatibility
+        counter.style['-webkit-backdrop-filter'] = "blur(8px)";
+        counter.style.border = "1px solid rgba(255, 255, 255, 0.2)";
+        counter.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+        counter.style.borderRadius = "8px";
+        counter.style.color = "#ffffff";
+        counter.style.fontFamily = DesignSystem.fonts.secondary;
+        counter.style.fontWeight = "500";
+        counter.style.padding = "8px 12px";
+        counter.style.pointerEvents = "none";
+        counter.style.cursor = "default";
+        counter.style.width = `${this.kxsClient.defaultSizes[name].width}px`;
+        counter.style.height = `${this.kxsClient.defaultSizes[name].height}px`;
+        counter.style.display = "flex";
+        counter.style.alignItems = "center";
+        counter.style.justifyContent = "center";
+        counter.style.textAlign = "center";
+        counter.style.resize = "both";
+        counter.style.overflow = "hidden";
+        counter.style.textShadow = "0 1px 2px rgba(0, 0, 0, 0.5)";
+        counter.style.transition = `all ${DesignSystem.animation.normal} ease`;
+        // Reset the counter value
+        const labelElement = counter.querySelector('span:first-child');
+        const valueElement = counter.querySelector('span:last-child');
+        if (labelElement && valueElement) {
+            labelElement.textContent = `${label}:`;
+            valueElement.textContent = initialText;
+            // Ensure label styling is consistent
+            labelElement.style.fontWeight = "600";
+            labelElement.style.marginRight = "6px";
+            labelElement.style.color = "#ffffff";
+            // Ensure value styling is consistent
+            valueElement.style.fontWeight = "500";
+        }
+        else {
+            // Fallback if the spans don't exist
+            counter.innerHTML = "";
+            // Create new label and value elements
+            const newLabelElement = document.createElement("span");
+            newLabelElement.style.fontWeight = "700";
+            newLabelElement.style.marginRight = DesignSystem.spacing.sm;
+            newLabelElement.style.color = DesignSystem.colors.primary;
+            newLabelElement.textContent = `${label}:`;
+            const newValueElement = document.createElement("span");
+            newValueElement.style.fontWeight = "500";
+            newValueElement.textContent = initialText;
+            counter.appendChild(newLabelElement);
+            counter.appendChild(newValueElement);
+        }
         // Clear the saved position for this counter only
         localStorage.removeItem(`${name}CounterPosition`);
-        setTimeout(() => {
-            this.kxsClient.gridSystem.updateCounterCorners();
-        }, 50);
     }
     updateBoostBars() {
         const boostCounter = document.querySelector("#ui-boost-counter");
@@ -5538,7 +6673,8 @@ class KxsClientHUD {
 .kxs-chromatic-border {
 	border: 3px solid transparent !important;
 	border-image: linear-gradient(120deg, #ff004c, #fffa00, #00ff90, #004cff, #ff004c) 1;
-	animation: kxs-rainbow 3s linear infinite, kxs-glint 2s ease-in-out infinite, kxs-bg-rainbow 8s linear infinite;
+	animation: kxs-rainbow 6s linear infinite, kxs-glint 4s ease-in-out infinite, kxs-bg-rainbow 12s linear infinite;
+	will-change: border-image, background-position;
 	border-radius: 8px !important;
 	background: linear-gradient(270deg, #ff004c, #fffa00, #00ff90, #004cff, #ff004c);
 	background-size: 1200% 1200%;
@@ -5715,18 +6851,6 @@ class KxsClientHUD {
             value: change,
         });
     }
-    updateCounterCorners() {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                this.kxsClient.gridSystem.updateCounterCorners();
-            });
-        }
-        else {
-            setTimeout(() => {
-                this.kxsClient.gridSystem.updateCounterCorners();
-            }, 100);
-        }
-    }
     updateCountersDraggableState() {
         var _a;
         const countersVisibility = {
@@ -5751,7 +6875,6 @@ class KxsClientHUD {
                 counter.style.resize = isMenuOpen ? 'both' : 'none';
             }
         });
-        this.updateCounterCorners();
     }
     updateHealthAnimations() {
         const currentTime = performance.now();
@@ -5776,8 +6899,8 @@ class KxsClientHUD {
         });
     }
 }
- 
- 
+
+
 ;// ./src/FUNC/Logger.ts
 class Logger {
     getHeader(method) {
@@ -5801,8 +6924,8 @@ class Logger {
         this.展示(this.getHeader("ERROR"), message);
     }
 }
- 
- 
+
+
 // EXTERNAL MODULE: ../../GitLab/SteganoDB2/lib/browser.js
 var browser = __webpack_require__(686);
 ;// ./src/HUD/HistoryManager.ts
@@ -6120,9 +7243,10 @@ class GameHistoryMenu {
         // Add fade-in animation
         this.container.style.opacity = '0';
         this.container.style.transition = 'opacity 0.2s ease-in-out';
-        setTimeout(() => {
+        // Optimized: use requestAnimationFrame instead of setTimeout
+        requestAnimationFrame(() => {
             this.container.style.opacity = '1';
-        }, 10);
+        });
         document.body.appendChild(this.container);
     }
     hide() {
@@ -6145,23 +7269,238 @@ class GameHistoryMenu {
         this.hide();
     }
 }
- 
- 
-;// ./src/NETWORK/KxsNetwork.ts
- 
-class KxsNetwork {
-    sendGlobalChatMessage(text) {
-        if (!this.ws || this.ws.readyState !== WebSocket.OPEN)
-            return;
-        const payload = {
-            op: 7,
-            d: {
-                user: this.getUsername(),
-                text
-            }
-        };
-        this.send(payload);
+
+
+;// ./src/HUD/MOD/BroadcastHUD.ts
+/**
+ * BroadcastHUD - Displays broadcast messages in a glassmorphism HUD
+ * matching the online menu style from KxsClient
+ */
+class BroadcastHUD {
+    /**
+     * Get the singleton instance of BroadcastHUD
+     * @param kxsClient Reference to the KxsClient instance
+     * @returns BroadcastHUD instance
+     */
+    static getInstance(kxsClient) {
+        if (!BroadcastHUD.instance) {
+            BroadcastHUD.instance = new BroadcastHUD(kxsClient);
+        }
+        return BroadcastHUD.instance;
     }
+    /**
+     * Private constructor to enforce singleton pattern
+     * @param kxsClient Reference to the KxsClient instance
+     */
+    constructor(kxsClient) {
+        this.currentMessage = "";
+        this.isVisible = false;
+        this.hideTimeout = null;
+        this.progressAnimation = null;
+        this.kxsClient = kxsClient;
+        this.container = document.createElement("div");
+        this.messageElement = document.createElement("div");
+        this.progressBar = document.createElement("div");
+        this.createHUD();
+    }
+    /**
+     * Create the HUD container and elements
+     */
+    createHUD() {
+        // Check if glassmorphism is enabled
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
+        // Apply the appropriate styling based on glassmorphism toggle
+        Object.assign(this.container.style, {
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            padding: "8px 18px 0 18px", // Remove bottom padding to accommodate progress bar
+            zIndex: "999",
+            minWidth: "280px",
+            maxWidth: "400px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            opacity: "0",
+            pointerEvents: "none",
+            transition: "all 0.3s ease",
+            transform: "translateY(-20px)",
+            // Apply different styles based on glassmorphism toggle
+            background: is_glassmorphism_enabled ? "rgba(255, 255, 255, 0.1)" : "rgba(50, 50, 50, 0.95)",
+            backdropFilter: is_glassmorphism_enabled ? "blur(20px) saturate(180%)" : "none",
+            WebkitBackdropFilter: is_glassmorphism_enabled ? "blur(20px) saturate(180%)" : "none",
+            border: is_glassmorphism_enabled ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid #555",
+            borderRadius: is_glassmorphism_enabled ? "16px" : "10px",
+            boxShadow: is_glassmorphism_enabled ?
+                "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)" :
+                "0 4px 15px rgba(0, 0, 0, 0.4)",
+            fontSize: "15px",
+            userSelect: "none",
+            fontFamily: "inherit",
+            overflow: "hidden" // Ensure progress bar doesn't overflow
+        });
+        // Create header
+        const header = document.createElement("div");
+        Object.assign(header.style, {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+            width: "100%"
+        });
+        // Create notification dot (similar to online dot)
+        const dot = document.createElement("span");
+        Object.assign(dot.style, {
+            display: "inline-block",
+            width: "12px",
+            height: "12px",
+            borderRadius: "50%",
+            background: "#3fae2a",
+            marginRight: "10px",
+            boxShadow: "0 0 8px #3fae2a"
+        });
+        // Create title
+        const title = document.createElement("div");
+        title.textContent = "BROADCAST MESSAGE FROM KXS CREATOR";
+        Object.assign(title.style, {
+            fontWeight: "bold",
+            color: "#fff",
+            fontSize: "15px"
+        });
+        header.appendChild(dot);
+        header.appendChild(title);
+        // Create message element
+        Object.assign(this.messageElement.style, {
+            fontFamily: "inherit",
+            fontSize: "14px",
+            lineHeight: "1.5",
+            color: "#fff",
+            width: "100%",
+            wordBreak: "break-word"
+        });
+        // Create decorative line
+        const decorativeLine = document.createElement("div");
+        Object.assign(decorativeLine.style, {
+            background: "linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.05) 100%)",
+            width: "100%",
+            margin: "8px 0"
+        });
+        // Create progress bar at the bottom
+        Object.assign(this.progressBar.style, {
+            height: is_glassmorphism_enabled ? "4px" : "3px",
+            marginTop: "10px",
+            background: "linear-gradient(to right, #3fae2a, #6ae95f)",
+            transformOrigin: "left",
+            transform: "scaleX(0)",
+            transition: "transform 0.2s linear",
+            alignSelf: "flex-start",
+            marginLeft: "-18px", // To compensate for container padding
+            width: "calc(100% + 36px)" // Extend full width including padding
+        });
+        // Assemble HUD
+        this.container.appendChild(header);
+        this.container.appendChild(decorativeLine);
+        this.container.appendChild(this.messageElement);
+        this.container.appendChild(this.progressBar);
+        // Add to document
+        document.body.appendChild(this.container);
+        // Create animation style for the dot
+        if (!document.getElementById('kxs-broadcast-style')) {
+            const style = document.createElement('style');
+            style.id = 'kxs-broadcast-style';
+            style.innerHTML = `
+                @keyframes kxs-broadcast-pulse {
+                    0% { box-shadow:0 0 8px #3fae2a; opacity: 1; }
+                    100% { box-shadow:0 0 16px #3fae2a; opacity: 0.6; }
+                }
+            `;
+            document.head.appendChild(style);
+            // Apply animation to dot
+            dot.style.animation = "kxs-broadcast-pulse 1s infinite alternate";
+        }
+    }
+    /**
+     * Show a broadcast message in the HUD
+     * @param message The message to display
+     * @param duration How long to show the message (ms)
+     */
+    showMessage(message, duration = 8000) {
+        if (!this.container || !this.messageElement)
+            return;
+        // Clear any existing timeout and animation
+        if (this.hideTimeout !== null) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+        if (this.progressAnimation) {
+            this.progressAnimation.cancel();
+            this.progressAnimation = null;
+        }
+        // Reset progress bar
+        this.progressBar.style.transform = "scaleX(0)";
+        // Update message
+        this.currentMessage = message;
+        this.messageElement.textContent = message;
+        // Show HUD if not already visible
+        if (!this.isVisible) {
+            this.container.style.opacity = "1";
+            this.container.style.transform = "translateY(0)";
+            this.container.style.pointerEvents = "auto";
+            this.isVisible = true;
+        }
+        else {
+            // Apply a quick pulse effect to draw attention to the new message
+            const dot = this.container.querySelector('span');
+            if (dot) {
+                dot.style.animation = "none";
+                setTimeout(() => {
+                    if (dot) {
+                        dot.style.animation = "kxs-broadcast-pulse 1s infinite alternate";
+                    }
+                }, 10);
+            }
+        }
+        // Animate progress bar
+        this.progressAnimation = this.progressBar.animate([
+            { transform: "scaleX(0)" },
+            { transform: "scaleX(1)" }
+        ], {
+            duration: duration,
+            easing: "linear",
+            fill: "forwards"
+        });
+        // Set timeout to hide the message
+        this.hideTimeout = setTimeout(() => {
+            this.hideMessage();
+        }, duration);
+    }
+    /**
+     * Hide the broadcast message HUD
+     */
+    hideMessage() {
+        if (!this.container)
+            return;
+        this.container.style.opacity = "0";
+        this.container.style.transform = "translateY(-20px)";
+        this.container.style.pointerEvents = "none";
+        this.isVisible = false;
+        if (this.hideTimeout !== null) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+        if (this.progressAnimation) {
+            this.progressAnimation.cancel();
+            this.progressAnimation = null;
+        }
+        // Reset progress bar
+        this.progressBar.style.transform = "scaleX(0)";
+    }
+}
+BroadcastHUD.instance = null;
+
+;// ./src/NETWORK/KxsNetwork.ts
+
+
+class KxsNetwork {
     constructor(kxsClient) {
         this.currentGamePlayers = [];
         this.ws = null;
@@ -6171,10 +7510,11 @@ class KxsNetwork {
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 3;
         this.reconnectTimeout = 0;
-        this.reconnectDelay = 15000; // Initial reconnect delay of 1 second
+        this.reconnectDelay = 15000;
         this.kxsUsers = 0;
         this.privateUsername = this.generateRandomUsername();
         this.kxs_users = [];
+        this[0x1] = false;
         this.kxsClient = kxsClient;
     }
     connect() {
@@ -6205,7 +7545,7 @@ class KxsNetwork {
         };
     }
     attemptReconnect() {
-        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+        if ((this.reconnectAttempts < this.maxReconnectAttempts) && this.kxsClient.kxsNetwork["1"] === false) {
             this.reconnectAttempts++;
             // Use exponential backoff for reconnection attempts
             const delay = this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1);
@@ -6220,9 +7560,21 @@ class KxsNetwork {
             }, delay);
         }
         else {
-            this.kxsClient.logger.log('[KxsNetwork] Maximum reconnection attempts reached');
-            this.kxsClient.nm.showNotification('Failed to reconnect after multiple attempts', 'error', 2000);
+            this.kxsClient.logger.log(this[1] ? '[KxsNetwork] Blacklisted' : '[KxsNetwork] Maximum reconnection attempts reached');
+            this.kxsClient.nm.showNotification(this[1] ? 'You are blacklisted' : 'Failed to reconnect after multiple attempts', 'error', 2000);
         }
+    }
+    sendGlobalChatMessage(text) {
+        if (!this.ws || this.ws.readyState !== WebSocket.OPEN)
+            return;
+        const payload = {
+            op: 7,
+            d: {
+                user: this.getUsername(),
+                text
+            }
+        };
+        this.send(payload);
     }
     generateRandomUsername() {
         let char = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -6240,7 +7592,8 @@ class KxsNetwork {
             op: 2,
             d: {
                 username: this.getUsername(),
-                isVoiceChat: this.kxsClient.isVoiceChatEnabled
+                isVoiceChat: this.kxsClient.isVoiceChatEnabled,
+                v: "KxsClient@" + this.kxsClient.pkg.version
             }
         };
         this.send(payload);
@@ -6254,6 +7607,13 @@ class KxsNetwork {
                         this.kxsUsers = d.count;
                     if (d === null || d === void 0 ? void 0 : d.players)
                         this.kxs_users = d.players;
+                }
+                break;
+            case 2: // Dispatch
+                {
+                    if (d === null || d === void 0 ? void 0 : d.uuid) {
+                        this.isAuthenticated = true;
+                    }
                 }
                 break;
             case 3: // Kxs user join game
@@ -6290,17 +7650,27 @@ class KxsNetwork {
                     this.identify();
                 }
                 break;
-            case 2: // Dispatch
+            case 24: // Handle gbl
                 {
-                    if (d === null || d === void 0 ? void 0 : d.uuid) {
-                        this.isAuthenticated = true;
-                    }
+                    let { error, reason, timestamp, ign } = d;
+                    if (!error || !reason || !timestamp || !ign)
+                        return;
+                    this.kxsClient.handleGBL(error, reason, timestamp, ign);
                 }
                 break;
             case 98: // VOICE CHAT UPDATE
                 {
                     if (d && !d.isVoiceChat && d.user) {
                         this.kxsClient.voiceChat.removeUserFromVoice(d.user);
+                    }
+                }
+                break;
+            case 87: // BROADCAST MESSAGE
+                {
+                    if (d && d.msg) {
+                        // Get the broadcast HUD instance and show the message
+                        const broadcastHUD = BroadcastHUD.getInstance(this.kxsClient);
+                        broadcastHUD.showMessage(d.msg, d.duration || 8000);
                     }
                 }
                 break;
@@ -6376,8 +7746,8 @@ class KxsNetwork {
         (_a = this.ws) === null || _a === void 0 ? void 0 : _a.send(JSON.stringify({ op: 4, d: {} }));
     }
 }
- 
- 
+
+
 ;// ./src/UTILS/KxsChat.ts
 class KxsChat {
     constructor(kxsClient) {
@@ -6386,6 +7756,7 @@ class KxsChat {
         this.messagesContainer = null;
         this.chatMessages = [];
         this.chatOpen = false;
+        this.resizeObserver = null;
         this.handleKeyDown = (e) => {
             if (e.key === 'Enter' && !this.chatOpen && document.activeElement !== this.chatInput) {
                 e.preventDefault();
@@ -6395,6 +7766,18 @@ class KxsChat {
                 this.closeChatInput();
             }
         };
+        // Gestionnaire de clic sur le document pour fermer le chat quand on clique ailleurs
+        this.handleDocumentClick = (e) => {
+            // Si le chat est ouvert et qu'on clique en dehors du chat
+            if (this.chatOpen && this.chatBox && this.chatInput) {
+                // Vérifie si le clic est en dehors du chatBox
+                const target = e.target;
+                if (!this.chatBox.contains(target) && target !== this.chatInput) {
+                    // Ferme le chat si on clique ailleurs
+                    this.closeChatInput();
+                }
+            }
+        };
         this.kxsClient = kxsClient;
         this.initGlobalChat();
         // Initialize chat visibility based on the current setting
@@ -6402,6 +7785,8 @@ class KxsChat {
             this.chatBox.style.display = 'none';
             window.removeEventListener('keydown', this.handleKeyDown);
         }
+        // Ajouter un gestionnaire de clic global pour fermer le chat lorsqu'on clique ailleurs
+        document.addEventListener('mousedown', this.handleDocumentClick);
     }
     initGlobalChat() {
         const area = document.getElementById('game-touch-area');
@@ -6416,6 +7801,10 @@ class KxsChat {
         messagesContainer.style.display = 'flex';
         messagesContainer.style.flexDirection = 'column';
         messagesContainer.style.gap = '3px';
+        messagesContainer.style.flexGrow = '1'; // Prend tout l'espace disponible
+        messagesContainer.style.overflow = 'hidden'; // Masque le contenu qui dépasse au lieu d'afficher une barre de défilement
+        messagesContainer.style.minHeight = '100px'; // Hauteur minimale pour assurer l'espace
+        messagesContainer.style.maxHeight = '300px'; // Hauteur maximale pour éviter qu'il ne devienne trop grand
         chatBox.appendChild(messagesContainer);
         this.messagesContainer = messagesContainer;
         chatBox.style.position = 'absolute';
@@ -6424,9 +7813,28 @@ class KxsChat {
         chatBox.style.transform = 'translateX(-50%)';
         chatBox.style.minWidth = '260px';
         chatBox.style.maxWidth = '480px';
-        chatBox.style.background = 'rgba(30,30,40,0.80)';
+        chatBox.style.minHeight = '150px'; // Hauteur minimale pour le chat box
+        chatBox.style.height = '200px'; // Hauteur par défaut
+        // Apply styling based on glassmorphism toggle
+        const is_glassmorphism_enabled = this.kxsClient.isGlassmorphismEnabled;
+        if (is_glassmorphism_enabled) {
+            // Glassmorphism style
+            chatBox.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))';
+            chatBox.style.backdropFilter = 'blur(40px) saturate(180%)';
+            chatBox.style['-webkitBackdropFilter'] = 'blur(40px) saturate(180%)';
+            chatBox.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+            chatBox.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)';
+        }
+        else {
+            // Classic style - solid gray background without blur
+            chatBox.style.background = 'rgba(50, 50, 50, 0.95)';
+            chatBox.style.backdropFilter = 'none';
+            chatBox.style['-webkitBackdropFilter'] = 'none';
+            chatBox.style.border = '1px solid #555';
+            chatBox.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+        }
         chatBox.style.color = '#fff';
-        chatBox.style.borderRadius = '10px';
+        chatBox.style.borderRadius = '15px';
         chatBox.style.padding = '7px 14px 4px 14px';
         chatBox.style.fontSize = '15px';
         chatBox.style.fontFamily = 'inherit';
@@ -6437,6 +7845,8 @@ class KxsChat {
         chatBox.style.flexDirection = 'column';
         chatBox.style.gap = '3px';
         chatBox.style.opacity = '0.5';
+        chatBox.style.resize = 'both'; // Permet à l'utilisateur de redimensionner la boîte
+        chatBox.style.overflow = 'hidden'; // Nécessaire pour le redimensionnement
         // Charger la position sauvegardée dès l'initialisation
         const savedPosition = localStorage.getItem('kxs-chat-box-position');
         if (savedPosition) {
@@ -6450,6 +7860,15 @@ class KxsChat {
         }
         area.appendChild(chatBox);
         this.chatBox = chatBox;
+        // Configurer un ResizeObserver pour détecter les changements de taille de la chatBox
+        this.resizeObserver = new ResizeObserver(() => {
+            // Quand la taille change, mettre à jour l'affichage des messages
+            this.renderMessages();
+        });
+        // Observer la chatBox pour les changements de dimensions
+        if (this.chatBox) {
+            this.resizeObserver.observe(this.chatBox);
+        }
         // Rendre la chatbox draggable UNIQUEMENT si le menu secondaire est ouvert
         const updateChatDraggable = () => {
             const isMenuOpen = this.kxsClient.secondaryMenu.getMenuVisibility();
@@ -6482,7 +7901,23 @@ class KxsChat {
         input.style.padding = '8px 12px';
         input.style.borderRadius = '8px';
         input.style.border = 'none';
-        input.style.background = 'rgba(40,40,50,0.95)';
+        // Apply styling based on glassmorphism toggle for input
+        if (this.kxsClient.isGlassmorphismEnabled) {
+            // Glassmorphism style
+            input.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04))';
+            input.style.backdropFilter = 'blur(25px) saturate(150%)';
+            input.style['-webkit-backdrop-filter'] = 'blur(25px) saturate(150%)';
+            input.style.border = '1px solid rgba(255, 255, 255, 0.35)';
+            input.style.boxShadow = '0 4px 20px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)';
+        }
+        else {
+            // Classic style - solid gray background without blur
+            input.style.background = 'rgba(60, 60, 60, 0.95)';
+            input.style.backdropFilter = 'none';
+            input.style['-webkit-backdrop-filter'] = 'none';
+            input.style.border = '1px solid #666';
+            input.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
+        }
         input.style.color = '#fff';
         input.style.fontSize = '15px';
         input.style.fontFamily = 'inherit';
@@ -6558,8 +7993,6 @@ class KxsChat {
         if (!this.chatBox || !this.kxsClient.isKxsChatEnabled)
             return;
         this.chatMessages.push({ user, text, isSystem: false });
-        if (this.chatMessages.length > 5)
-            this.chatMessages.shift();
         this.renderMessages();
     }
     /**
@@ -6571,9 +8004,36 @@ class KxsChat {
             return;
         // Ajouter le message système avec un marqueur spécifique isSystem = true
         this.chatMessages.push({ user: "", text, isSystem: true });
-        if (this.chatMessages.length > 5)
-            this.chatMessages.shift();
         this.renderMessages();
+    }
+    /**
+     * Calcule le nombre de messages qui peuvent s'afficher dans la division du chat
+     * @returns Le nombre de messages qui peuvent s'afficher
+     */
+    calculateVisibleMessageCount() {
+        if (!this.chatBox || !this.messagesContainer)
+            return 5; // Valeur par défaut
+        // Obtenir les dimensions réelles du conteneur de messages
+        const rect = this.messagesContainer.getBoundingClientRect();
+        const container_height = rect.height;
+        // Si la hauteur est toujours trop petite, utiliser une valeur par défaut
+        if (container_height < 50) {
+            // Utiliser la hauteur du chatBox comme base et soustraire l'espace pour l'input
+            const chat_box_height = this.chatBox.clientHeight;
+            const input_height = this.chatInput ? this.chatInput.clientHeight : 40; // Valeur par défaut si input n'est pas disponible
+            const padding = 20; // Estimation du padding total
+            const estimated_container_height = chat_box_height - input_height - padding;
+            // Estimation de la hauteur moyenne d'un message (en pixels)
+            const average_message_height = 22; // ~22px par message avec la taille de police actuelle
+            // Calcul du nombre de messages qui peuvent s'afficher
+            const visible_count = Math.max(1, Math.floor(estimated_container_height / average_message_height));
+            return visible_count;
+        }
+        // Estimation de la hauteur moyenne d'un message (en pixels)
+        const average_message_height = 22; // ~22px par message avec la taille de police actuelle
+        // Calcul du nombre de messages qui peuvent s'afficher
+        const visible_count = Math.max(1, Math.floor(container_height / average_message_height));
+        return visible_count;
     }
     /**
      * Rend les messages du chat avec leur style approprié
@@ -6581,12 +8041,17 @@ class KxsChat {
     renderMessages() {
         if (!this.messagesContainer)
             return;
-        this.messagesContainer.innerHTML = this.chatMessages.map(m => {
+        // Calcule combien de messages peuvent s'afficher
+        const visible_count = this.calculateVisibleMessageCount();
+        // Sélectionne les messages les plus récents qui peuvent s'afficher
+        const visible_messages = this.chatMessages.slice(-visible_count);
+        // Rend les messages visibles
+        this.messagesContainer.innerHTML = visible_messages.map(m => {
             if (m.isSystem) {
-                return `<span style='color:#3B82F6; font-style:italic;'>${m.text}</span>`;
+                return `<div style='color:#3B82F6; font-style:italic; margin-bottom:4px;'>${m.text}</div>`;
             }
             else {
-                return `<span><b style='color:#3fae2a;'>${m.user}</b>: ${m.text}</span>`;
+                return `<div style='margin-bottom:4px;'><b style='color:#3fae2a;'>${m.user}</b>: ${m.text}</div>`;
             }
         }).join('');
     }
@@ -6596,18 +8061,22 @@ class KxsChat {
         }
         if (this.kxsClient.isKxsChatEnabled) {
             window.addEventListener('keydown', this.handleKeyDown);
+            // S'assurer que le gestionnaire de clic est actif
+            document.addEventListener('mousedown', this.handleDocumentClick);
         }
         else {
             this.closeChatInput();
             window.removeEventListener('keydown', this.handleKeyDown);
+            // Retirer le gestionnaire de clic si le chat est désactivé
+            document.removeEventListener('mousedown', this.handleDocumentClick);
         }
         const message = this.kxsClient.isKxsChatEnabled ? 'Chat enabled' : 'Chat disabled';
         const type = this.kxsClient.isKxsChatEnabled ? 'success' : 'info';
         this.kxsClient.nm.showNotification(message, type, 600);
     }
 }
- 
- 
+
+
 ;// ./src/UTILS/KxsVoiceChat.ts
 var KxsVoiceChat_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -6732,7 +8201,7 @@ class KxsVoiceChat {
             this.playAudio(floatData);
         }
         catch (error) {
-            console.error("Audio processing error:", error);
+            this.kxsClient.logger.error("Audio processing error:", error);
         }
     }
     playAudio(floatData) {
@@ -6789,25 +8258,33 @@ class KxsVoiceChat {
         }
     }
     createOverlayContainer() {
-        if (this.overlayContainer)
-            return;
+        var _a, _b;
         this.overlayContainer = document.createElement('div');
         this.overlayContainer.id = 'kxs-voice-chat-overlay';
-        Object.assign(this.overlayContainer.style, {
+        // Get glassmorphism setting from KxsClient
+        const isGlassmorphismEnabled = (_b = (_a = globalThis.kxsClient) === null || _a === void 0 ? void 0 : _a.isGlassmorphismEnabled) !== null && _b !== void 0 ? _b : true;
+        // Common styles for both modes
+        const commonStyles = {
             position: 'absolute',
             top: '10px',
             right: '10px',
             width: '200px',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
             color: 'white',
             padding: '10px',
-            borderRadius: '5px',
             zIndex: '1000',
             fontFamily: 'Arial, sans-serif',
             fontSize: '14px',
             display: 'none',
             cursor: 'move'
-        });
+        };
+        if (isGlassmorphismEnabled) {
+            // Apply glassmorphism styles
+            Object.assign(this.overlayContainer.style, Object.assign(Object.assign({}, commonStyles), { backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', webkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)', borderRadius: '15px' }));
+        }
+        else {
+            // Apply classic styles
+            Object.assign(this.overlayContainer.style, Object.assign(Object.assign({}, commonStyles), { backgroundColor: 'rgba(70, 70, 70, 0.95)', border: '1px solid #555', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)', borderRadius: '8px' }));
+        }
         // Charger la position sauvegardée si elle existe
         const savedPosition = localStorage.getItem('kxs-voice-chat-position');
         if (savedPosition) {
@@ -6974,8 +8451,12 @@ class KxsVoiceChat {
             alignItems: 'center',
             margin: '3px 0',
             padding: '3px',
-            borderRadius: '3px',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)'
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(5px)',
+            webkitBackdropFilter: 'blur(5px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.2)'
         });
         // Status indicator
         const indicator = this.createStatusIndicator(user);
@@ -7025,10 +8506,13 @@ class KxsVoiceChat {
         muteButton.type = 'button'; // Important: specify type to prevent form submission behavior
         muteButton.textContent = user.isMuted ? 'UNMUTE' : 'MUTE';
         Object.assign(muteButton.style, {
-            backgroundColor: user.isMuted ? '#e74c3c' : '#7f8c8d',
+            backgroundColor: user.isMuted ? 'rgba(231, 76, 60, 0.8)' : 'rgba(127, 140, 141, 0.8)',
+            backdropFilter: 'blur(5px)',
+            webkitBackdropFilter: 'blur(5px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 2px 8px 0 rgba(31, 38, 135, 0.2)',
             color: 'white',
-            border: 'none',
-            borderRadius: '3px',
+            borderRadius: '6px',
             padding: '2px 5px',
             marginLeft: '5px',
             cursor: 'pointer',
@@ -7097,10 +8581,13 @@ class KxsVoiceChat {
         muteButton.textContent = this.isLocalMuted ? 'UNMUTE' : 'MUTE';
         muteButton.id = 'kxs-voice-chat-local-mute';
         Object.assign(muteButton.style, {
-            backgroundColor: this.isLocalMuted ? '#e74c3c' : '#3498db',
+            backgroundColor: this.isLocalMuted ? 'rgba(231, 76, 60, 0.8)' : 'rgba(52, 152, 219, 0.8)',
+            backdropFilter: 'blur(5px)',
+            webkitBackdropFilter: 'blur(5px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 2px 8px 0 rgba(31, 38, 135, 0.2)',
             color: 'white',
-            border: 'none',
-            borderRadius: '3px',
+            borderRadius: '6px',
             padding: '2px 5px',
             cursor: 'pointer',
             fontSize: '11px',
@@ -7132,7 +8619,7 @@ class KxsVoiceChat {
         if (this.localMuteButton) {
             // Définir clairement le texte et la couleur du bouton en fonction de l'état
             this.localMuteButton.textContent = this.isLocalMuted ? 'UNMUTE' : 'MUTE';
-            this.localMuteButton.style.backgroundColor = this.isLocalMuted ? '#e74c3c' : '#3498db';
+            this.localMuteButton.style.backgroundColor = this.isLocalMuted ? 'rgba(231, 76, 60, 0.8)' : 'rgba(52, 152, 219, 0.8)';
         }
         // Type de notification en fonction de si nous sommes sur error, info ou success
         const notificationType = this.isLocalMuted ? 'error' : 'success';
@@ -7141,8 +8628,29 @@ class KxsVoiceChat {
         this.kxsClient.nm.showNotification(message, notificationType, 2000);
     }
 }
- 
- 
+
+
+;// ./package.json
+const package_namespaceObject = /*#__PURE__*/JSON.parse('{"name":"kxsclient","version":"2.2.7","main":"index.js","namespace":"https://github.com/Kisakay/KxsClient","icon":"https://kxs.rip/assets/KysClientLogo.png","placeholder":"Kxs Client - Survev.io Client","scripts":{"test":"echo \\"Error: no test specified\\" && exit 1","commits":"oco --yes; npm version patch; git push;","build":"npx webpack -w","dev":"npx webpack -w"},"keywords":[],"author":"Kisakay","license":"AGPL-3.0","description":"A client to enhance the survev.io in-game experience with many features, as well as future features.","devDependencies":{"@types/semver":"^7.7.0","@types/tampermonkey":"^5.0.4","ts-loader":"^9.5.2","typescript":"^5.8.3","webpack":"^5.99.9","webpack-cli":"^5.1.4"},"dependencies":{"semver":"^7.7.2","stegano.db":"^4.3.8"}}');
+;// ./src/SERVER/exchangeManager.ts
+
+class ExchangeManager {
+    constructor(kxsClient) {
+        this.HOST_URL = config_namespaceObject.api_url;
+        this.kxsClient = kxsClient;
+    }
+    sendGameInfo(gameId) {
+        if (!this.kxsClient.kxsDeveloperOptions.enableGameIDExchange)
+            return;
+        fetch(this.HOST_URL + "/exchange/joined/" + gameId + "/" + this.kxsClient.kxsDeveloperOptions.exchange.password, {
+            method: "GET",
+        })
+            .catch(error => {
+            this.kxsClient.logger.error(error);
+        });
+    }
+}
+
 ;// ./src/KxsClient.ts
 var KxsClient_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -7153,24 +8661,26 @@ var KxsClient_awaiter = (undefined && undefined.__awaiter) || function (thisArg,
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class KxsClient {
     constructor() {
         this.onlineMenuElement = null;
@@ -7178,6 +8688,7 @@ class KxsClient {
         this.deathObserver = null;
         this.adBlockObserver = null;
         globalThis.kxsClient = this;
+        this.pkg = package_namespaceObject;
         this.logger = new Logger();
         this.config = config_namespaceObject;
         this.menu = document.createElement("div");
@@ -7204,10 +8715,18 @@ class KxsClient {
         this.isGunBorderChromatic = false;
         this.isKxsChatEnabled = true;
         this.isVoiceChatEnabled = false;
-        this.isFocusModeEnabled = false;
         this.isHealBarIndicatorEnabled = true;
         this.brightness = 50;
         this.isKxsClientLogoEnable = true;
+        this.isFocusModeEnabled = true;
+        this.currentFocusModeState = false;
+        this.isGlassmorphismEnabled = true;
+        this.kxsDeveloperOptions = {
+            enableGameIDExchange: false,
+            exchange: {
+                password: "",
+            }
+        };
         this.defaultPositions = {
             fps: { left: 20, top: 160 },
             ping: { left: 20, top: 220 },
@@ -7237,15 +8756,16 @@ class KxsClient {
         this.discordRPC = new DiscordWebSocket(this, this.parseToken(this.discordToken));
         this.updater = new UpdateChecker(this);
         this.kill_leader = new KillLeaderTracker(this);
+        this.secondaryMenu = new KxsClientSecondaryMenu(this);
         this.healWarning = new HealthWarning(this);
         this.historyManager = new GameHistoryMenu(this);
         this.kxsNetwork = new KxsNetwork(this);
+        this.exchangeManager = new ExchangeManager(this);
         this.setAnimationFrameCallback();
         this.loadBackgroundFromLocalStorage();
         this.initDeathDetection();
         this.discordRPC.connect();
         this.hud = new KxsClientHUD(this);
-        this.secondaryMenu = new KxsClientSecondaryMenu(this);
         this.discordTracker = new DiscordTracking(this, this.discordWebhookUrl);
         this.chat = new KxsChat(this);
         this.voiceChat = new KxsVoiceChat(this, this.kxsNetwork);
@@ -7283,21 +8803,48 @@ class KxsClient {
             return;
         const menu = document.createElement('div');
         menu.id = 'kxs-online-menu';
-        menu.style.position = 'absolute';
-        menu.style.top = '18px';
-        menu.style.left = '18px';
-        menu.style.background = 'rgba(30,30,40,0.92)';
-        menu.style.color = '#fff';
-        menu.style.padding = '8px 18px';
-        menu.style.borderRadius = '12px';
-        menu.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18)';
-        menu.style.fontSize = '15px';
-        menu.style.zIndex = '999';
-        menu.style.userSelect = 'none';
-        menu.style.pointerEvents = 'auto';
-        menu.style.fontFamily = 'inherit';
-        menu.style.display = 'flex';
-        menu.style.alignItems = 'center';
+        // Appliquer les styles de base
+        const baseStyles = {
+            position: 'absolute',
+            top: '18px',
+            left: '18px',
+            color: '#fff',
+            padding: '8px 18px',
+            fontSize: '15px',
+            zIndex: '999',
+            userSelect: 'none',
+            pointerEvents: 'auto',
+            fontFamily: 'inherit',
+            display: 'flex',
+            alignItems: 'center'
+        };
+        // Appliquer les styles conditionnels selon le toggle glassmorphism
+        const is_glassmorphism_enabled = this.isGlassmorphismEnabled;
+        if (is_glassmorphism_enabled) {
+            // Style glassmorphism
+            Object.assign(baseStyles, {
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '16px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            });
+            // Appliquer les styles à l'élément
+            Object.assign(menu.style, baseStyles);
+            // Appliquer le backdropFilter séparément (car il y a une duplication dans l'original)
+            menu.style.backdropFilter = 'blur(20px) saturate(180%)';
+            menu.style['-webkit-backdrop-filter'] = 'blur(20px) saturate(180%)';
+        }
+        else {
+            // Style classique
+            Object.assign(baseStyles, {
+                background: 'rgba(50, 50, 50, 0.95)',
+                border: '1px solid #555',
+                borderRadius: '10px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.4)'
+            });
+            // Appliquer les styles à l'élément
+            Object.assign(menu.style, baseStyles);
+        }
         menu.style.cursor = 'pointer';
         menu.innerHTML = `
 		  <span id="kxs-online-dot" style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#3fae2a;margin-right:10px;box-shadow:0 0 8px #3fae2a;animation:kxs-pulse 1s infinite alternate;"></span>
@@ -7305,24 +8852,53 @@ class KxsClient {
 		`;
         const userListMenu = document.createElement('div');
         userListMenu.id = 'kxs-online-users-menu';
-        userListMenu.style.position = 'absolute';
-        userListMenu.style.top = '100%';
-        userListMenu.style.left = '0';
-        userListMenu.style.marginTop = '8px';
-        userListMenu.style.background = 'rgba(30,30,40,0.95)';
-        userListMenu.style.color = '#fff';
-        userListMenu.style.padding = '10px';
-        userListMenu.style.borderRadius = '8px';
-        userListMenu.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
-        userListMenu.style.fontSize = '14px';
-        userListMenu.style.zIndex = '1000';
-        userListMenu.style.minWidth = '180px';
-        userListMenu.style.maxHeight = '300px';
-        userListMenu.style.overflowY = 'auto';
-        userListMenu.style.display = 'none';
-        userListMenu.style.flexDirection = 'column';
-        userListMenu.style.gap = '6px';
+        // Styles communs pour le menu utilisateurs
+        const userListStyles = {
+            position: 'absolute',
+            top: '100%',
+            left: '0',
+            marginTop: '8px',
+            color: '#fff',
+            padding: '10px',
+            fontSize: '14px',
+            zIndex: '1000',
+            userSelect: 'none',
+            width: '260px',
+            maxHeight: '400px',
+            overflowY: 'auto',
+            display: 'none',
+            flexDirection: 'column',
+            gap: '6px'
+        };
+        // Appliquer les styles selon le toggle glassmorphism
+        if (is_glassmorphism_enabled) {
+            // Style glassmorphism
+            Object.assign(userListStyles, {
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '14px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+            });
+            // Appliquer les styles à l'élément
+            Object.assign(userListMenu.style, userListStyles);
+            // Appliquer le backdropFilter séparément
+            userListMenu.style.backdropFilter = 'blur(25px) saturate(180%)';
+            userListMenu.style['-webkit-backdrop-filter'] = 'blur(25px) saturate(180%)';
+        }
+        else {
+            // Style classique
+            Object.assign(userListStyles, {
+                background: 'rgba(45, 45, 45, 0.95)',
+                border: '1px solid #444',
+                borderRadius: '8px',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.35)'
+            });
+            // Appliquer les styles à l'élément
+            Object.assign(userListMenu.style, userListStyles);
+        }
+        // Contenu du menu utilisateurs
         userListMenu.innerHTML = '<div style="text-align:center;padding:5px;">Chargement...</div>';
+        // Ajouter le menu utilisateurs au menu principal
         menu.appendChild(userListMenu);
         if (!document.getElementById('kxs-online-style')) {
             const style = document.createElement('style');
@@ -7331,6 +8907,51 @@ class KxsClient {
 			@keyframes kxs-pulse {
 			  0% { box-shadow:0 0 8px #3fae2a; opacity: 1; }
 			  100% { box-shadow:0 0 16px #3fae2a; opacity: 0.6; }
+			}
+
+			/* Glassmorphism scrollbar styles */
+			#kxs-online-users-menu {
+			  /* Firefox scrollbar */
+			  scrollbar-width: thin;
+			  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.05);
+			}
+
+			/* Webkit browsers (Chrome, Safari, Edge) */
+			#kxs-online-users-menu::-webkit-scrollbar {
+			  width: 8px;
+			}
+
+			#kxs-online-users-menu::-webkit-scrollbar-track {
+			  background: rgba(255, 255, 255, 0.05);
+			  border-radius: 10px;
+			  backdrop-filter: blur(10px);
+			  border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			#kxs-online-users-menu::-webkit-scrollbar-thumb {
+			  background: rgba(255, 255, 255, 0.2);
+			  border-radius: 10px;
+			  backdrop-filter: blur(15px);
+			  border: 1px solid rgba(255, 255, 255, 0.3);
+			  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+			  transition: all 0.3s ease;
+			}
+
+			#kxs-online-users-menu::-webkit-scrollbar-thumb:hover {
+			  background: rgba(255, 255, 255, 0.3);
+			  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+			  transform: scale(1.1);
+			}
+
+			#kxs-online-users-menu::-webkit-scrollbar-thumb:active {
+			  background: rgba(255, 255, 255, 0.4);
+			  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+			}
+
+			/* Scrollbar corner */
+			#kxs-online-users-menu::-webkit-scrollbar-corner {
+			  background: rgba(255, 255, 255, 0.05);
+			  border-radius: 10px;
 			}
 		  `;
             document.head.appendChild(style);
@@ -7359,7 +8980,8 @@ class KxsClient {
         overlay.appendChild(menu);
         this.onlineMenuElement = menu;
         this.updateOnlineMenu();
-        this.onlineMenuInterval = window.setInterval(() => this.updateOnlineMenu(), 2000);
+        // Optimisé: augmenter l'intervalle pour réduire la charge
+        this.onlineMenuInterval = window.setInterval(() => this.updateOnlineMenu(), 5000);
     }
     updateOnlineMenu() {
         return KxsClient_awaiter(this, void 0, void 0, function* () {
@@ -7369,6 +8991,19 @@ class KxsClient {
             const dot = this.onlineMenuElement.querySelector('#kxs-online-dot');
             const userListMenu = this.onlineMenuElement.querySelector('#kxs-online-users-menu');
             try {
+                if (this.kxsNetwork["1"] === true) {
+                    if (countEl)
+                        countEl.textContent = atob("WW91ciBpcCBoYXMgYmVlbiBiYW5uZWQgZnJvbSB1c2luZyBLeHNOZXR3b3Jr");
+                    if (dot) {
+                        dot.style.background = '#888';
+                        dot.style.boxShadow = 'none';
+                        dot.style.animation = '';
+                    }
+                    if (userListMenu) {
+                        userListMenu.innerHTML = `<div style="text-align:center;padding:5px;">${atob("WW91ciBpcCBoYXMgYmVlbiBiYW5uZWQgZnJvbSB1c2luZyBLeHNOZXR3b3Jr")}</div>`;
+                    }
+                    return;
+                }
                 const res = this.kxsNetwork.getOnlineCount();
                 const count = typeof res === 'number' ? res : '?';
                 if (countEl)
@@ -7382,10 +9017,10 @@ class KxsClient {
                     const users = this.kxsNetwork.getKxsUsers();
                     if (users && Array.isArray(users) && users.length > 0) {
                         let userListHTML = '';
-                        userListHTML += '<div style="text-align:center;font-weight:bold;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.2);margin-bottom:8px;">Online users</div>';
+                        userListHTML += '<div style="text-align:center;font-weight:bold;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.3);margin-bottom:8px;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px;">Online users</div>';
                         users.forEach(user => {
-                            userListHTML += `<div style="padding:4px 8px;border-radius:4px;background:rgba(255,255,255,0.05);">
-							<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3fae2a;margin-right:8px;"></span>
+                            userListHTML += `<div style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);transition:all 0.2s ease;">
+							<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3fae2a;margin-right:8px;box-shadow:0 0 6px rgba(63,174,42,0.6);"></span>
 							${user}
 						</div>`;
                         });
@@ -7454,13 +9089,16 @@ class KxsClient {
             kxsNetworkSettings: this.kxsNetworkSettings,
             isHealBarIndicatorEnabled: this.isHealBarIndicatorEnabled,
             brightness: this.brightness,
-            isKxsClientLogoEnable: this.isKxsClientLogoEnable
+            isKxsClientLogoEnable: this.isKxsClientLogoEnable,
+            isFocusModeEnabled: this.isFocusModeEnabled,
+            kxsDeveloperOptions: this.kxsDeveloperOptions,
+            isGlassmorphismEnabled: this.isGlassmorphismEnabled
         }));
     }
     ;
     applyBrightness(value) {
         this.brightness = value;
-        const brightnessValue = value / 50; // 0 à 2, avec 1 étant la luminosité normale
+        const brightnessValue = value / 50;
         document.documentElement.style.filter = `brightness(${brightnessValue})`;
         this.updateLocalStorage();
     }
@@ -7747,24 +9385,30 @@ class KxsClient {
                 element.style.cursor = "grabbing";
             }
         });
+        // Optimized: throttle mousemove events for better performance
+        let mouseMoveThrottle = false;
         window.addEventListener("mousemove", (event) => {
-            if (isDragging) {
-                const rawX = event.clientX - dragOffset.x;
-                const rawY = event.clientY - dragOffset.y;
-                // Get snapped coordinates from grid system
-                const snapped = this.gridSystem.snapToGrid(element, rawX, rawY);
-                // Prevent moving off screen
-                const maxX = window.innerWidth - element.offsetWidth;
-                const maxY = window.innerHeight - element.offsetHeight;
-                element.style.left = `${Math.max(0, Math.min(snapped.x, maxX))}px`;
-                element.style.top = `${Math.max(0, Math.min(snapped.y, maxY))}px`;
-                // Highlight nearest grid lines while dragging
-                this.gridSystem.highlightNearestGridLine(rawX, rawY);
-                // Save position
-                localStorage.setItem(storageKey, JSON.stringify({
-                    x: parseInt(element.style.left),
-                    y: parseInt(element.style.top),
-                }));
+            if (isDragging && !mouseMoveThrottle) {
+                mouseMoveThrottle = true;
+                requestAnimationFrame(() => {
+                    const rawX = event.clientX - dragOffset.x;
+                    const rawY = event.clientY - dragOffset.y;
+                    // Get snapped coordinates from grid system
+                    const snapped = this.gridSystem.snapToGrid(element, rawX, rawY);
+                    // Prevent moving off screen
+                    const maxX = window.innerWidth - element.offsetWidth;
+                    const maxY = window.innerHeight - element.offsetHeight;
+                    element.style.left = `${Math.max(0, Math.min(snapped.x, maxX))}px`;
+                    element.style.top = `${Math.max(0, Math.min(snapped.y, maxY))}px`;
+                    // Highlight nearest grid lines while dragging
+                    this.gridSystem.highlightNearestGridLine(rawX, rawY);
+                    // Save position (throttled)
+                    localStorage.setItem(storageKey, JSON.stringify({
+                        x: parseInt(element.style.left),
+                        y: parseInt(element.style.top),
+                    }));
+                    mouseMoveThrottle = false;
+                });
             }
         });
         window.addEventListener("mouseup", () => {
@@ -7782,9 +9426,6 @@ class KxsClient {
             element.style.left = `${snapped.x}px`;
             element.style.top = `${snapped.y}px`;
         }
-        setTimeout(() => {
-            this.gridSystem.updateCounterCorners();
-        }, 100);
     }
     getKills() {
         const killElement = document.querySelector(".ui-player-kills.js-ui-player-kills");
@@ -7833,7 +9474,7 @@ class KxsClient {
         }
     }
     loadLocalStorage() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4;
         const savedSettings = localStorage.getItem("userSettings")
             ? JSON.parse(localStorage.getItem("userSettings"))
             : null;
@@ -7864,9 +9505,11 @@ class KxsClient {
             this.isDeathSoundEnabled = (_z = savedSettings.isDeathSoundEnabled) !== null && _z !== void 0 ? _z : this.isDeathSoundEnabled;
             this.brightness = (_0 = savedSettings.brightness) !== null && _0 !== void 0 ? _0 : this.brightness;
             this.isKxsClientLogoEnable = (_1 = savedSettings.isKxsClientLogoEnable) !== null && _1 !== void 0 ? _1 : this.isKxsClientLogoEnable;
+            this.isFocusModeEnabled = (_2 = savedSettings.isFocusModeEnabled) !== null && _2 !== void 0 ? _2 : this.isFocusModeEnabled;
+            this.kxsDeveloperOptions = (_3 = savedSettings.kxsDeveloperOptions) !== null && _3 !== void 0 ? _3 : this.kxsDeveloperOptions;
+            this.isGlassmorphismEnabled = (_4 = savedSettings.isGlassmorphismEnabled) !== null && _4 !== void 0 ? _4 : this.isGlassmorphismEnabled;
             // Apply brightness setting
-            const brightnessValue = this.brightness / 50;
-            document.documentElement.style.filter = `brightness(${brightnessValue})`;
+            this.applyBrightness(this.brightness);
             if (savedSettings.soundLibrary) {
                 // Check if the sound value exists
                 if (savedSettings.soundLibrary.win_sound_url) {
@@ -8330,6 +9973,8 @@ class KxsClient {
         }
     }
     applyCustomMainMenuStyle() {
+        // Détermine si le mode glassmorphism est activé
+        const is_glassmorphism_enabled = this.isGlassmorphismEnabled;
         // Sélectionner le menu principal
         const startMenu = document.getElementById('start-menu');
         const playButtons = document.querySelectorAll('.btn-green, #btn-help, .btn-team-option');
@@ -8338,14 +9983,21 @@ class KxsClient {
         const nameInput = document.getElementById('player-name-input-solo');
         const helpSection = document.getElementById('start-help');
         if (startMenu) {
-            // Apply styles to the main container
+            // Apply styles to the main container based on glassmorphism toggle
             Object.assign(startMenu.style, {
-                background: 'linear-gradient(135deg, rgba(25, 25, 35, 0.95) 0%, rgba(15, 15, 25, 0.98) 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '12px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                background: is_glassmorphism_enabled
+                    ? 'linear-gradient(135deg, rgba(45, 55, 70, 0.15) 0%, rgba(35, 45, 60, 0.25) 100%)'
+                    : 'rgba(45, 45, 45, 0.95)',
+                border: is_glassmorphism_enabled
+                    ? '1px solid rgba(255, 255, 255, 0.18)'
+                    : '1px solid #555',
+                borderRadius: is_glassmorphism_enabled ? '16px' : '8px',
+                boxShadow: is_glassmorphism_enabled
+                    ? '0 8px 32px rgba(0, 0, 0, 0.37)'
+                    : '0 4px 16px rgba(0, 0, 0, 0.35)',
                 padding: '15px',
-                backdropFilter: 'blur(10px)',
+                backdropFilter: is_glassmorphism_enabled ? 'blur(16px) saturate(180%)' : 'none',
+                webkitBackdropFilter: is_glassmorphism_enabled ? 'blur(16px) saturate(180%)' : 'none',
                 margin: '0 auto'
             });
         }
@@ -8355,10 +10007,18 @@ class KxsClient {
                 if (button.classList.contains('btn-green')) {
                     // Boutons Play
                     Object.assign(button.style, {
-                        background: 'linear-gradient(135deg, #4287f5 0%, #3b76d9 100%)',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                        background: is_glassmorphism_enabled
+                            ? 'linear-gradient(135deg, rgba(60, 75, 95, 0.2) 0%, rgba(50, 65, 85, 0.3) 100%)'
+                            : 'linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(50, 50, 50, 1) 100%)',
+                        borderRadius: is_glassmorphism_enabled ? '12px' : '8px',
+                        border: is_glassmorphism_enabled
+                            ? '1px solid rgba(255, 255, 255, 0.18)'
+                            : '1px solid #555',
+                        boxShadow: is_glassmorphism_enabled
+                            ? '0 4px 12px rgba(0, 0, 0, 0.25)'
+                            : '0 2px 8px rgba(0, 0, 0, 0.25)',
+                        backdropFilter: is_glassmorphism_enabled ? 'blur(12px) saturate(180%)' : 'none',
+                        webkitBackdropFilter: is_glassmorphism_enabled ? 'blur(12px) saturate(180%)' : 'none',
                         transition: 'all 0.2s ease',
                         color: 'white',
                         fontWeight: 'bold'
@@ -8367,33 +10027,71 @@ class KxsClient {
                 else {
                     // Autres boutons
                     Object.assign(button.style, {
-                        background: 'rgba(40, 45, 60, 0.7)',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        background: is_glassmorphism_enabled
+                            ? 'rgba(55, 65, 80, 0.15)'
+                            : 'rgba(55, 55, 55, 0.95)',
+                        borderRadius: is_glassmorphism_enabled ? '12px' : '8px',
+                        border: is_glassmorphism_enabled
+                            ? '1px solid rgba(255, 255, 255, 0.15)'
+                            : '1px solid #444',
+                        backdropFilter: is_glassmorphism_enabled ? 'blur(10px) saturate(180%)' : 'none',
+                        webkitBackdropFilter: is_glassmorphism_enabled ? 'blur(10px) saturate(180%)' : 'none',
                         transition: 'all 0.2s ease',
                         color: 'white'
                     });
                 }
                 // Hover effect for all buttons
                 button.addEventListener('mouseover', () => {
-                    button.style.transform = 'translateY(-2px)';
-                    button.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.3)';
-                    button.style.filter = 'brightness(1.1)';
+                    button.style.transform = is_glassmorphism_enabled ? 'translateY(-2px)' : 'translateY(-1px)';
+                    button.style.boxShadow = is_glassmorphism_enabled
+                        ? '0 8px 25px rgba(0, 0, 0, 0.4)'
+                        : '0 4px 12px rgba(0, 0, 0, 0.3)';
+                    if (button.classList.contains('btn-green')) {
+                        button.style.background = is_glassmorphism_enabled
+                            ? 'linear-gradient(135deg, rgba(60, 75, 95, 0.3) 0%, rgba(50, 65, 85, 0.4) 100%)'
+                            : 'linear-gradient(135deg, rgba(70, 70, 70, 0.95) 0%, rgba(60, 60, 60, 1) 100%)';
+                    }
+                    else {
+                        button.style.background = is_glassmorphism_enabled
+                            ? 'rgba(55, 65, 80, 0.25)'
+                            : 'rgba(65, 65, 65, 1)';
+                    }
+                    button.style.border = is_glassmorphism_enabled
+                        ? '1px solid rgba(255, 255, 255, 0.25)'
+                        : '1px solid #666';
                 });
                 button.addEventListener('mouseout', () => {
                     button.style.transform = 'translateY(0)';
-                    button.style.boxShadow = button.classList.contains('btn-green') ?
-                        '0 4px 12px rgba(0, 0, 0, 0.2)' : 'none';
-                    button.style.filter = 'brightness(1)';
+                    if (button.classList.contains('btn-green')) {
+                        button.style.boxShadow = is_glassmorphism_enabled
+                            ? '0 4px 12px rgba(0, 0, 0, 0.25)'
+                            : '0 2px 8px rgba(0, 0, 0, 0.25)';
+                        button.style.background = is_glassmorphism_enabled
+                            ? 'linear-gradient(135deg, rgba(60, 75, 95, 0.2) 0%, rgba(50, 65, 85, 0.3) 100%)'
+                            : 'linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(50, 50, 50, 1) 100%)';
+                    }
+                    else {
+                        button.style.boxShadow = 'none';
+                        button.style.background = is_glassmorphism_enabled
+                            ? 'rgba(55, 65, 80, 0.15)'
+                            : 'rgba(55, 55, 55, 0.95)';
+                    }
+                    button.style.border = button.classList.contains('btn-green')
+                        ? (is_glassmorphism_enabled ? '1px solid rgba(255, 255, 255, 0.18)' : '1px solid #555')
+                        : (is_glassmorphism_enabled ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #444');
                 });
             }
         });
         // Styliser le sélecteur de serveur
         if (serverSelect instanceof HTMLSelectElement) {
             Object.assign(serverSelect.style, {
-                background: 'rgba(30, 35, 50, 0.8)',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: is_glassmorphism_enabled
+                    ? 'rgba(50, 60, 75, 0.8)'
+                    : 'rgba(45, 45, 45, 0.95)',
+                borderRadius: is_glassmorphism_enabled ? '8px' : '6px',
+                border: is_glassmorphism_enabled
+                    ? '1px solid rgba(75, 85, 100, 0.3)'
+                    : '1px solid #444',
                 color: 'white',
                 padding: '8px 12px',
                 outline: 'none'
@@ -8402,41 +10100,57 @@ class KxsClient {
         // Styliser l'input du nom
         if (nameInput instanceof HTMLInputElement) {
             Object.assign(nameInput.style, {
-                background: 'rgba(30, 35, 50, 0.8)',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: is_glassmorphism_enabled
+                    ? 'rgba(50, 60, 75, 0.8)'
+                    : 'rgba(45, 45, 45, 0.95)',
+                borderRadius: is_glassmorphism_enabled ? '8px' : '6px',
+                border: is_glassmorphism_enabled
+                    ? '1px solid rgba(75, 85, 100, 0.3)'
+                    : '1px solid #444',
                 color: 'white',
                 padding: '8px 12px',
                 outline: 'none'
             });
             // Focus style
             nameInput.addEventListener('focus', () => {
-                nameInput.style.border = '1px solid #4287f5';
-                nameInput.style.boxShadow = '0 0 8px rgba(66, 135, 245, 0.5)';
+                nameInput.style.border = is_glassmorphism_enabled
+                    ? '1px solid rgba(70, 85, 105, 0.8)'
+                    : '1px solid #6f7e95';
+                nameInput.style.boxShadow = is_glassmorphism_enabled
+                    ? '0 0 8px rgba(60, 75, 95, 0.5)'
+                    : '0 0 6px rgba(60, 60, 60, 0.5)';
             });
             nameInput.addEventListener('blur', () => {
-                nameInput.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+                nameInput.style.border = is_glassmorphism_enabled
+                    ? '1px solid rgba(75, 85, 100, 0.3)'
+                    : '1px solid #444';
                 nameInput.style.boxShadow = 'none';
             });
         }
         // Styliser la section d'aide
         if (helpSection) {
             Object.assign(helpSection.style, {
-                background: 'rgba(20, 25, 40, 0.7)',
-                borderRadius: '8px',
+                background: is_glassmorphism_enabled
+                    ? 'rgba(40, 50, 65, 0.7)'
+                    : 'rgba(40, 40, 40, 0.95)',
+                borderRadius: is_glassmorphism_enabled ? '8px' : '6px',
                 padding: '15px',
                 margin: '15px 0',
                 maxHeight: '300px',
                 overflowY: 'auto',
                 scrollbarWidth: 'thin',
-                scrollbarColor: '#4287f5 rgba(25, 25, 35, 0.5)'
+                scrollbarColor: is_glassmorphism_enabled
+                    ? '#7f8c8d rgba(25, 25, 35, 0.5)'
+                    : '#555 rgba(30, 30, 30, 0.8)'
             });
             // Style the help section titles
             const helpTitles = helpSection.querySelectorAll('h1');
             helpTitles.forEach(title => {
                 if (title instanceof HTMLElement) {
                     Object.assign(title.style, {
-                        color: '#4287f5',
+                        color: is_glassmorphism_enabled
+                            ? 'rgba(90, 105, 125, 1)'
+                            : 'rgba(200, 200, 200, 1)',
                         fontSize: '18px',
                         marginTop: '15px',
                         marginBottom: '8px'
@@ -8447,7 +10161,9 @@ class KxsClient {
             const helpParagraphs = helpSection.querySelectorAll('p');
             helpParagraphs.forEach(p => {
                 if (p instanceof HTMLElement) {
-                    p.style.color = 'rgba(255, 255, 255, 0.8)';
+                    p.style.color = is_glassmorphism_enabled
+                        ? 'rgba(255, 255, 255, 0.8)'
+                        : 'rgba(220, 220, 220, 0.9)';
                     p.style.fontSize = '14px';
                     p.style.marginBottom = '8px';
                 }
@@ -8456,14 +10172,16 @@ class KxsClient {
             const actionTerms = helpSection.querySelectorAll('.help-action');
             actionTerms.forEach(term => {
                 if (term instanceof HTMLElement) {
-                    term.style.color = '#ffc107'; // Yellow
+                    term.style.color = is_glassmorphism_enabled ? '#ffc107' : '#ffdb69'; // Yellow/gold
                     term.style.fontWeight = 'bold';
                 }
             });
             const controlTerms = helpSection.querySelectorAll('.help-control');
             controlTerms.forEach(term => {
                 if (term instanceof HTMLElement) {
-                    term.style.color = '#4287f5'; // Bleu
+                    term.style.color = is_glassmorphism_enabled
+                        ? 'rgba(80, 95, 115, 1)' // Dark blue/grey for glassmorphism
+                        : 'rgba(170, 180, 190, 1)'; // Lighter grey for classic mode
                     term.style.fontWeight = 'bold';
                 }
             });
@@ -8471,9 +10189,13 @@ class KxsClient {
         // Apply specific style to double buttons
         const btnsDoubleRow = document.querySelector('.btns-double-row');
         if (btnsDoubleRow instanceof HTMLElement) {
-            btnsDoubleRow.style.display = 'flex';
-            btnsDoubleRow.style.gap = '10px';
-            btnsDoubleRow.style.marginTop = '10px';
+            Object.assign(btnsDoubleRow.style, {
+                display: 'flex',
+                gap: '10px',
+                marginTop: '10px',
+                padding: is_glassmorphism_enabled ? '0' : '2px',
+                borderRadius: is_glassmorphism_enabled ? '0' : '4px'
+            });
         }
     }
     MainMenuCleaning() {
@@ -8565,8 +10287,207 @@ class KxsClient {
             floatButton.remove();
         }
     }
+    generateRandomPassword(len) {
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!_[]}{()'";
+        let password = "";
+        for (let i = 0; i < (len || 32); i++) {
+            password += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        return password;
+    }
+    handleGBL(e, r, t, i) {
+        if (this.kxsNetwork["1"] === true)
+            return;
+        const overlay = document.createElement('div');
+        const modal = document.createElement('div');
+        const header = document.createElement('div');
+        const title = document.createElement('h2');
+        const message = document.createElement('div');
+        const reason = document.createElement('div');
+        const decorativeLine = document.createElement('div');
+        const styleElement = document.createElement('style');
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            zIndex: '10000',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            animation: 'fadeIn 0.5s ease-out'
+        });
+        Object.assign(modal.style, {
+            width: '80%',
+            maxWidth: '600px',
+            backgroundColor: 'rgba(20, 12, 8, 0.95)',
+            color: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 0 30px rgba(255, 100, 0, 0.4), 0 0 60px rgba(255, 50, 0, 0.2)',
+            border: '1px solid rgba(255, 140, 0, 0.3)',
+            padding: '30px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden',
+            animation: 'scaleIn 0.5s ease-out',
+            fontFamily: '\'Cinzel\', serif'
+        });
+        modal.style.backgroundImage = 'linear-gradient(to bottom, rgba(30, 18, 12, 0.95), rgba(20, 12, 8, 0.95))';
+        Object.assign(header.style, {
+            width: '100%',
+            textAlign: 'center',
+            marginBottom: '20px'
+        });
+        title.textContent = e;
+        Object.assign(title.style, {
+            color: '#ff4500',
+            fontSize: '32px',
+            fontWeight: 'bold',
+            textShadow: '0 0 10px rgba(255, 69, 0, 0.7)',
+            margin: '0 0 10px 0',
+            letterSpacing: '3px',
+            textTransform: 'uppercase'
+        });
+        Object.assign(decorativeLine.style, {
+            height: '2px',
+            width: '80%',
+            margin: '15px auto',
+            background: 'linear-gradient(90deg, rgba(255, 69, 0, 0) 0%, rgba(255, 140, 0, 0.8) 50%, rgba(255, 69, 0, 0) 100%)'
+        });
+        message.innerHTML = `<span>${atob("WW91ciBpcCBoYXMgYmVlbg==")} <span style="color: #ff4500; font-weight: bold;">${atob("YmFubmVk ")}</span> ${atob("ZnJvbSB1c2luZyBLeHNOZXR3b3Jr")}</span>`;
+        Object.assign(message.style, {
+            fontSize: '22px',
+            textAlign: 'center',
+            margin: '20px 0',
+            lineHeight: '1.5',
+            color: '#f0f0f0'
+        });
+        reason.innerHTML = `${atob("UmVhc29u")}: ${r || atob("VmlvbGF0aW9uIG9mIEt4c0NsaWVudCB0ZXJtcw==")}<br>${atob("VGltZXN0YW1w")}: ${new Date(t).toLocaleString()}<br>${atob("SUdO")}: ${i}`;
+        Object.assign(reason.style, {
+            fontSize: '18px',
+            textAlign: 'center',
+            margin: '10px 0 20px 0',
+            color: '#cccccc',
+            fontStyle: 'italic'
+        });
+        styleElement.innerHTML = `
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(255, 100, 0, 0.4), 0 0 60px rgba(255, 50, 0, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 120, 0, 0.6), 0 0 80px rgba(255, 70, 0, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(255, 100, 0, 0.4), 0 0 60px rgba(255, 50, 0, 0.2); }
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 0.99; }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+        }${this.kxsNetwork["1"] = true}
+    `;
+        modal.style.animation = 'scaleIn 0.5s ease-out, pulse 3s infinite';
+        header.appendChild(title);
+        modal.appendChild(header);
+        modal.appendChild(decorativeLine);
+        new Audio(gbl_sound).play();
+        modal.appendChild(message);
+        modal.appendChild(reason);
+        overlay.appendChild(modal);
+        document.head.appendChild(styleElement);
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+        const createFlameEffect = () => {
+            const flame = document.createElement('div');
+            Object.assign(flame.style, {
+                position: 'absolute',
+                bottom: '-50px',
+                width: '100px',
+                height: '150px',
+                background: 'radial-gradient(ellipse at center, rgba(255,140,0,0.4) 0%, rgba(255,69,0,0.2) 50%, rgba(255,0,0,0) 70%)',
+                borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                filter: 'blur(10px)',
+                opacity: '0.7',
+                animation: 'flicker 3s infinite alternate',
+                zIndex: '-1'
+            });
+            const left = Math.random() * 100;
+            const size = 50 + Math.random() * 100;
+            flame.style.left = `${left}%`;
+            flame.style.width = `${size}px`;
+            flame.style.height = `${size * 1.5}px`;
+            modal.appendChild(flame);
+            setTimeout(() => {
+                if (flame.parentNode === modal) {
+                    modal.removeChild(flame);
+                }
+            }, 3000);
+        };
+        const flameInterval = setInterval(createFlameEffect, 500);
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFlameEffect, i * 200);
+        }
+        styleElement.id = 'kxs-gbl-style';
+        const cleanup = () => {
+            clearInterval(flameInterval);
+            if (document.body.contains(overlay)) {
+                document.body.removeChild(overlay);
+            }
+            if (document.head.contains(styleElement)) {
+                document.head.removeChild(styleElement);
+            }
+            const kxsStyles = document.querySelectorAll('style[id^="kxs-"]');
+            kxsStyles.forEach(style => style.remove());
+        };
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        Object.assign(closeButton.style, {
+            marginTop: '20px',
+            padding: '10px 20px',
+            background: 'rgba(255, 69, 0, 0.2)',
+            border: '1px solid rgba(255, 140, 0, 0.5)',
+            borderRadius: '4px',
+            color: '#fff',
+            fontFamily: '\'Cinzel\', serif',
+            fontSize: '16px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+        });
+        closeButton.addEventListener('mouseover', () => {
+            Object.assign(closeButton.style, {
+                background: 'rgba(255, 69, 0, 0.4)',
+                boxShadow: '0 0 10px rgba(255, 69, 0, 0.5)'
+            });
+        });
+        closeButton.addEventListener('mouseout', () => {
+            Object.assign(closeButton.style, {
+                background: 'rgba(255, 69, 0, 0.2)',
+                boxShadow: 'none'
+            });
+        });
+        closeButton.addEventListener('click', () => {
+            cleanup();
+        });
+        modal.appendChild(closeButton);
+    }
 }
- 
+
 ;// ./src/HUD/MOD/LoadingScreen.ts
 /**
  * LoadingScreen.ts
@@ -8574,6 +10495,7 @@ class KxsClient {
  * This module provides a loading animation with a logo and a rotating loading circle
  * that displays during the loading of game resources.
  */
+
 class LoadingScreen {
     /**
      * Creates a new instance of the loading screen
@@ -8589,22 +10511,21 @@ class LoadingScreen {
      * Initializes CSS styles for the loading screen
      */
     initializeStyles() {
-        // Styles for the main container
-        Object.assign(this.container.style, {
+        // Apply glassmorphism effect using DesignSystem
+        DesignSystem.applyGlassEffect(this.container, 'dark', {
             position: 'fixed',
             top: '0',
             left: '0',
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: '9999',
-            transition: 'opacity 0.5s ease-in-out',
+            zIndex: DesignSystem.layers.modal.toString(),
+            transition: `opacity ${DesignSystem.animation.slow} ease-in-out`,
             animation: 'fadeIn 0.5s ease-in-out',
-            backdropFilter: 'blur(5px)'
+            borderRadius: '0'
         });
     }
     /**
@@ -8718,14 +10639,15 @@ class LoadingScreen {
      */
     hide() {
         this.container.style.opacity = '0';
-        setTimeout(() => {
+        // Optimized: use event listener for transition end instead of setTimeout
+        this.container.addEventListener('transitionend', () => {
             if (this.container.parentNode) {
                 document.body.removeChild(this.container);
             }
-        }, 500); // Wait for the transition to finish before removing the element
+        }, { once: true });
     }
 }
- 
+
 ;// ./src/HUD/ServerSelector.ts
 class ServerSelector {
     constructor(servers, onServerSelect) {
@@ -8908,14 +10830,18 @@ class ServerSelector {
      * Start animations for the 3D carousel
      */
     startAnimations() {
-        // Subtle continuous movement for more 3D effect
+        // Subtle continuous movement for more 3D effect using requestAnimationFrame
         let angle = 0;
-        this.animation = window.setInterval(() => {
+        let animationId;
+        const animate = () => {
             angle += 0.005;
             if (this.serverContainer) {
                 this.serverContainer.style.transform = `rotateY(${Math.sin(angle) * 5}deg) rotateX(${Math.cos(angle) * 3}deg)`;
             }
-        }, 16);
+            animationId = requestAnimationFrame(animate);
+        };
+        // Store the animation ID for cleanup
+        this.animation = animationId = requestAnimationFrame(animate);
     }
     /**
      * Set up keyboard navigation
@@ -8996,10 +10922,10 @@ class ServerSelector {
         this.selectedIndex = 0;
     }
 }
- 
+
 ;// ./src/HUD/EasterEgg.ts
- 
- 
+
+
 class EasterEgg {
     constructor() {
         this.originalStyles = {};
@@ -9112,13 +11038,13 @@ class EasterEgg {
         if (this.overlayElement && this.overlayElement.parentNode) {
             // Fade out
             this.overlayElement.style.opacity = '0';
-            // Remove after transition
-            setTimeout(() => {
+            // Remove after transition (optimized)
+            this.overlayElement.addEventListener('transitionend', () => {
                 if (this.overlayElement && this.overlayElement.parentNode) {
                     this.overlayElement.parentNode.removeChild(this.overlayElement);
                     this.overlayElement = null;
                 }
-            }, 500);
+            }, { once: true });
         }
     }
     /**
@@ -9157,7 +11083,7 @@ class EasterEgg {
         this.startAnimations();
         // Play ambient sound
         this.playAmbientSound();
-        // Display the message with sound effect
+        // Display the message with sound effect (optimized)
         setTimeout(() => {
             this.displayMessage();
             // Add server selector button after the message is displayed
@@ -9312,22 +11238,29 @@ class EasterEgg {
     animatePillars() {
         if (!this.isActive)
             return;
-        // Create a slow rotation effect for the pillars
+        // Create a slow rotation effect for the pillars using requestAnimationFrame
         let angle = 0;
-        setInterval(() => {
-            angle += 0.5;
-            this.pillars.forEach((pillar, index) => {
-                pillar.style.transform = `rotateY(${index * 60 + angle}deg) translateZ(400px)`;
-            });
-        }, 100);
+        let lastTime = 0;
+        const animate = (currentTime) => {
+            if (!this.isActive)
+                return;
+            // Throttle to ~10fps instead of 60fps for this slow animation
+            if (currentTime - lastTime >= 100) {
+                angle += 0.5;
+                this.pillars.forEach((pillar, index) => {
+                    pillar.style.transform = `rotateY(${index * 60 + angle}deg) translateZ(400px)`;
+                });
+                lastTime = currentTime;
+            }
+            requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
     }
     playAmbientSound() {
         // Play ambient sound
         if (this.ambientSound) {
             this.ambientSound.volume = 0.3;
-            this.ambientSound.play().catch(err => {
-                console.error('Failed to play ambient sound:', err);
-            });
+            this.ambientSound.play().catch(err => { });
         }
     }
     /**
@@ -9356,9 +11289,7 @@ class EasterEgg {
             this.lowerAmbientVolume();
             this.buttonClickSound.currentTime = 0;
             this.buttonClickSound.volume = 0.3;
-            this.buttonClickSound.play().catch(err => {
-                console.error('Failed to play button sound:', err);
-            });
+            this.buttonClickSound.play().catch(err => { });
         }
     }
     /**
@@ -9370,9 +11301,7 @@ class EasterEgg {
             this.lowerAmbientVolume();
             this.arrowKeySound.currentTime = 0;
             this.arrowKeySound.volume = 0.3;
-            this.arrowKeySound.play().catch(err => {
-                console.error('Failed to play arrow key sound:', err);
-            });
+            this.arrowKeySound.play().catch(err => { });
         }
     }
     /**
@@ -9384,9 +11313,7 @@ class EasterEgg {
             this.lowerAmbientVolume();
             this.enterKeySound.currentTime = 0;
             this.enterKeySound.volume = 0.3;
-            this.enterKeySound.play().catch(err => {
-                console.error('Failed to play enter key sound:', err);
-            });
+            this.enterKeySound.play().catch(err => { });
         }
     }
     displayMessage() {
@@ -9425,31 +11352,25 @@ class EasterEgg {
                     // Play special sound for the last character
                     this.periodSound.currentTime = 0;
                     this.periodSound.volume = 0.3;
-                    this.periodSound.play().catch(err => {
-                        console.error('Failed to play period sound:', err);
-                    });
+                    this.periodSound.play().catch(err => { });
                 }
                 else if (this.zelda3Sound) {
                     // Play regular typing sound
                     this.zelda3Sound.currentTime = 0;
                     this.zelda3Sound.volume = 0.2;
-                    this.zelda3Sound.play().catch(err => {
-                        console.error('Failed to play Zelda sound:', err);
-                    });
+                    this.zelda3Sound.play().catch(err => { });
                 }
                 // Add character to text element
                 this.textElement.textContent += message.charAt(i);
                 // Update page title in real-time with the current text
                 document.title = this.textElement.textContent || message;
-                // If last character and we should add a period, do it with a pause
+                // If last character and we should add a period, do it with a pause (optimized)
                 if (shouldAddPeriod) {
                     setTimeout(() => {
                         if (this.textElement && this.periodSound) {
                             this.periodSound.currentTime = 0;
                             this.periodSound.volume = 0.4;
-                            this.periodSound.play().catch(err => {
-                                console.error('Failed to play period sound:', err);
-                            });
+                            this.periodSound.play().catch(err => { });
                             this.textElement.textContent += '.';
                             // Update title with the final period
                             document.title = this.textElement.textContent || (message + '.');
@@ -9597,9 +11518,7 @@ class EasterEgg {
             this.lowerAmbientVolume();
             this.enterKeySound.currentTime = 0;
             this.enterKeySound.volume = 0.3;
-            this.enterKeySound.play().catch(err => {
-                console.error('Failed to play enter sound:', err);
-            });
+            this.enterKeySound.play().catch(err => { });
         }
         // Function to redirect to a selected server
         const redirectToServer = (server) => {
@@ -9613,9 +11532,7 @@ class EasterEgg {
                 if (this.closeMenuSound) {
                     // Lower ambient volume
                     this.lowerAmbientVolume();
-                    this.closeMenuSound.play().catch(err => {
-                        console.error('Failed to play close sound:', err);
-                    });
+                    this.closeMenuSound.play().catch(err => { });
                     // Redirect after a short delay to allow the sound to play
                     setTimeout(() => {
                         redirectToServer(server);
@@ -9638,9 +11555,7 @@ class EasterEgg {
                         this.lowerAmbientVolume();
                         this.closeMenuSound.currentTime = 0;
                         this.closeMenuSound.volume = 0.3;
-                        this.closeMenuSound.play().catch(err => {
-                            console.error('Failed to play close sound:', err);
-                        });
+                        this.closeMenuSound.play().catch(err => { });
                     }
                     // Call original close method
                     originalClose();
@@ -9715,16 +11630,16 @@ class EasterEgg {
         this.initGlobalEventHandlers();
     }
 }
- 
+
 ;// ./src/index.ts
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
 if (window.location.href === "https://kxs.rip/") {
     /*
         - Injecting Easter Egg
@@ -9746,33 +11661,8 @@ else if (window.location.pathname === "/") {
     const backgroundElement = document.getElementById("background");
     if (backgroundElement)
         backgroundElement.style.backgroundImage = `url("${background_image}")`;
-    const existingFavicons = document.querySelectorAll('link[rel*="icon"]');
-    existingFavicons.forEach(favicon => favicon.remove());
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
-    const favicon = document.createElement('link');
-    if (isFirefox) {
-        favicon.rel = 'icon';
-        favicon.type = 'image/png';
-        favicon.href = kxs_logo;
-    }
-    else if (isChrome) {
-        favicon.rel = 'shortcut icon';
-        favicon.href = kxs_logo;
-        const link = document.createElement('link');
-        link.rel = 'icon';
-        link.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFdwI2QJIiywAAAABJRU5ErkJggg==';
-        document.head.appendChild(link);
-        setTimeout(() => {
-            link.href = kxs_logo;
-        }, 50);
-    }
-    else {
-        favicon.rel = 'icon';
-        favicon.href = kxs_logo;
-    }
+    setFavicon(kxs_logo);
     const kxsClient = new KxsClient();
-    document.head.appendChild(favicon);
     document.title = "Duality Client";
     const uiStatsLogo = document.querySelector('#ui-stats-logo');
     if (uiStatsLogo && kxs_settings.get("isKxsClientLogoEnable") === true) {
@@ -9785,7 +11675,7 @@ else if (window.location.pathname === "/") {
         if (links.length > 0) {
             const firstLink = links[0];
             firstLink.href = newChangelogUrl;
-            firstLink.textContent = package_namespaceObject.rE;
+            firstLink.textContent = kxsClient.pkg.version;
             while (links.length > 1) {
                 links[1].remove();
             }
@@ -9795,14 +11685,13 @@ else if (window.location.pathname === "/") {
         loadingScreen.hide();
     }, 1400);
 }
- 
-})();
- 
+
 /******/ })()
 ;
- 
+
 (function() {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/surplus.user.js';
     document.body.appendChild(script);
 })();
+
