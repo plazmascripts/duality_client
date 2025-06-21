@@ -1,3 +1,14 @@
+// ==UserScript==
+// @name         krity
+// @version      3
+// @description  yes
+// @author       yes
+// @match        *survev.io*
+// @run-at       document-start
+// @icon         https://i.postimg.cc/W4g7cxLP/image.png
+// @grant        none
+// ==/UserScript==
+
 (function () {
     'use strict';
 
