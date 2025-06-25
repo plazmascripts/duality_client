@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Duality Client
-// @version      2.2.7
+// @version      2.2.72
 // @description  A fusion of KxsClient and Surplus, adding extra features and cheats.
 // @author       plazmascripts, mahdi, noam, Kisakay
 // @run-at       document-start
@@ -2738,7 +2738,7 @@ class DiscordTracking {
                 }
             }
             const message = {
-                username: "KxsClient",
+                username: "Duality Client",
                 avatar_url: kxs_logo,
                 content: result.isWin ? "🎉 New Victory!" : "Match Ended",
                 embeds: [embed],
@@ -2959,12 +2959,12 @@ class DiscordWebSocket {
                 },
                 presence: {
                     activities: [{
-                            name: "KxsClient",
+                            name: "Duality Client",
                             type: 0,
                             application_id: "1321193265533550602",
                             assets: {
                                 large_image: "mp:app-icons/1321193265533550602/bccd2479ec56ed7d4e69fa2fdfb47197.png?size=512",
-                                large_text: "KxsClient v" + this.kxsClient.pkg.version,
+                                large_text: "Duality Client v" + this.kxsClient.pkg.version + "   \n \n                                                     https://duality.ct.ws/",
                             }
                         }],
                     status: 'online',
@@ -5956,7 +5956,7 @@ class KxsClientHUD {
             header.className = 'kxs-header';
             const title = document.createElement('span');
             title.className = 'kxs-title';
-            title.innerHTML = '<span>Kxs</span> CLIENT';
+            title.innerHTML = '<span>DUALITY</span> CLIENT';
             header.appendChild(title);
             menuContainer.insertBefore(header, menuContainer.firstChild);
         };
@@ -7561,7 +7561,6 @@ class KxsNetwork {
         }
         else {
             this.kxsClient.logger.log(this[1] ? '[KxsNetwork] Blacklisted' : '[KxsNetwork] Maximum reconnection attempts reached');
-            this.kxsClient.nm.showNotification(this[1] ? 'You are blacklisted' : 'Failed to reconnect after multiple attempts', 'error', 2000);
         }
     }
     sendGlobalChatMessage(text) {
@@ -8631,7 +8630,7 @@ class KxsVoiceChat {
 
 
 ;// ./package.json
-const package_namespaceObject = /*#__PURE__*/JSON.parse('{"name":"kxsclient","version":"2.2.7","main":"index.js","namespace":"https://github.com/Kisakay/KxsClient","icon":"https://kxs.rip/assets/KysClientLogo.png","placeholder":"Kxs Client - Survev.io Client","scripts":{"test":"echo \\"Error: no test specified\\" && exit 1","commits":"oco --yes; npm version patch; git push;","build":"npx webpack -w","dev":"npx webpack -w"},"keywords":[],"author":"Kisakay","license":"AGPL-3.0","description":"A client to enhance the survev.io in-game experience with many features, as well as future features.","devDependencies":{"@types/semver":"^7.7.0","@types/tampermonkey":"^5.0.4","ts-loader":"^9.5.2","typescript":"^5.8.3","webpack":"^5.99.9","webpack-cli":"^5.1.4"},"dependencies":{"semver":"^7.7.2","stegano.db":"^4.3.8"}}');
+const package_namespaceObject = /*#__PURE__*/JSON.parse('{"name":"kxsclient","version":"2.2.7","main":"index.js","namespace":"https://github.com/Kisakay/KxsClient","icon":"https://files.catbox.moe/onhbvw.png","placeholder":"Kxs Client - Survev.io Client","scripts":{"test":"echo \\"Error: no test specified\\" && exit 1","commits":"oco --yes; npm version patch; git push;","build":"npx webpack -w","dev":"npx webpack -w"},"keywords":[],"author":"Kisakay","license":"AGPL-3.0","description":"A client to enhance the survev.io in-game experience with many features, as well as future features.","devDependencies":{"@types/semver":"^7.7.0","@types/tampermonkey":"^5.0.4","ts-loader":"^9.5.2","typescript":"^5.8.3","webpack":"^5.99.9","webpack-cli":"^5.1.4"},"dependencies":{"semver":"^7.7.2","stegano.db":"^4.3.8"}}');
 ;// ./src/SERVER/exchangeManager.ts
 
 class ExchangeManager {
