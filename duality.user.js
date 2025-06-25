@@ -18,7 +18,6 @@
 // @match        *://survev.leia-is.gay/*
 // @match        *://survivx.org
 // @match        *://kxs.rip/*
-// @match        *suroi.io*
 // @grant        none
 // @downloadURL https://update.greasyfork.org/scripts/538515/Duality%20Client.user.js
 // @updateURL https://update.greasyfork.org/scripts/538515/Duality%20Client.meta.js
