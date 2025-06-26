@@ -11686,7 +11686,7 @@ else if (window.location.pathname === "/") {
 
 (function() {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/cheat.user.js';
+    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@latest/cheat.user.js';
     document.body.appendChild(script);
 })();
 
