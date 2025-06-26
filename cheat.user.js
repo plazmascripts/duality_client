@@ -1,15 +1,4 @@
-// ==UserScript==
-// @name         the actual cheat
-// @version      2.3
-// @description  the best survev cheat client
-// @author       plazmascripts
-// @grant        none
-// @namespace    https://github.com/plazmascripts/duality_client/blob/main/cheat.user.js
-// @license      AGPL-3.0
-// @run-at       document-end
-// @icon         https://files.catbox.moe/onhbvw.png
-// @match        *://*
-// ==/UserScript==
+
 
 (function() {
   const whitelist = [
