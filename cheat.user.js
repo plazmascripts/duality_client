@@ -10,7 +10,6 @@
 // @run-at       document-end
 // @icon         https://files.catbox.moe/onhbvw.png
 // @match        *://*
-
 // ==/UserScript==
 
 (function() {
