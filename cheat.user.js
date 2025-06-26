@@ -9,16 +9,10 @@
 // @license      AGPL-3.0
 // @run-at       document-end
 // @icon         https://files.catbox.moe/onhbvw.png
-// @match        *://survev.io/*
-// @match        *://66.179.254.36/*
-// @match        *://zurviv.io/*
-// @match        *://resurviv.biz/*
-// @match        *://leia-uwu.github.io/survev/*
-// @match        *://survev.leia-is.gay/*
-// @match        *://survivx.org
-// @match        *://kxs.rip/*
-// @grant        none
+// @match        *://*
+
 // ==/UserScript==
+
 (function() {
   const whitelist = [
     'surviv',
