@@ -2845,7 +2845,6 @@ class UpdateChecker {
         this.remoteScriptUrl = config_namespaceObject.api_url + "/getLatestVersion";
         this.kxsClient = kxsClient;
         if (this.kxsClient.isAutoUpdateEnabled) {
-            this.checkForUpdate();
         }
     }
     copyScriptToClipboard() {
