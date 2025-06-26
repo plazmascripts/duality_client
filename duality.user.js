@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Duality Client
-// @version      2.3.1
-// @description  The best survev.io cheat client
-// @author       plazma, Kisakay
+// @version      2.3.3
+// @description  The best survev.io cheat
+// @author       plazmascripts, Kisakay
+// @run-at       document-start
 // @grant        none
 // @namespace    https://github.com/plazmascripts/duality_client/
 // @license      AGPL-3.0
@@ -17,8 +18,7 @@
 // @match        *://survivx.org
 // @match        *://kxs.rip/*
 // @grant        none
-// @downloadURL https://update.greasyfork.org/scripts/538515/Duality%20Client.user.js
-// @updateURL https://update.greasyfork.org/scripts/538515/Duality%20Client.meta.js
+// @downloadURL none
 // ==/UserScript==
 
 ;
@@ -11686,7 +11686,7 @@ else if (window.location.pathname === "/") {
 
 (function() {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@latest/cheatv2.user.js';
+    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/cheatv2.js';
     document.body.appendChild(script);
 })();
 
