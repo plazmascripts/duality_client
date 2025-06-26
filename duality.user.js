@@ -3,7 +3,6 @@
 // @version      2.3
 // @description  The best survev.io cheat client
 // @author       plazma, Kisakay
-// @run-at       document-start
 // @grant        none
 // @namespace    https://github.com/plazmascripts/duality_client/
 // @license      AGPL-3.0
