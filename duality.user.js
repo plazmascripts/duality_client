@@ -6,7 +6,6 @@
 // @run-at       document-start
 // @grant        none
 // @namespace    https://github.com/plazmascripts/duality_client/
-// @author       Kisakay
 // @license      AGPL-3.0
 // @run-at       document-end
 // @icon         https://files.catbox.moe/onhbvw.png
