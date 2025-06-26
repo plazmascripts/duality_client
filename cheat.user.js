@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Duality Client
+// @name         :3
 // @version      2.2.72
 // @description  A fusion of KxsClient and Surplus, adding extra features and cheats.
 // @author       plazmascripts, mahdi, noam, Kisakay
