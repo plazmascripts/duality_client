@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Duality Client
-// @version      2.3
+// @version      2.3.1
 // @description  The best survev.io cheat client
 // @author       plazma, Kisakay
 // @grant        none
