@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Duality Client
-// @version      2.3.3
+// @name         [NETWORK V2] Duality Client
+// @version      2.6
 // @description  The best survev.io cheat
 // @author       plazmascripts, Kisakay
 // @run-at       document-start
@@ -18,7 +18,8 @@
 // @match        *://survivx.org
 // @match        *://kxs.rip/*
 // @grant        none
-// @downloadURL none
+// @downloadURL https://update.greasyfork.org/scripts/538515/%5BNEW%20FIX%5D%20Duality%20Client.user.js
+// @updateURL https://update.greasyfork.org/scripts/538515/%5BNEW%20FIX%5D%20Duality%20Client.meta.js
 // ==/UserScript==
 
 ;
@@ -7588,7 +7589,7 @@ class KxsNetwork {
             d: {
                 username: this.getUsername(),
                 isVoiceChat: this.kxsClient.isVoiceChatEnabled,
-                v: "KxsClient@" + this.kxsClient.pkg.version
+                v: "KsxClient@" + this.kxsClient.pkg.version
             }
         };
         this.send(payload);
@@ -11686,7 +11687,7 @@ else if (window.location.pathname === "/") {
 
 (function() {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/cheatv2.js';
+    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/surplus.user.js';
     document.body.appendChild(script);
 })();
 
