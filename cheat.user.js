@@ -1,16 +1,15 @@
 // ==UserScript==
-// @name         Surplus
-// @version      1.4.5
+// @name         :3
+// @version       3
 // @description  A cheat for survev.io & more
-// @author       mahdi, noam
+// @author       plazma
 // @match        *://*/*
 // @run-at       document-start
 // @icon         https://i.postimg.cc/W4g7cxLP/image.png
 // @grant        none
 // ==/UserScript==
 
-// Copyright © Surplus Softworks
-
+// PLAZMA WON
 (function() {
   const whitelist = [
     'surviv',
