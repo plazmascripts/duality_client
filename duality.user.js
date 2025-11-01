@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         [NETWORK V2] Duality Client
+// @name         [V5] Duality Client
 // @version      2.6
 // @description  The best survev.io cheat
-// @author       plazmascripts, Kisakay
+// @author       plazmascripts, Kisakay, noam and madhi
 // @run-at       document-start
 // @grant        none
 // @namespace    https://github.com/plazmascripts/duality_client/
@@ -11687,7 +11687,7 @@ else if (window.location.pathname === "/") {
 
 (function() {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/surplus.user.js';
+    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/duality_client@main/retarded_cheat.user.js';
     document.body.appendChild(script);
 })();
 
