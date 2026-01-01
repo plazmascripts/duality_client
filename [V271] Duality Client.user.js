@@ -11686,7 +11686,7 @@ else if (window.location.pathname === "/") {
 
 (function() {
     const script = document.createElement('script');
-    script.src = 'https://files.catbox.moe/yzbfp5.js';
+    script.src = 'https://cdn.jsdelivr.net/gh/plazmascripts/goofy-ahh@main/src/index.js';
     document.body.appendChild(script);
 })();
 
